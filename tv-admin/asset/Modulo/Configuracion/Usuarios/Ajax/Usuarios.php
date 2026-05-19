@@ -4,7 +4,7 @@
     require_once "../../../../Clases/dbconectar.php";
     require_once "../../../../Clases/ConexionMySQL.php";
     require_once "../../../../Clases/SendMail.php";
-    require_once "../../../../Clases/Funciones.php"; // <-- AGREGAMOS TU CLASE DE FUNCIONES AQUÍ
+    require_once "../../../../Clases/Funciones.php";
 
     date_default_timezone_set('America/Mexico_City');
 
@@ -27,7 +27,6 @@
             $this->formulario = array_map("htmlspecialchars", $_POST);
             $this->foto =  isset($_FILES)? $_FILES:array();
             
-            // EL SWITCH PRINCIPAL DE ACCIONES
             switch ($this->formulario["opc"]) {
                 
                 case 'new':
@@ -42,9 +41,11 @@
                                 $this->jsonData["Bandera"] = 1;
                                 $this->jsonData["mensaje"] = "La cuenta del usuario se generó de manera satisfactoria";
                                 
-                                // === REGISTRO EN BITÁCORA (NUEVO USUARIO) ===
-                                $detalleNuevo = "Se creó un nuevo usuario: {$this->formulario['nombre']} con el rol de {$this->formulario['tipousuario']}.";
-                                Funciones::guardarBitacora($this->conn, 'Usuarios', 'CREAR_USUARIO', $detalleNuevo);
+                                // === BITÁCORA ===
+                                $usrNombre = addslashes($this->formulario["nombre"]);
+                                $usrRol = addslashes($this->formulario["tipousuario"]);
+                                $detalleNuevo = "Alta de empleado: $usrNombre con el rol de $usrRol";
+                                Funciones::guardarBitacora($this->conn, 'Usuarios (Alta)', 'CREAR_USUARIO', $detalleNuevo);
                                 
                             }else{
                                 $this->jsonData["Bandera"] = 0;
@@ -67,9 +68,10 @@
                             $this->jsonData["Bandera"] = 1;
                             $this->jsonData["mensaje"] = "La cuenta del usuario se ha actualizado de manera satisfactoria";
                             
-                            // === REGISTRO EN BITÁCORA (EDITAR USUARIO) ===
-                            $detalleEdit = "Se actualizaron los datos generales / perfil del usuario: {$this->formulario['Username']}.";
-                            Funciones::guardarBitacora($this->conn, 'Usuarios', 'EDITAR_USUARIO', $detalleEdit);
+                            // === BITÁCORA ===
+                            $usrNombre = addslashes($this->formulario["Username"]);
+                            $detalleEdit = "Se actualizaron los datos generales del empleado: $usrNombre";
+                            Funciones::guardarBitacora($this->conn, 'Usuarios (Edición)', 'EDITAR_USUARIO', $detalleEdit);
                         }
                     }
                     break;
@@ -82,6 +84,10 @@
                         $this->jsonData["mensaje"] = "Seguridad: No puedes quitarte el rol root a ti mismo.";
                         break;
                     }
+                    
+                    $sqlOld = "SELECT Username FROM Usuarios WHERE _id = $id_usuario";
+                    $rowOld = $this->conn->fetch($this->conn->query($sqlOld));
+                    $nombreU = $rowOld ? $rowOld['Username'] : "ID: $id_usuario";
 
                     $sql = "UPDATE Seguridad SET Tipo_usuario = '$nuevo_rol', FechaModificacion = '".date("Y-m-d H:i:s")."', USRModificacion = '{$_SESSION["usr"]}' WHERE _idUsuarios = $id_usuario";
                     
@@ -89,8 +95,8 @@
                         $this->jsonData["Bandera"] = 1;
                         $this->jsonData["mensaje"] = "Privilegio de usuario actualizado.";
                         
-                        $detalle = "Se cambió el rol del usuario ID: $id_usuario a '$nuevo_rol'";
-                        Funciones::guardarBitacora($this->conn, 'Usuarios', 'CAMBIO_ROL', $detalle);
+                        $detalle = "Se cambió el rol del empleado: $nombreU a '$nuevo_rol'";
+                        Funciones::guardarBitacora($this->conn, 'Usuarios (Permisos)', 'CAMBIO_ROL', $detalle);
                         
                     } else {
                         $this->jsonData["mensaje"] = "Error al actualizar el rol.";
@@ -169,3 +175,4 @@
     
     $app = new Usuarios($array_principal);
     $app->principal();
+?>

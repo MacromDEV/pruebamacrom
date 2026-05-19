@@ -47,19 +47,25 @@
                             $this->subirImagen();
                         }
 
-                        $nombreCat = isset($this->formulario["Categoria"]) ? $this->formulario["Categoria"] : "S/C";
+                        // === BITÁCORA ===
+                        $nombreCat = isset($this->formulario["Categoria"]) ? $this->formulario["Categoria"] : "Categoría ID: " . $this->formulario["lastid"];
                         $id_afectado = $this->formulario["lastid"];
                         
                         if ($this->formulario["opc"] == "new") {
-                            $det = "Registró nueva categoría: $nombreCat (ID: $id_afectado)";
-                            Funciones::guardarBitacora($this->conn, 'Categorias', 'NUEVA_CATEGORIA', $det);
+                            $det = "Se creó una nueva categoría: $nombreCat";
+                            Funciones::guardarBitacora($this->conn, 'Categorías', 'NUEVA_CATEGORIA', $det);
                         } else {
-                            $accionLog = "";
-                            if($this->formulario["opc"] == "edit") $accionLog = "EDITAR_CATEGORIA";
-                            else if($this->formulario["opc"] == "disabled") $accionLog = "DESACTIVAR_CATEGORIA";
-                            else if($this->formulario["opc"] == "enabled") $accionLog = "ACTIVAR_CATEGORIA";
-                            else if($this->formulario["opc"] == "delete") $accionLog = "ELIMINAR_CATEGORIA";
-                            Funciones::guardarBitacora($this->conn, 'Categorias', $accionLog, "ID: $id_afectado - $nombreCat");
+                            $accionLog = ""; $det = "";
+                            if($this->formulario["opc"] == "edit") {
+                                $accionLog = "EDITAR_CATEGORIA"; $det = "Se actualizaron los datos de la categoría: $nombreCat";
+                            } else if($this->formulario["opc"] == "disabled") {
+                                $accionLog = "DESACTIVAR_CATEGORIA"; $det = "Se desactivó la categoría: $nombreCat";
+                            } else if($this->formulario["opc"] == "enabled") {
+                                $accionLog = "ACTIVAR_CATEGORIA"; $det = "Se reactivó la categoría: $nombreCat";
+                            } else if($this->formulario["opc"] == "delete") {
+                                $accionLog = "ELIMINAR_CATEGORIA"; $det = "Se eliminó de forma permanente la categoría ID: $id_afectado";
+                            }
+                            Funciones::guardarBitacora($this->conn, 'Categorías', $accionLog, $det);
                         }
 
                         $this->jsonData["Bandera"] = 1;

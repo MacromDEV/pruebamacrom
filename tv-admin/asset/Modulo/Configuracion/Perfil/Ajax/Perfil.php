@@ -3,6 +3,8 @@ session_name("loginUsuario");
 session_start();
 require_once "../../../../Clases/dbconectar.php";
 require_once "../../../../Clases/ConexionMySQL.php";
+require_once "../../../../Clases/Funciones.php";
+
 date_default_timezone_set('America/Mexico_City');
 
 class Perfil {
@@ -42,6 +44,8 @@ class Perfil {
                 if ($this->setPassword()) {
                     $this->jsonData["Bandera"] = 1;
                     $this->jsonData["mensaje"] = "La contraseña se actualizó correctamente.";
+                    
+                    Funciones::guardarBitacora($this->conn, 'Mi Perfil', 'CAMBIO_PASSWORD_PROPIO', "El usuario actualizó su propia contraseña de acceso.");
                 } else {
                     $this->jsonData["Bandera"] = 0;
                     $this->jsonData["mensaje"] = "Error al intentar cambiar la contraseña.";
@@ -54,12 +58,15 @@ class Perfil {
                         $this->subirImagen();
                     }
                     $this->jsonData["Bandera"] = 1;
-                    $this->jsonData["mensaje"] = "El perfil se ha actualizado de manera satisfactoria.";       
+                    $this->jsonData["mensaje"] = "El perfil se ha actualizado de manera satisfactoria."; 
+                    
+                    Funciones::guardarBitacora($this->conn, 'Mi Perfil', 'EDITAR_PERFIL_PROPIO', "El usuario actualizó su información personal o de contacto.");
                 } else {
                     $this->jsonData["Bandera"] = 0;
                     $this->jsonData["mensaje"] = "Error al guardar los datos del perfil.";
                 }
                 break;
+                
             case 'delete_foto':
                 $username = $this->formulario['Username'] ?? '';
                 if ($username != '') {
@@ -69,6 +76,8 @@ class Perfil {
                     }
                     $this->jsonData["Bandera"] = 1;
                     $this->jsonData["mensaje"] = "Foto de perfil eliminada correctamente.";
+                    
+                    Funciones::guardarBitacora($this->conn, 'Mi Perfil', 'ELIMINAR_FOTO_PERFIL', "El usuario eliminó su avatar/foto de perfil.");
                 } else {
                     $this->jsonData["Bandera"] = 0;
                     $this->jsonData["mensaje"] = "Error al identificar al usuario.";
@@ -128,3 +137,4 @@ class Perfil {
 
 $app = new Perfil($array_principal);
 $app->principal();
+?>

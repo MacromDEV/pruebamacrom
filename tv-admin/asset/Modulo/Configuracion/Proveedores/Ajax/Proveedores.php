@@ -80,24 +80,34 @@ Class Proveedores{
             $alt_seguro = addslashes(trim($this->formulario["tag_alt"]));
             $sql = "INSERT INTO Proveedor (Proveedor, Estatus, tag_title, tag_alt, USRCreacion, USRModificacion, FechaCreacion, fechaModificacion) 
                     VALUES ('$prov_seguro', 1, '$title_seguro', '$alt_seguro', '$usr_seguro', '$usr_seguro', '{$this->fecha}', '{$this->fecha}')";
-            $accionLog = "CREAR_PROVEEDOR"; $detallesLog = "Proveedor creado: $prov_seguro";
+            $accionLog = "CREAR_PROVEEDOR"; $detallesLog = "Se registró el proveedor de marca: $prov_seguro";
         } else {
             $id_seguro = intval($this->formulario["_id"]);
+            $nombre_prov = isset($this->formulario["Proveedor"]) ? addslashes(trim($this->formulario["Proveedor"])) : "Proveedor ID: $id_seguro";
+
             if($this->formulario["opc"] == 'edit'){
                 $prov_seguro = addslashes(trim($this->formulario["Proveedor"]));
                 $title_seguro = addslashes(trim($this->formulario["tag_title"]));
                 $alt_seguro = addslashes(trim($this->formulario["tag_alt"]));
                 $sql = "UPDATE Proveedor SET Proveedor = '$prov_seguro', USRModificacion='$usr_seguro', fechaModificacion='{$this->fecha}', tag_title = '$title_seguro', tag_alt = '$alt_seguro' WHERE _id=$id_seguro";
-                $accionLog = "EDITAR_PROVEEDOR"; $detallesLog = "Proveedor editado. ID: $id_seguro";
+                $accionLog = "EDITAR_PROVEEDOR"; $detallesLog = "Se actualizaron los datos del proveedor: $nombre_prov";
             } else if($this->formulario["opc"] == 'enabled'){
+                $sqlOld = "SELECT Proveedor FROM Proveedor WHERE _id = $id_seguro";
+                $rowOld = $this->conn->fetch($this->conn->query($sqlOld));
+                $nombreV = $rowOld ? $rowOld['Proveedor'] : "Proveedor ID: $id_seguro";
+
                 $sql = "UPDATE Proveedor SET Estatus = 1, USRModificacion='$usr_seguro', fechaModificacion='{$this->fecha}' WHERE _id = $id_seguro";
-                $accionLog = "ACTIVAR_PROVEEDOR"; $detallesLog = "Proveedor activado. ID: $id_seguro";
+                $accionLog = "ACTIVAR_PROVEEDOR"; $detallesLog = "Se reactivó el proveedor: $nombreV";
             } else if($this->formulario["opc"] == 'disabled'){
+                $sqlOld = "SELECT Proveedor FROM Proveedor WHERE _id = $id_seguro";
+                $rowOld = $this->conn->fetch($this->conn->query($sqlOld));
+                $nombreV = $rowOld ? $rowOld['Proveedor'] : "Proveedor ID: $id_seguro";
+
                 $sql = "UPDATE Proveedor SET Estatus = 0, USRModificacion='$usr_seguro', fechaModificacion='{$this->fecha}' WHERE _id = $id_seguro";
-                $accionLog = "DESACTIVAR_PROVEEDOR"; $detallesLog = "Proveedor desactivado. ID: $id_seguro";
+                $accionLog = "DESACTIVAR_PROVEEDOR"; $detallesLog = "Se desactivó el proveedor: $nombreV";
             } else if($this->formulario["opc"] == 'delete'){
                 $sql = "DELETE FROM Proveedor WHERE _id = $id_seguro";
-                $accionLog = "ELIMINAR_PROVEEDOR"; $detallesLog = "Proveedor eliminado permanentemente. ID: $id_seguro";
+                $accionLog = "ELIMINAR_PROVEEDOR"; $detallesLog = "Se eliminó permanentemente el proveedor ID: $id_seguro";
             }
         }
         

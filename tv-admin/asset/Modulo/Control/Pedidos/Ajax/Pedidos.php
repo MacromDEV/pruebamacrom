@@ -3,6 +3,7 @@ session_name("loginUsuario");
 session_start();
 require_once "../../../../Clases/dbconectar.php";
 require_once "../../../../Clases/ConexionMySQL.php";
+require_once "../../../../Clases/Funciones.php";
 date_default_timezone_set('America/Mexico_City');
 
 class Pedidos {
@@ -96,11 +97,12 @@ class Pedidos {
                         $detallesAudit .= "Cambió estatus del envío a $txtPago. ";
                     }
 
-                    $this->setBitacora("ACTUALIZAR_PEDIDO", trim($detallesAudit));
+                    // BITÁCORA
+                    Funciones::guardarBitacora($this->conn, 'Pedidos', 'ACTUALIZAR_PEDIDO', trim($detallesAudit));
 
                     if(count($this->archivos) != 0){
                         $this->setPedidoDetallesfiles($this->uploadfiles($this->archivos), $idPedido);
-                        $this->setBitacora("SUBIR_FACTURA", "Subió archivos de facturación (XML/PDF) para el Pedido #$noPedidoStr ($clienteStr)");
+                        Funciones::guardarBitacora($this->conn, 'Pedidos', 'SUBIR_FACTURA', "Subió archivos de facturación (XML/PDF) para el Pedido #$noPedidoStr ($clienteStr)");
                     }
                     if($acreditado == 5){
                         $arrayTemp = $this->getdetalsComprobanteMipedido($idPedido);
@@ -126,12 +128,12 @@ class Pedidos {
                 if(file_exists($ruta) && $this->removeFile($ruta)){
                     $this->setDeletefilePedido($idPedido, $tipo);
                     
-                    // BITÁCORA
                     $datosReales = $this->getDatosPedido($idPedido);
                     $noPedidoStr = $datosReales['noPedido'];
                     $clienteStr = $datosReales['cliente'];
 
-                    $this->setBitacora("ELIMINAR_FACTURA", "Eliminó el archivo de facturación ($tipo) del Pedido #$noPedidoStr ($clienteStr)");
+                    // BITÁCORA
+                    Funciones::guardarBitacora($this->conn, 'Pedidos', 'ELIMINAR_FACTURA', "Eliminó el archivo de facturación ($tipo) del Pedido #$noPedidoStr ($clienteStr)");
                     
                     $this->jsonData["Bandera"] = 1;
                     $this->jsonData["mensaje"] = "Archivo Eliminado";
@@ -149,13 +151,13 @@ class Pedidos {
                     $idPedido = $detalle["_idPedidos"];
                     $this->setImportePedidosDetallesxArticulo($idPedido, $detalle["Importe"]);
                     
-                    // BITÁCORA
                     $datosReales = $this->getDatosPedido($idPedido);
                     $noPedidoStr = $datosReales['noPedido'];
                     $clienteStr = $datosReales['cliente'];
                     $importeFormat = number_format($detalle["Importe"], 2);
 
-                    $this->setBitacora("CANCELAR_ARTICULO", "Canceló un artículo (Detalle ID: $idDetalle) del Pedido #$noPedidoStr ($clienteStr). Importe descontado: $$importeFormat");
+                    // BITÁCORA
+                    Funciones::guardarBitacora($this->conn, 'Pedidos', 'CANCELAR_ARTICULO', "Canceló un artículo (Detalle ID: $idDetalle) del Pedido #$noPedidoStr ($clienteStr). Importe descontado: $$importeFormat");
 
                     $this->jsonData["Bandera"] = 1;
                     $this->jsonData["mensaje"] = "Artículo cancelado exitosamente";
@@ -165,9 +167,6 @@ class Pedidos {
                 }
                 break;
 
-            // ===============================================
-            //ELIMINAR PEDIDO PERMANENTEMENTE
-            // ===============================================
             case 'deleteOrder':
                 if($rol_usuario != 'root' && $rol_usuario != 'Admin'){
                     $this->jsonData["Bandera"] = 0;
@@ -204,7 +203,8 @@ class Pedidos {
                 $this->conn->query("DELETE FROM cupones_usados WHERE id_pedido = $idPedido");
                 $this->conn->query("DELETE FROM Pedidos WHERE _idPedidos = $idPedido");
 
-                $this->setBitacora("ELIMINAR_PEDIDO", "ELIMINÓ PERMANENTEMENTE el Pedido #$noPedidoStr ($clienteStr) y sus detalles asociados.");
+                // BITÁCORA
+                Funciones::guardarBitacora($this->conn, 'Pedidos', 'ELIMINAR_PEDIDO', "ELIMINÓ PERMANENTEMENTE el Pedido #$noPedidoStr ($clienteStr) y sus detalles asociados.");
 
                 $this->jsonData["Bandera"] = 1;
                 $this->jsonData["mensaje"] = "Pedido eliminado permanentemente.";
@@ -229,23 +229,6 @@ class Pedidos {
             ];
         }
         return ['noPedido' => $idPedido, 'cliente' => 'Cliente Desconocido'];
-    }
-
-    private function setBitacora($accion, $detalles) {
-        $id_usuario = $_SESSION["id_usuario"] ?? $_SESSION["id"] ?? 0; 
-        $username = $_SESSION["nombre_usuario"] ?? $_SESSION["usr"] ?? 'Admin'; 
-        
-        $modulo = 'Pedidos';
-        $ip_usuario = $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0'; 
-        
-        $detalles_limpios = addslashes($detalles);
-
-        $sql = "INSERT INTO Bitacora_Auditoria 
-                (id_usuario, username, modulo, accion, detalles, fecha, ip_usuario) 
-                VALUES 
-                ($id_usuario, '$username', '$modulo', '$accion', '$detalles_limpios', '{$this->fecha}', '$ip_usuario')";
-        
-        $this->conn->query($sql);
     }
 
     private function getNoPedidos($find, $historico){
@@ -379,9 +362,6 @@ class Pedidos {
         return $this->conn->query($sql);
     }
 
-    // ==========================================
-    // AUTO-CANCELACIÓN DE PEDIDOS
-    // ==========================================
     private function autoCancelarPedidos() {
         $fecha_limite = date("Y-m-d H:i:s", strtotime("-5 days"));
         $sql = "UPDATE Pedidos SET Acreditado = '6' WHERE Acreditado = '0' AND Fecha <= '$fecha_limite'";  

@@ -104,8 +104,7 @@
             $sql = "";
             $usr_seguro = addslashes($_SESSION["nombre"]);
             $fecha_actual = date("Y-m-d H:i:s");
-            $accionLog = "";
-            $detallesLog = "";
+            $accionLog = ""; $detallesLog = "";
 
             if($this->formulario["opc"] == 'new' || $this->formulario["opc"] == 'edit') {
                 $marca_segura = addslashes(trim($this->formulario["Marca"]));
@@ -123,23 +122,33 @@
                 $color_seguro = addslashes($this->formulario["Color"]);
                 $sql = "INSERT INTO Marcas (Marca, Estatus, USRCreacion, USRModificacion, FechaCreacion, FechaModificacion, Color) 
                         VALUES ('$marca_segura', 1, '$usr_seguro', '$usr_seguro', '$fecha_actual', '$fecha_actual', '$color_seguro')";
-                $accionLog = "CREAR_MARCA"; $detallesLog = "Agencia creada: $marca_segura";
+                
+                $accionLog = "CREAR_AGENCIA"; $detallesLog = "Se registró la agencia: $marca_segura";
             } else {
                 $id_seguro = intval($this->formulario["_id"]);
+                $nombre_agencia = isset($this->formulario["Marca"]) ? addslashes(trim($this->formulario["Marca"])) : "Agencia ID: $id_seguro";
+
                 if($this->formulario["opc"] == 'edit'){
-                    $marca_segura = addslashes(trim($this->formulario["Marca"]));
                     $color_seguro = addslashes($this->formulario["Color"]);
-                    $sql = "UPDATE Marcas SET Marca = '$marca_segura', USRModificacion = '$usr_seguro', FechaModificacion = '$fecha_actual', Color = '$color_seguro' WHERE _id = $id_seguro";
-                    $accionLog = "EDITAR_MARCA"; $detallesLog = "Agencia editada. ID: $id_seguro";
+                    $sql = "UPDATE Marcas SET Marca = '$nombre_agencia', USRModificacion = '$usr_seguro', FechaModificacion = '$fecha_actual', Color = '$color_seguro' WHERE _id = $id_seguro";
+                    $accionLog = "EDITAR_AGENCIA"; $detallesLog = "Se actualizaron los datos de la agencia: $nombre_agencia";
                 } else if($this->formulario["opc"] == 'disabled'){
+                    $sqlOld = "SELECT Marca FROM Marcas WHERE _id = $id_seguro";
+                    $rowOld = $this->conn->fetch($this->conn->query($sqlOld));
+                    $nombreV = $rowOld ? $rowOld['Marca'] : "Agencia ID: $id_seguro";
+
                     $sql = "UPDATE Marcas SET Estatus = 0, USRModificacion = '$usr_seguro', FechaModificacion = '$fecha_actual' WHERE _id = $id_seguro"; 
-                    $accionLog = "DESACTIVAR_MARCA"; $detallesLog = "Agencia desactivada. ID: $id_seguro";
+                    $accionLog = "DESACTIVAR_AGENCIA"; $detallesLog = "Se desactivó la agencia: $nombreV";
                 } else if($this->formulario["opc"] == 'enabled'){
+                    $sqlOld = "SELECT Marca FROM Marcas WHERE _id = $id_seguro";
+                    $rowOld = $this->conn->fetch($this->conn->query($sqlOld));
+                    $nombreV = $rowOld ? $rowOld['Marca'] : "Agencia ID: $id_seguro";
+
                     $sql = "UPDATE Marcas SET Estatus = 1, USRModificacion = '$usr_seguro', FechaModificacion = '$fecha_actual' WHERE _id = $id_seguro"; 
-                    $accionLog = "ACTIVAR_MARCA"; $detallesLog = "Agencia activada. ID: $id_seguro";
+                    $accionLog = "ACTIVAR_AGENCIA"; $detallesLog = "Se reactivó la agencia: $nombreV";
                 } else if($this->formulario["opc"] == 'delete'){ 
                     $sql = "DELETE FROM Marcas WHERE _id = $id_seguro"; 
-                    $accionLog = "ELIMINAR_MARCA"; $detallesLog = "Agencia eliminada permanentemente. ID: $id_seguro";
+                    $accionLog = "ELIMINAR_AGENCIA"; $detallesLog = "Se eliminó permanentemente la agencia ID: $id_seguro";
                 }
             }
 

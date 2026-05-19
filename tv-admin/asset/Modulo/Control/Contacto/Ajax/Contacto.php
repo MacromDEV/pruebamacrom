@@ -3,6 +3,7 @@ session_name("loginUsuario");
 session_start();
 require_once "../../../../Clases/dbconectar.php";
 require_once "../../../../Clases/ConexionMySQL.php";
+require_once "../../../../Clases/Funciones.php";
 date_default_timezone_set('America/Mexico_City');
 
 class Contacto {
@@ -41,7 +42,8 @@ class Contacto {
                     $this->jsonData["Bandera"] = 1;
                     $this->jsonData["Data"] = $this->getContacto();
                     $this->jsonData["msgnuevos"] = $this->getmsgnuevos();
-                    $this->setBitacora("LECTURA_MENSAJE", "Abrió para lectura el mensaje de: $nombreRemitente");
+                    
+                    Funciones::guardarBitacora($this->conn, 'Contacto', 'LECTURA_MENSAJE', "Abrió para lectura el mensaje de: $nombreRemitente");
                 } else {
                     $this->jsonData["Bandera"] = 0;
                     $this->jsonData["mensaje"] = "Error al intentar consultar la base de datos.";
@@ -57,7 +59,8 @@ class Contacto {
                     $this->jsonData["mensaje"] = "El mensaje fue eliminado.";
                     $this->jsonData["Data"] = $this->getContactos();
                     $this->jsonData["msgnuevos"] = $this->getmsgnuevos();
-                    $this->setBitacora("ELIMINAR_MENSAJE", "Eliminó permanentemente el mensaje de: $nombreRemitente");
+                    
+                    Funciones::guardarBitacora($this->conn, 'Contacto', 'ELIMINAR_MENSAJE', "Eliminó permanentemente el mensaje de: $nombreRemitente");
                 } else {
                     $this->jsonData["Bandera"] = 0;
                     $this->jsonData["mensaje"] = "Error al intentar eliminar el mensaje.";
@@ -72,7 +75,7 @@ class Contacto {
                 $this->conn->query("UPDATE Contacto SET leido = $estado WHERE _id = $id");
                 
                 $accionTxt = $estado ? "leído" : "no leído";
-                $this->setBitacora("CAMBIO_ESTADO_LECTURA", "Marcó como $accionTxt el mensaje de: $nombreRemitente");
+                Funciones::guardarBitacora($this->conn, 'Contacto', 'CAMBIO_ESTADO_LECTURA', "Marcó como $accionTxt el mensaje de: $nombreRemitente");
 
                 $this->jsonData["Bandera"] = 1;
                 $this->jsonData["Data"] = $this->getContactos();
@@ -84,7 +87,7 @@ class Contacto {
                 $nombreRemitente = $this->getNombreRemitente($id);
                 
                 $this->conn->query("UPDATE Contacto SET destacado = IF(destacado = 1, 0, 1) WHERE _id = $id");
-                $this->setBitacora("TOGGLE_DESTACADO", "Cambió el estado de 'Destacado' para el mensaje de: $nombreRemitente");
+                Funciones::guardarBitacora($this->conn, 'Contacto', 'TOGGLE_DESTACADO', "Cambió el estado de 'Destacado' para el mensaje de: $nombreRemitente");
 
                 $this->jsonData["Bandera"] = 1;
                 $this->jsonData["Data"] = $this->getContactos();
@@ -102,23 +105,6 @@ class Contacto {
             return html_entity_decode(stripslashes($row['nombre']), ENT_QUOTES, 'UTF-8');
         }
         return "ID: $id";
-    }
-
-    private function setBitacora($accion, $detalles) {
-        $id_usuario = $_SESSION["id_usuario"] ?? $_SESSION["id"] ?? 0; 
-        $username = $_SESSION["nombre_usuario"] ?? $_SESSION["usr"] ?? 'Desarrollador'; 
-        
-        $modulo = 'Contacto';
-        $ip_usuario = $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0'; 
-        
-        $detalles_limpios = addslashes($detalles);
-
-        $sql = "INSERT INTO Bitacora_Auditoria 
-                (id_usuario, username, modulo, accion, detalles, fecha, ip_usuario) 
-                VALUES 
-                ($id_usuario, '$username', '$modulo', '$accion', '$detalles_limpios', '{$this->fecha}', '$ip_usuario')";
-        
-        $this->conn->query($sql);
     }
 
     private function getContactos() {

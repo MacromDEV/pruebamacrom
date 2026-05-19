@@ -179,24 +179,29 @@
                 $mod_seguro = addslashes(trim($this->formulario["Modelo"]));
                 $marca_segura = intval($this->formulario["_idMarca"]);
                 $sql = "INSERT INTO Modelos (Modelo, Estatus, _idMarca, USRCreacion, USRModificacion, FechaCreacion, FechaModificacion) VALUES ('$mod_seguro', 1, $marca_segura, '$usr_seguro', '$usr_seguro', '$fecha_actual', '$fecha_actual')";
-                $accionLog = "CREAR_MODELO"; $detallesLog = "Vehículo creado: $mod_seguro (Marca ID: $marca_segura)";
+                $accionLog = "CREAR_VEHICULO"; $detallesLog = "Se registró el vehículo: $mod_seguro";
             } else {
                 $id_seguro = intval($this->formulario["_id"]);
+                
+                $sqlOld = "SELECT Modelo FROM Modelos WHERE _id = $id_seguro";
+                $rowOld = $this->conn->fetch($this->conn->query($sqlOld));
+                $nombreV = $rowOld ? $rowOld['Modelo'] : "Vehículo ID: $id_seguro";
+
                 if($this->formulario["opc"] == 'edit'){
                     $mod_seguro = addslashes(trim($this->formulario["Modelo"]));
                     $marca_segura = intval($this->formulario["_idMarca"]);
                     $sql = "UPDATE Modelos SET Modelo='$mod_seguro', _idMarca=$marca_segura, USRModificacion='$usr_seguro', FechaModificacion='$fecha_actual' WHERE _id= $id_seguro";
-                    $accionLog = "EDITAR_MODELO"; $detallesLog = "Vehículo editado. ID: $id_seguro";
+                    $accionLog = "EDITAR_VEHICULO"; $detallesLog = "Se actualizaron los datos del vehículo: $mod_seguro";
                 } else if($this->formulario["opc"] == 'disabled'){
                     $sql = "UPDATE Modelos SET Estatus=0, USRModificacion='$usr_seguro', FechaModificacion='$fecha_actual' WHERE _id= $id_seguro";
-                    $accionLog = "DESACTIVAR_MODELO"; $detallesLog = "Vehículo desactivado. ID: $id_seguro";
+                    $accionLog = "DESACTIVAR_VEHICULO"; $detallesLog = "Se desactivó el vehículo: $nombreV";
                 } else if($this->formulario["opc"] == 'enabled'){
                     $sql = "UPDATE Modelos SET Estatus=1, USRModificacion='$usr_seguro', FechaModificacion='$fecha_actual' WHERE _id= $id_seguro";
-                    $accionLog = "ACTIVAR_MODELO"; $detallesLog = "Vehículo activado. ID: $id_seguro";
+                    $accionLog = "ACTIVAR_VEHICULO"; $detallesLog = "Se reactivó el vehículo: $nombreV";
                 } else if($this->formulario["opc"] == 'delete'){
                     $sql = "DELETE FROM Modelos WHERE _id= $id_seguro";
                     $this->conn->query("DELETE FROM Anios WHERE _idModelo = $id_seguro");
-                    $accionLog = "ELIMINAR_MODELO"; $detallesLog = "Vehículo eliminado permanentemente. ID: $id_seguro";
+                    $accionLog = "ELIMINAR_VEHICULO"; $detallesLog = "Se eliminó permanentemente el vehículo ID: $id_seguro";
                 }
             }
 
