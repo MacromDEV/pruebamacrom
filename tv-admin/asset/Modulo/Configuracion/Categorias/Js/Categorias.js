@@ -106,7 +106,7 @@ function CategoriasCrtl($scope, $http) {
         obj.nuevo = false;
         obj.categoria = angular.copy(categoria);
         obj.categoria.opc = "edit";
-        obj.img = obj.categoria.foto ? "/images/Categorias/" + obj.categoria._id + ".png" : "/tv-admin/asset/Images/boxed-bg.jpg";
+        obj.img = obj.categoria.foto ? "https://macromautopartes.com/images/Categorias/" + obj.categoria._id + ".png" : "https://macromautopartes.com/Images/motor.webp";
         document.getElementById("txtfile").value = "";
         $('.custom-file-label').html('Cambiar archivo...');
         $("#mcategoria").modal("show");
