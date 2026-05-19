@@ -308,10 +308,6 @@
     margin: 0;
 }
 
-::selection {
-  background-color: var(--primario);
-  color: var(--blanco);
-}
 a, button, .enlace, .sidebar__click, .cliente__opciones--button, .menu__enlaces span {
   transition: all 0.25s ease;
 }
