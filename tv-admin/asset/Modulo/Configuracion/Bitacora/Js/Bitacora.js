@@ -50,7 +50,6 @@ function BitacoraCtrl($scope, $http, $sce) {
         if (!textoFila) return "";
         
         let textoLimpio = textoFila.replace(/&quot;/g, '"');
-        let mod = modulo ? modulo.toLowerCase() : "";
 
         const etiquetasJSON = {
             "_idMarca": "Marca", "_idCategoria": "Categoría", "Modelo": "Vehículo",
@@ -90,78 +89,6 @@ function BitacoraCtrl($scope, $http, $sce) {
             }
         } catch(e) {}
 
-        let catalogosBasicos = ["agencias", "marcas", "categorias", "vehículos", "vehiculos", "modelos", "proveedores", "cenvios", "envios"];
-        let esCatalogoBasico = catalogosBasicos.some(c => mod.includes(c));
-
-        if (esCatalogoBasico) {
-            let regexTextoID = /(?:ID Envío|ID)\s*[:]?\s*(\d+)/i; 
-            let matchTexto = textoLimpio.match(regexTextoID);
-            let nombreTraducido = "";
-
-            if (matchTexto) {
-                let idCapturado = matchTexto[1];
-
-                if (mod.includes("agencias") || mod.includes("marcas")) nombreTraducido = obj.mapMarcas[idCapturado];
-                else if (mod.includes("categorias")) nombreTraducido = obj.mapCategorias[idCapturado];
-                else if (mod.includes("vehículos") || mod.includes("vehiculos") || mod.includes("modelos")) nombreTraducido = obj.mapModelos[idCapturado];
-                else if (mod.includes("proveedores")) nombreTraducido = obj.mapProveedores[idCapturado];
-                else if (mod.includes("cenvios") || mod.includes("envios")) nombreTraducido = obj.mapEnvios[idCapturado];
-
-                if (!nombreTraducido) {
-                    let partes = textoLimpio.split(matchTexto[0]);
-                    let resto = partes.join(' ').replace(/^[-,\s()]+|[-,\s()]+$/g, ''); 
-                    resto = resto.replace(/(Proveedor|Vehículo|Agencia|Categoría|Generación) (creado|creada|editado|editada|activado|activada|desactivado|desactivada|eliminado|eliminada)[.\s]*/gi, '');
-                    resto = resto.replace(/Registró nueva categoría[:\s]*/gi, '');
-                    resto = resto.replace(/^[-,\s()]+|[-,\s()]+$/g, '');
-
-                    if (resto.length > 1 && resto !== "S/C" && isNaN(resto)) {
-                        nombreTraducido = resto; 
-                    }
-                }
-
-                if (nombreTraducido) {
-                    let textoPildora = `<b class="text-primary"><i class="fas fa-tag mr-1"></i> ${nombreTraducido}</b>`;
-                    
-                    let accion = accionLog ? accionLog.toUpperCase() : "";
-                    let verbo = "Modificó"; 
-                    if (accion.includes("ACTIVAR") && !accion.includes("DESACTIVAR")) verbo = "Activó";
-                    else if (accion.includes("DESACTIVAR")) verbo = "Desactivó";
-                    else if (accion.includes("NUEVA") || accion.includes("CREAR")) verbo = "Agregó";
-                    else if (accion.includes("EDITAR")) verbo = "Editó";
-                    else if (accion.includes("ELIMINAR") || accion.includes("BORRAR")) verbo = "Eliminó";
-
-                    let entidad = "el registro";
-                    if (mod.includes("agencias") || mod.includes("marcas")) entidad = "la agencia";
-                    else if (mod.includes("categorias")) entidad = "la categoría";
-                    else if (mod.includes("vehículos") || mod.includes("modelos")) entidad = "el vehículo";
-                    else if (mod.includes("proveedores")) entidad = "el proveedor";
-                    else if (mod.includes("cenvios") || mod.includes("envios")) entidad = "el destino";
-
-                    let frasePrincipal = `${verbo} ${entidad}: ${textoPildora}`;
-                    let infoExtra = "";
-
-                    if (matchTexto) {
-                        infoExtra = textoLimpio.replace(matchTexto[0], '').trim();
-                        infoExtra = infoExtra.replace(/(Proveedor|Vehículo|Agencia|Categoría|Generación) (creado|creada|editado|editada|activado|activada|desactivado|desactivada|eliminado|eliminada)[.\s]*/gi, '');
-                        infoExtra = infoExtra.replace(/Registró nueva categoría[:\s]*/gi, '');
-                        infoExtra = infoExtra.replace(/^[-,\s()]+|[-,\s()]+$/g, '');
-
-                        if (infoExtra.toLowerCase().includes(nombreTraducido.toLowerCase())) {
-                            infoExtra = infoExtra.replace(new RegExp(nombreTraducido, 'ig'), '').trim();
-                            infoExtra = infoExtra.replace(/^[-,\s()]+|[-,\s()]+$/g, ''); 
-                        }
-                    }
-
-                    if (infoExtra && infoExtra.length > 2) {
-                        return $sce.trustAsHtml(`${frasePrincipal} <span class="ml-2 text-muted font-weight-normal">- ${infoExtra}</span>`);
-                    } else {
-                        return $sce.trustAsHtml(frasePrincipal);
-                    }
-                }
-            }
-        }
-
-        textoLimpio = textoLimpio.replace(/^[-,\s()]+|[-,\s()]+$/g, '');
         return $sce.trustAsHtml(textoLimpio);
     };
 

@@ -87,8 +87,8 @@
             }
             
             if($this->conn->query($sql)){
-                $det = "Permiso $estadoTexto - Rol: $rol_seguro, Módulo: $nombre_modulo";
-                Funciones::guardarBitacora($this->conn, 'Permisos', $accionLog, $det);
+                $det = "Permiso $estadoTexto - Rol afectado: '$rol_seguro' | Módulo: $nombre_modulo";
+                Funciones::guardarBitacora($this->conn, 'Permisos del Sistema', $accionLog, $det);
 
                 $this->jsonData["Bandera"] = 1;
                 $this->jsonData["mensaje"] = "Permiso guardado correctamente.";
@@ -108,8 +108,8 @@
             $sql = "DELETE FROM Permisos_Roles WHERE rol_nombre = '$rol_seguro'";
                         
             if($this->conn->query($sql)){
-                $det = "Rol eliminado permanentemente: $rol_seguro";
-                Funciones::guardarBitacora($this->conn, 'Permisos', 'ELIMINAR_ROL', $det);
+                $det = "Se eliminó permanentemente el rol del sistema: '$rol_seguro' y todos sus permisos asociados.";
+                Funciones::guardarBitacora($this->conn, 'Permisos del Sistema', 'ELIMINAR_ROL', $det);
 
                 $this->jsonData["Bandera"] = 1;
                 $this->jsonData["mensaje"] = "El rol '$rol_seguro' ha sido eliminado correctamente.";

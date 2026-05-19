@@ -44,7 +44,7 @@ class getRefacciones {
                 break;
 
                 case "inicio_sync":
-                    $this->registrarBitacoraCentral('INICIAR_SINCRONIZACION', 'Inició el proceso de sincronización con SEICOM.');
+                    Funciones::guardarBitacora($this->conn, 'Sincronizador SEICOM', 'INICIAR_SINCRONIZACION', 'El usuario inició manualmente el proceso de extracción de datos con SEICOM.');
                     $this->jsonData["Bandera"] = 1;
                 break;
 
@@ -65,7 +65,8 @@ class getRefacciones {
                     $updated = $this->bulkUpdateProductos();
 
                     $this->setBitacoraLocal($usr, $updated);
-                    $this->registrarBitacoraCentral('SINCRONIZACION_COMPLETADA', "Sincronización finalizada exitosamente: $updated productos actualizados.");
+                    
+                    Funciones::guardarBitacora($this->conn, 'Sincronizador SEICOM', 'SINCRONIZACION_COMPLETADA', "Proceso finalizado. Total de productos actualizados en tienda: $updated.");
 
                     $this->conn->query("COMMIT");
 
@@ -80,7 +81,9 @@ class getRefacciones {
 
         } catch(Exception $e){
             $this->conn->query("ROLLBACK");
-            $this->registrarBitacoraCentral('ERROR_SINCRONIZACION', "Falló la sincronización SEICOM. Error: " . $e->getMessage());
+            
+            Funciones::guardarBitacora($this->conn, 'Sincronizador SEICOM', 'ERROR_SINCRONIZACION', "Fallo crítico al conectar con SEICOM. Detalle técnico: " . $e->getMessage());
+            
             $this->jsonData["mensaje"] = $e->getMessage();
         }
 
@@ -114,7 +117,7 @@ class getRefacciones {
     }
 
     private function bulkInsertTemp(){
-        if(!isset($this->xml["Table"])){ throw new Exception("No hay datos."); }
+        if(!isset($this->xml["Table"])){ throw new Exception("No hay datos en el XML."); }
 
         $values = [];
         foreach($this->xml["Table"] as $item){
@@ -124,7 +127,7 @@ class getRefacciones {
             $values[] = "($clave,$precio,$stock)";
         }
 
-        if(empty($values)){ throw new Exception("Sin registros."); }
+        if(empty($values)){ throw new Exception("Lista de registros vacía."); }
 
         $sql = "INSERT INTO tmp_refacciones (Clave, Precio, Stock) VALUES " . implode(",", $values);
         $this->conn->query($sql);
@@ -147,24 +150,6 @@ class getRefacciones {
         $mensaje = "Actualización de precios ($cantidad productos)";
         $sql1 = "INSERT INTO logActualizacion (mensaje, usr, fecha, hora) VALUES ('$mensaje','$usr','{$this->fechaActual}','{$this->horaActual}')";
         $this->conn->query($sql1);
-    }
-
-    private function registrarBitacoraCentral($accion, $detalles) {
-        $id_usuario = $_SESSION["id_usuario"] ?? $_SESSION["id"] ?? 0; 
-        $username = $_SESSION["nombre_usuario"] ?? $_SESSION["usr"] ?? 'Sistema'; 
-        
-        $modulo = 'Sincronizador_SEICOM';
-        $ip_usuario = $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0'; 
-        
-        $detalles_limpios = addslashes($detalles);
-        $fechaHora = "{$this->fechaActual} {$this->horaActual}";
-
-        $sql = "INSERT INTO Bitacora_Auditoria 
-                (id_usuario, username, modulo, accion, detalles, fecha, ip_usuario) 
-                VALUES 
-                ($id_usuario, '$username', '$modulo', '$accion', '$detalles_limpios', '$fechaHora', '$ip_usuario')";
-        
-        $this->conn->query($sql);
     }
 
     private function getBitacora(){

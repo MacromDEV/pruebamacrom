@@ -1,5 +1,4 @@
 <?php
-    
     class Funciones{
         static function siAcceso($string=""){
             $arrayTemp = explode(",", $string);
@@ -12,8 +11,8 @@
 
         public static function guardarBitacora($conn, $modulo, $accion, $detalles) {
 
-            $id_usuario = isset($_SESSION['_id']) ? $_SESSION['_id'] : 0;
-            $username = isset($_SESSION['usr']) ? $_SESSION['usr'] : 'Sistema';
+            $id_usuario = isset($_SESSION['_id']) ? $_SESSION['_id'] : (isset($_SESSION['iduser']) ? $_SESSION['iduser'] : 0);
+            $username = isset($_SESSION['nombre']) ? $_SESSION['nombre'] : (isset($_SESSION['usr']) ? $_SESSION['usr'] : 'Sistema');
 
             $ip = $_SERVER['REMOTE_ADDR'];
             if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
@@ -33,3 +32,4 @@
             $conn->query($sql);
         }
     }
+?>

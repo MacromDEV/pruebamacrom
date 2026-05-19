@@ -38,6 +38,11 @@
                     
                 case 'activar':
                 case 'borrar':
+                        $idUser = (int)$this->formulario->usuarios->id;
+                        $sqlOld = "SELECT Username FROM Usuarios WHERE _id = $idUser";
+                        $rowOld = $this->conn->fetch($this->conn->query($sqlOld));
+                        $nombreU = $rowOld ? $rowOld['Username'] : "ID: $idUser";
+
                         if($this->setUsuarios($this->formulario->usuarios->opc=="borrar"? 0:1)){
                             if($this->setSeguridad($this->formulario->usuarios->opc=="borrar"? 0:1)){
                                 $this->jsonData["Bandera"] = 1;
@@ -45,7 +50,7 @@
                                 
                                 $accionBitacora = $this->formulario->usuarios->opc == "borrar" ? 'DESACTIVAR_USUARIO' : 'ACTIVAR_USUARIO';
                                 $textoBitacora = $this->formulario->usuarios->opc == "borrar" ? 'desactivó' : 'reactivó';
-                                Funciones::guardarBitacora($this->conn, 'Usuarios', $accionBitacora, "Se $textoBitacora la cuenta del usuario ID: {$this->formulario->usuarios->id}");
+                                Funciones::guardarBitacora($this->conn, 'Usuarios (Gestión)', $accionBitacora, "Se $textoBitacora la cuenta del empleado: $nombreU");
                                 
                             }else{
                                 $this->jsonData["Bandera"] = 0;
@@ -73,7 +78,8 @@
                         $this->jsonData["Bandera"] = 1;
                         $this->jsonData["mensaje"] = "El password ha sido cambiado";
                         
-                        Funciones::guardarBitacora($this->conn, 'Usuarios', 'CAMBIO_PASSWORD', "Se generó una nueva contraseña para la cuenta del usuario ID: {$this->formulario->usuarios->id}");
+                        $nombrePass = addslashes($this->formulario->usuarios->username);
+                        Funciones::guardarBitacora($this->conn, 'Usuarios (Gestión)', 'CAMBIO_PASSWORD', "Se forzó la regeneración de contraseña para: $nombrePass");
                         
                     }else{
                         $this->jsonData["Bandera"] = 0;
@@ -130,7 +136,7 @@
                         $this->jsonData["mensaje"] = "Usuario eliminado permanentemente.";
                         
                         if ($uInfo) {
-                            Funciones::guardarBitacora($this->conn, 'Usuarios', 'ELIMINAR_USUARIO', "Se eliminó de forma definitiva la cuenta de: {$uInfo['Username']} (ID: $idUser)");
+                            Funciones::guardarBitacora($this->conn, 'Usuarios (Gestión)', 'ELIMINAR_USUARIO', "Se eliminó de forma definitiva la cuenta de empleado: {$uInfo['Username']}");
                         }
                         
                     } else {
