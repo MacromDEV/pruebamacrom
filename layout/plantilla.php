@@ -149,21 +149,21 @@
             $mod = isset($_GET["mod"]) ? $_GET["mod"] : "home";
             switch ($mod) {
                 case 'home':
-                    echo "<script type='text/javascript' src='modulo/home/Js/$mod.js'></script>";
+                    echo "<script type='text/javascript' src='/modulo/home/Js/$mod.js'></script>";
                     break;
                 case 'catalogo':
-                    echo "<script type='text/javascript' src='vendor/noui/nouislider.min.js'></script>";
-                    echo "<script type='text/javascript' src='modulo/Catalogo/Js/$mod.js'></script>";
+                    echo "<script type='text/javascript' src='/vendor/noui/nouislider.min.js'></script>";
+                    echo "<script type='text/javascript' src='/modulo/Catalogo/Js/$mod.js'></script>";
                     break;
                 case 'login':
                 case 'register':
-                    echo "<script type='text/javascript' src='modulo/Login/Js/Login.js'></script>";
+                    echo "<script type='text/javascript' src='/modulo/Login/Js/Login.js'></script>";
                     break;
                 case 'ProcesoCompra':
                 case 'Compras':
                 case 'Blog':
                 case 'Profile':
-                    echo "<script type='text/javascript' src='modulo/$mod/Js/$mod.js'></script>";
+                    echo "<script type='text/javascript' src='/modulo/$mod/Js/$mod.js'></script>";
                     break;
             }
         ?>
