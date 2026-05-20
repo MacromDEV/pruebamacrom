@@ -3,21 +3,21 @@
 	itemtype="http://schema.org/Product">
 
 	<meta itemprop="url"
-		content="https://macromautopartes.com/?mod=catalogo&opc=detalles&_id={{Refaccion.datos._id}}-{{Refaccion.datos.NewUrlName}}">
+		content="https://macromautopartes.com/catalogo/detalles/{{Refaccion.datos._id}}-{{Refaccion.datos.NewUrlName}}">
 
 	<div class="bread-crumb bgwhite flex-w categorias__link">
-		<a href="?mod=catalogo&pag=1&prod=&cate={{Refaccion.datos._idCategoria}}&armadora=&mdl=&[a]=" class="s-text16">
+		<a href="/catalogo?pag=1&prod=&cate={{Refaccion.datos._idCategoria}}&armadora=&mdl=&[a]=" class="s-text16">
 			<span ng-bind="Refaccion.datos.Categoria"></span><i class="fa fa-angle-right" aria-hidden="true"></i>
 		</a>
-		<a href="?mod=catalogo&pag=1&prod=&cate={{Refaccion.datos._idCategoria}}&armadora={{Refaccion.datos._idMarca}}&mdl=&[a]="
+		<a href="/catalogo?pag=1&prod=&cate={{Refaccion.datos._idCategoria}}&armadora={{Refaccion.datos._idMarca}}&mdl=&[a]="
 			class="s-text16">
 			<span ng-bind="Refaccion.datos.Marca"></span><i class="fa fa-angle-right" aria-hidden="true"></i>
 		</a>
-		<a href="?mod=catalogo&pag=1&prod=&cate={{Refaccion.datos._idCategoria}}&armadora={{Refaccion.datos._idMarca}}&mdl={{Refaccion.datos._idModelo}}&[a]="
+		<a href="/catalogo?pag=1&prod=&cate={{Refaccion.datos._idCategoria}}&armadora={{Refaccion.datos._idMarca}}&mdl={{Refaccion.datos._idModelo}}&[a]="
 			class="s-text16">
 			<span ng-bind="Refaccion.datos.Modelo"></span><i class="fa fa-angle-right" aria-hidden="true"></i>
 		</a>
-		<a href="?mod=catalogo&pag=1&prod=&cate={{Refaccion.datos._idCategoria}}&armadora={{Refaccion.datos._idMarca}}&mdl={{Refaccion.datos._idModelo}}&[a]={{Refaccion.datos.Anios}}"class="s-text17" ng-bind="Refaccion.datos.Anio"></a>
+		<a href="/catalogo?pag=1&prod=&cate={{Refaccion.datos._idCategoria}}&armadora={{Refaccion.datos._idMarca}}&mdl={{Refaccion.datos._idModelo}}&[a]={{Refaccion.datos.Anios}}"class="s-text17" ng-bind="Refaccion.datos.Anio"></a>
 	</div>
 
 	<div class="contenido-principal bgwhite" id="MainDark">
@@ -229,7 +229,7 @@
 								<div class="productos__informacion">
 									<div class="wrap-pic-w of-hidden cursorpnt">
 										<a itemprop="url"
-											href="?mod=catalogo&opc=detalles&_id={{producto._id}}-{{producto.NewUrlName}}"
+											href="/catalogo/detalles/{{producto._id}}-{{producto.NewUrlName}}"
 											class="enlace">
 											<div class="avisos__productos">
 												<span class="nuevo__aviso bg-new"
@@ -251,7 +251,7 @@
 											<p itemprop="brand" class="block2-brand" ng-bind="producto.NombreProveedor">
 											</p>
 											<a itemprop="name"
-												href="?mod=catalogo&opc=detalles&_id={{producto._id}}-{{producto.NewUrlName}}"
+												href="/catalogo/detalles/{{producto._id}}-{{producto.NewUrlName}}"
 												class="block2-name dis-block s-text3" ng-bind="producto.Producto"></a>
 											<div class="sku_row">
 												<span class="sku_label dis-block">No. Parte:</span>

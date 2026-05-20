@@ -213,7 +213,7 @@
 							<div class="home__pr" ng-repeat="producto in Refacciones" itemscope itemtype="http://schema.org/Product">
 								<div class="productos__informacion">
 									<div class="wrap-pic-w of-hidden cursorpnt">
-										<a itemprop="url" href="?mod=catalogo&opc=detalles&_id={{producto._id}}-{{producto.NewUrlName}}" class="enlace">
+										<a itemprop="url" href="/catalogo/detalles/{{producto._id}}-{{producto.NewUrlName}}" class="enlace">
 											<div class="avisos__productos">
 												<span class="nuevo__aviso bg-new" ng-show="producto.RefaccionNueva != 0">Nuevo</span>
 												<span class="agotado__aviso bg-advertencia" ng-show="producto.agotado">Agotado</span>
@@ -226,7 +226,7 @@
 									<div class="block2-txt">
 										<section class="descripcion-producto">
 											<p itemprop="brand" class="block2-brand" ng-bind="producto.NombreProveedor"></p>
-											<a itemprop="name" href="?mod=catalogo&opc=detalles&_id={{producto._id}}-{{producto.NewUrlName}}" class="block2-name dis-block s-text3" ng-bind="producto.Producto"></a>
+											<a itemprop="name" href="/catalogo/detalles/{{producto._id}}-{{producto.NewUrlName}}" class="block2-name dis-block s-text3" ng-bind="producto.Producto"></a>
 											
 											<div class="sku_row">
 												<span class="sku_label dis-block">No. Parte:</span>

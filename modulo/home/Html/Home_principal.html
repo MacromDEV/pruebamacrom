@@ -29,11 +29,11 @@
                     <div class="row rowrap">
                         <div class="categoria__cat" ng-repeat="categoria in Data.Categorias">
                             <div class="block1 hov-img-zoom pos-relative m-b-20">
-                                <a href="?mod=catalogo&pag=1&cate={{categoria._id}}">
+                                <a href="/catalogo?pag=1&cate={{categoria._id}}">
                                     <img ng-src="{{getImagen(categoria)}}" ng-attr-alt="Categoría {{categoria.Categoria}}" class="filcatego" loading="lazy">
                                 </a>
                                 <div class="block1-wrapbtn">
-                                    <a href="?mod=catalogo&pag=1&cate={{categoria._id}}" class="categoria__enlace" ng-bind="categoria.Categoria"></a>
+                                    <a href="/catalogo?pag=1&cate={{categoria._id}}" class="categoria__enlace" ng-bind="categoria.Categoria"></a>
                                 </div>
                             </div>
                         </div>
@@ -63,7 +63,7 @@
                                     <div class="home__pr" ng-repeat="producto in Data.masVendidos | limitTo: 8" itemscope itemtype="http://schema.org/Product">
                                         <div class="productos__informacion">
                                             <div class="wrap-pic-w of-hidden cursorpnt">
-                                                <a itemprop="url" href="?mod=catalogo&opc=detalles&_id={{producto._id}}-{{producto.NewUrlName}}" class="enlace">
+                                                <a itemprop="url" href="/catalogo/detalles/{{producto._id}}-{{producto.NewUrlName}}" class="enlace">
                                                     <div class="avisos__productos">
                                                         <span class="nuevo__aviso bg-new" ng-show="producto.RefaccionNueva != 0">Nuevo</span>
                                                         <span class="agotado__aviso bg-advertencia" ng-show="producto.agotado">Agotado</span>
@@ -77,7 +77,7 @@
                                             <div class="block2-txt">
                                                 <section class="descripcion-producto">
                                                     <p itemprop="brand" class="block2-brand" ng-bind="producto.NombreProveedor"></p>
-                                                    <a itemprop="name" href="?mod=catalogo&opc=detalles&_id={{producto._id}}-{{producto.NewUrlName}}" class="block2-name dis-block s-text3" ng-bind="producto.Producto"></a>
+                                                    <a itemprop="name" href="/catalogo/detalles/{{producto._id}}-{{producto.NewUrlName}}" class="block2-name dis-block s-text3" ng-bind="producto.Producto"></a>
                                                     <div class="sku_row">
 														<span class="sku_label dis-block">No. Parte:</span>
 														<span itemprop="sku" class="sku_value dis-block" ng-bind="producto.No_parte"></span>
@@ -112,7 +112,7 @@
                                     <div class="home__pr" ng-repeat="producto in Data.nuevos | limitTo: 8" itemscope itemtype="http://schema.org/Product">
                                         <div class="productos__informacion">
                                             <div class="wrap-pic-w of-hidden cursorpnt">
-                                                <a itemprop="url" href="?mod=catalogo&opc=detalles&_id={{producto._id}}-{{producto.NewUrlName}}" class="enlace">
+                                                <a itemprop="url" href="/catalogo/detalles/{{producto._id}}-{{producto.NewUrlName}}" class="enlace">
                                                     <div class="avisos__productos">
                                                         <span class="nuevo__aviso bg-new" ng-show="producto.RefaccionNueva != 0">Nuevo</span>
                                                         <span class="agotado__aviso bg-advertencia" ng-show="producto.agotado">Agotado</span>
@@ -126,7 +126,7 @@
                                             <div class="block2-txt">
                                                 <section class="descripcion-producto">
                                                     <p itemprop="brand" class="block2-brand" ng-bind="producto.NombreProveedor"></p>
-                                                    <a itemprop="name" href="?mod=catalogo&opc=detalles&_id={{producto._id}}-{{producto.NewUrlName}}" class="block2-name dis-block s-text3" ng-bind="producto.Producto"></a>
+                                                    <a itemprop="name" href="/catalogo/detalles/{{producto._id}}-{{producto.NewUrlName}}" class="block2-name dis-block s-text3" ng-bind="producto.Producto"></a>
                                                     <div class="sku_row">
 														<span class="sku_label dis-block">No. Parte:</span>
 														<span itemprop="sku" class="sku_value dis-block" ng-bind="producto.No_parte"></span>
@@ -161,7 +161,7 @@
                                     <div class="home__pr" ng-repeat="producto in Data.liquidacion | limitTo: 8" itemscope itemtype="http://schema.org/Product">
                                         <div class="productos__informacion">
                                             <div class="wrap-pic-w of-hidden cursorpnt">
-                                                <a itemprop="url" href="?mod=catalogo&opc=detalles&_id={{producto._id}}-{{producto.NewUrlName}}" class="enlace">
+                                                <a itemprop="url" href="/catalogo/detalles/{{producto._id}}-{{producto.NewUrlName}}" class="enlace">
                                                     <div class="avisos__productos">
                                                         <span class="nuevo__aviso bg-new" ng-show="producto.RefaccionNueva != 0">Nuevo</span>
                                                         <span class="agotado__aviso bg-advertencia" ng-show="producto.agotado">Agotado</span>
@@ -175,7 +175,7 @@
                                             <div class="block2-txt">
                                                 <section class="descripcion-producto">
                                                     <p itemprop="brand" class="block2-brand" ng-bind="producto.NombreProveedor"></p>
-                                                    <a itemprop="name" href="?mod=catalogo&opc=detalles&_id={{producto._id}}-{{producto.NewUrlName}}" class="block2-name dis-block s-text3" ng-bind="producto.Producto"></a>
+                                                    <a itemprop="name" href="/catalogo/detalles/{{producto._id}}-{{producto.NewUrlName}}" class="block2-name dis-block s-text3" ng-bind="producto.Producto"></a>
                                                     <div class="sku_row">
 														<span class="sku_label dis-block">No. Parte:</span>
 														<span itemprop="sku" class="sku_value dis-block" ng-bind="producto.No_parte"></span>
