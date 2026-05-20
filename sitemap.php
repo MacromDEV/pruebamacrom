@@ -1,6 +1,6 @@
 <?php
-require_once "Clases/dbconectar.php";
-require_once "Clases/ConexionMySQL.php";
+require_once "tv-admin/asset/Clases/dbconectar.php";
+require_once "tv-admin/asset/Clases/ConexionMySQL.php";
 
 header("Content-Type: application/xml; charset=utf-8");
 
