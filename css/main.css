@@ -172,6 +172,11 @@ a:hover {
   color: var(--primario);
 }
 
+::selection {
+  background-color: var(--primario);
+  color: var(--blanco);
+}
+
 ul,
 li {
   margin: 0px;
