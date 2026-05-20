@@ -83,23 +83,23 @@
             }
         </style>
 
-        <link rel="icon" type="image/png" href="images/icons/FaviconM.png"/>
+        <link rel="icon" type="image/png" href="/images/icons/FaviconM.png"/>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
-    	<link rel="stylesheet" type="text/css" href="fonts/fontawesome-5/css/all.min.css">
-    	<link rel="stylesheet" type="text/css" href="fonts/elegant-font/html-css/style.css">
-    	<link rel="stylesheet" type="text/css" href="vendor/animate/animate.css">
-    	<link rel="stylesheet" type="text/css" href="vendor/daterangepicker/daterangepicker.css">
-    	<link rel="stylesheet" type="text/css" href="vendor/lightbox2/css/lightbox.min.css">
-        <link rel="stylesheet" type="text/css" href="vendor/toastr/build/toastr.css">
+    	<link rel="stylesheet" type="text/css" href="/fonts/fontawesome-5/css/all.min.css">
+    	<link rel="stylesheet" type="text/css" href="/fonts/elegant-font/html-css/style.css">
+    	<link rel="stylesheet" type="text/css" href="/vendor/animate/animate.css">
+    	<link rel="stylesheet" type="text/css" href="/vendor/daterangepicker/daterangepicker.css">
+    	<link rel="stylesheet" type="text/css" href="/vendor/lightbox2/css/lightbox.min.css">
+        <link rel="stylesheet" type="text/css" href="/vendor/toastr/build/toastr.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css">
         <link rel="stylesheet" href="https://cdn.datatables.net/1.10.7/css/jquery.dataTables.css">
-    	<link rel="stylesheet" type="text/css" href="css/util.css">
-        <link rel="stylesheet" type="text/css" href="css/main.css">
-        <link rel="preload" href="css/main.css" as="style">
-        <link rel="stylesheet" type="text/css" href="css/otra.css">
-        <link rel="stylesheet" href="css/normalize.css">
+    	<link rel="stylesheet" type="text/css" href="/css/util.css">
+        <link rel="stylesheet" type="text/css" href="/css/main.css">
+        <link rel="preload" href="/css/main.css" as="style">
+        <link rel="stylesheet" type="text/css" href="/css/otra.css">
+        <link rel="stylesheet" href="/css/normalize.css">
 
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-T0GT52FN43"></script>
         <script>
@@ -128,22 +128,22 @@
         ?>
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
-        <script type="text/javascript" src="vendor/momentjs/moment.min.js"></script>
+        <script type="text/javascript" src="/vendor/momentjs/moment.min.js"></script>
         <script src="https://cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script>
-        <script src="tv-admin/asset/Plugins/numeric/jquery.numeric.js"></script>
-        <script type="text/javascript" src="tv-admin/asset/Js/angular/angular.min.js"></script>
-        <script src="tv-admin/asset/Js/angular/angular-datatables.min.js"></script>
-        <script src="tv-admin/asset/Js/angular/angular-recaptcha.min.js"></script>
-        <script type="text/javascript" src="tv-admin/asset/Js/angular/first.js"></script>
-        <script type="text/javascript" src="js/Cabecera.js"></script>
+        <script src="/tv-admin/asset/Plugins/numeric/jquery.numeric.js"></script>
+        <script type="text/javascript" src="/tv-admin/asset/Js/angular/angular.min.js"></script>
+        <script src="/tv-admin/asset/Js/angular/angular-datatables.min.js"></script>
+        <script src="/tv-admin/asset/Js/angular/angular-recaptcha.min.js"></script>
+        <script type="text/javascript" src="/tv-admin/asset/Js/angular/first.js"></script>
+        <script type="text/javascript" src="/js/Cabecera.js"></script>
         <script type="text/javascript">$_SESSION = <?php print json_encode($_SESSION)?>;</script>
         <script src="https://unpkg.com/@popperjs/core@2"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.js"></script>
-        <script type="text/javascript" src="vendor/JsZip/dist/jszip.min.js"></script>
+        <script type="text/javascript" src="/vendor/JsZip/dist/jszip.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-        <script type="text/javascript" src="vendor/toastr/build/toastr.min.js"></script>
-	    <script src="js/main.js"></script>
+        <script type="text/javascript" src="/vendor/toastr/build/toastr.min.js"></script>
+	    <script src="/js/main.js"></script>
 
         <?php
             $mod = isset($_GET["mod"]) ? $_GET["mod"] : "home";

@@ -319,10 +319,10 @@ function catalogosCtrl($scope, $http) {
     };
 
     if(aplicarbutton){
-        aplicarbutton.addEventListener("click", () => { window.location.href = "?mod=catalogo&pag=1"; });
+        aplicarbutton.addEventListener("click", () => { window.location.href = "?pag=1"; });
     }
     if(borrarbutton){
-        borrarbutton.addEventListener("click", clearfilter =>{ window.location.href = "?mod=catalogo&pag=1"; });
+        borrarbutton.addEventListener("click", clearfilter =>{ window.location.href = "?pag=1"; });
     }
 
     obj.viewMore = () => {
@@ -444,7 +444,7 @@ function catalogosCtrl($scope, $http) {
 
     obj.ejecutarBusquedaInteligente = (texto) => {
         if(!texto || texto.trim() === ""){
-            window.location.href = "?mod=catalogo&pag=1";
+            window.location.href = "?pag=1";
             return;
         }
         obj.cargando = true;
@@ -480,10 +480,10 @@ function catalogosCtrl($scope, $http) {
 
                 window.location.search = query.toString();
             } else {
-                window.location.href = "?mod=catalogo&pag=1&prod=" + encodeURIComponent(texto);
+                window.location.href = "?pag=1&prod=" + encodeURIComponent(texto);
             }
         }, function errorCallback(res) {
-            window.location.href = "?mod=catalogo&pag=1&prod=" + encodeURIComponent(texto);
+            window.location.href = "?pag=1&prod=" + encodeURIComponent(texto);
         });
     };
 
@@ -565,7 +565,7 @@ function catalogosCtrl($scope, $http) {
     };
 
     obj.RefaccionDetalles = (_id) => {
-        window.open("?mod=catalogo&opc=detalles&_id=" + _id, "_self");
+        window.open("/catalogo/detalles/_id=" + _id, "_self");
     }
 
     obj.init = function() {
@@ -618,7 +618,7 @@ function catalogosDetallesCtrl($scope, $http, $rootScope) {
     obj.btnEnabled = obj.session.autentificacion == undefined ? true : false;
     obj.Refaccion = { id: 0, opc: "OneRefaccion", datos: {}, galeria: [], Existencias: 0, cantidad: 1, precio: 0 };
     
-    obj.RefaccionDetalles = (_id) => { window.open("?mod=catalogo&opc=detalles&_id=" + _id, "_self"); }
+    obj.RefaccionDetalles = (_id) => { window.open("/catalogo/detalles/_id=" + _id, "_self"); }
 
     obj.Activa = false;
     obj.trunc = (x, posiciones = 0) => {
@@ -734,7 +734,7 @@ function catalogosDetallesCtrl($scope, $http, $rootScope) {
         }
     }
 
-    obj.btnDetallesRelacionados = (id) => { window.open("?mod=catalogo&opc=detalles&_id=" + id, "_self"); }
+    obj.btnDetallesRelacionados = (id) => { window.open("/catalogo/detalles/_id=" + id, "_self"); }
 
     obj.eachRefacciones = (array) => {
         array.forEach(e => {
