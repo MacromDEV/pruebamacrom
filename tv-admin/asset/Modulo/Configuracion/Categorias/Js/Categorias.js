@@ -107,6 +107,7 @@ function CategoriasCrtl($scope, $http) {
         obj.categoria = angular.copy(categoria);
         obj.categoria.opc = "edit";
         obj.img = obj.categoria.foto ? "https://macromautopartes.com/images/Categorias/" + obj.categoria._id + ".png" : "https://macromautopartes.com/Images/motor.webp";
+      
         document.getElementById("txtfile").value = "";
         $('.custom-file-label').html('Cambiar archivo...');
         $("#mcategoria").modal("show");
