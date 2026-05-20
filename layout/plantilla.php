@@ -52,7 +52,31 @@
         <meta property="business:contact_data:postal_code" content="28980">
         <meta property="business:contact_data:country_name" content="Mexico">
         <meta name="theme-color" content="#ffffff">
-
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "AutoPartsStore",
+          "name": "Macrom Autopartes",
+          "image": "https://macromautopartes.com/images/icons/previwmacrom.png",
+          "@id": "https://macromautopartes.com",
+          "url": "https://macromautopartes.com",
+          "telephone": "+523122682028",
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "Av. Benito Juárez #164 Col. La Gloria",
+            "addressLocality": "Villa de Álvarez",
+            "addressRegion": "Colima",
+            "postalCode": "28980",
+            "addressCountry": "MX"
+          },
+          "sameAs": [
+            "https://www.facebook.com/MacromAutopartes/",
+            "https://www.instagram.com/macromautopartes/",
+            "https://www.tiktok.com/@macromautopartes?lang=en",
+            "https://www.youtube.com/channel/UCbVJJH6AIZJ9lH7fE_2rtwA"
+          ]
+        }
+        </script>
         <style>
             [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
                 display: none !important;
