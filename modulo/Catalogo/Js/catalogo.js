@@ -488,10 +488,10 @@ function catalogosCtrl($scope, $http) {
 
                 window.location.href = "/catalogo?" + query.toString();
             } else {
-                window.location.href = "/catalogo?pag=1&prod=" + encodeURIComponent(texto);
+                window.location.href = "/catalogo?prod=" + encodeURIComponent(texto);
             }
         }, function errorCallback(res) {
-            window.location.href = "/catalogo?pag=1&prod=" + encodeURIComponent(texto);
+            window.location.href = "/catalogo?prod=" + encodeURIComponent(texto);
         });
     };
 
