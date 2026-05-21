@@ -340,9 +340,13 @@ function catalogosCtrl($scope, $http) {
 
     obj.eachRefacciones = (array) => {
         array.forEach(e => {
-            e.NewUrlName = e["Producto"].replaceAll(" ", "-");
-            e.NewUrlName = e.NewUrlName.replaceAll(",", "");
-            e.NewUrlName = e.NewUrlName.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+            let cleanUrl = e["Producto"].toLowerCase();
+            cleanUrl = cleanUrl.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+            cleanUrl = cleanUrl.replace(/[^a-z0-9-]/gi, '-');
+            cleanUrl = cleanUrl.replace(/-+/g, '-');
+            cleanUrl = cleanUrl.replace(/^-+|-+$/g, '');
+            e.NewUrlName = cleanUrl;
+            
             e.NewAltName = e["Producto"].replaceAll(",", "");
             if (e.stock == 0) { e.agotado = true; }
         })
@@ -666,10 +670,14 @@ function catalogosDetallesCtrl($scope, $http, $rootScope) {
                 obj.eachRefacciones(obj.productos);
                 obj.Refaccion.datos.NewAltName = obj.Refaccion.datos.Producto.replaceAll(",", "");
                 newPageTitle = obj.Refaccion.datos.NewAltName;
-                obj.Refaccion.datos.NewUrlName = obj.Refaccion.datos["Producto"].replaceAll(" ", "-");
-                obj.Refaccion.datos.NewUrlName = obj.Refaccion.datos.NewUrlName.replaceAll(",", "");
+                let cleanUrl = obj.Refaccion.datos["Producto"].toLowerCase();
+                cleanUrl = cleanUrl.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+                cleanUrl = cleanUrl.replace(/[^a-z0-9-]/gi, '-');
+                cleanUrl = cleanUrl.replace(/-+/g, '-');
+                cleanUrl = cleanUrl.replace(/^-+|-+$/g, '');
+                
+                obj.Refaccion.datos.NewUrlName = cleanUrl;
                 document.querySelector('title').textContent = newPageTitle;
-                obj.Refaccion.datos.NewUrlName = obj.Refaccion.datos.NewUrlName.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
 
                 const expectedIdParam = obj.Refaccion.id + "-" + obj.Refaccion.datos.NewUrlName;
                 const currentParams = new URLSearchParams(window.location.search);
@@ -738,9 +746,13 @@ function catalogosDetallesCtrl($scope, $http, $rootScope) {
 
     obj.eachRefacciones = (array) => {
         array.forEach(e => {
-            e.NewUrlName = e["Producto"].replaceAll(" ", "-");
-            e.NewUrlName = e.NewUrlName.replaceAll(",", "");
-            e.NewUrlName = e.NewUrlName.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+            let cleanUrl = e["Producto"].toLowerCase();
+            cleanUrl = cleanUrl.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+            cleanUrl = cleanUrl.replace(/[^a-z0-9-]/gi, '-');
+            cleanUrl = cleanUrl.replace(/-+/g, '-');
+            cleanUrl = cleanUrl.replace(/^-+|-+$/g, '');
+            e.NewUrlName = cleanUrl;
+            
             e.NewAltName = e["Producto"].replaceAll(",", "");
             if (e.stock == 0) { e.agotado = true; }
         })
