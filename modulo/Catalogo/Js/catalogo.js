@@ -679,13 +679,12 @@ function catalogosDetallesCtrl($scope, $http, $rootScope) {
                 obj.Refaccion.datos.NewUrlName = cleanUrl;
                 document.querySelector('title').textContent = newPageTitle;
 
-                const expectedIdParam = obj.Refaccion.id + "-" + obj.Refaccion.datos.NewUrlName;
-                const currentParams = new URLSearchParams(window.location.search);
-
-                if (currentParams.get('_id') !== expectedIdParam) {
-                    currentParams.set('_id', expectedIdParam);
-                    const newUrl = window.location.pathname + '?' + currentParams.toString();
-                    window.history.replaceState(null, '', newUrl);
+                const expectedSlug = obj.Refaccion.id + "-" + obj.Refaccion.datos.NewUrlName;
+                const currentPath = window.location.pathname;
+                const expectedPath = "/catalogo/detalles/" + expectedSlug;
+                
+                if (currentPath !== expectedPath && currentPath.includes('/catalogo/detalles')) {
+                    window.history.replaceState(null, '', expectedPath);
                 }
 
                 obj.Activa = obj.Refaccion.datos.stock != 0 ? true : false;
@@ -758,8 +757,16 @@ function catalogosDetallesCtrl($scope, $http, $rootScope) {
         })
     }
     
-    const urlParams = new URLSearchParams(window.location.search);
-    const rawId = urlParams.get('_id'); 
-    if (rawId) { obj.Refaccion.id = rawId.split('-')[0]; }
+    const pathParts = window.location.pathname.split('/');
+    const lastPart = pathParts[pathParts.length - 1];
+    
+    if (lastPart && /^\d+/.test(lastPart)) {
+        obj.Refaccion.id = lastPart.split('-')[0];
+    } else {
+        const urlParams = new URLSearchParams(window.location.search);
+        const rawId = urlParams.get('_id'); 
+        if (rawId) { obj.Refaccion.id = rawId.split('-')[0]; }
+    }
+    
     obj.getRefaccion();
 }
