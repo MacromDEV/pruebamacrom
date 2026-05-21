@@ -1,5 +1,5 @@
-const url_catalogo = "./modulo/Catalogo/Ajax/Catalogo.php";
-var url_session = "./modulo/home/Ajax/session.php";
+const url_catalogo = "/modulo/Catalogo/Ajax/Catalogo.php";
+var url_session = "/modulo/home/Ajax/session.php";
 
 tsuruVolks
     .controller('catalogosCtrl', ["$scope", "$http", catalogosCtrl])

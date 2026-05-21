@@ -1,6 +1,6 @@
-var url_session = "./modulo/home/Ajax/session.php";
-var url = "./modulo/home/Ajax/home.php";
-var urlLogin = "./modulo/Login/Ajax/Login.php";
+var url_session = "/modulo/home/Ajax/session.php";
+var url = "/modulo/home/Ajax/home.php";
+var urlLogin = "/modulo/Login/Ajax/Login.php";
 
 tsuruVolks.controller('CabeceraCtrl', ["$scope", "$http", "$sce", "vcRecaptchaService", CabeceraCtrl])
     .controller('FooterCtrl', ["$scope", "$http", FooterCtrl])
@@ -172,7 +172,7 @@ function CabeceraCtrl($scope, $http, $sce, vcRecaptchaService) {
     obj.getBanners = (data) => {
         $http({
             method: 'POST',
-            url: "./tv-admin/asset/Modulo/Secciones/webprincipal/Ajax/webprincipal.php",
+            url: "/tv-admin/asset/Modulo/Secciones/webprincipal/Ajax/webprincipal.php",
             data: { imagen: data },
             headers: { 'Content-Type': undefined },
             transformRequest: function (data) {
@@ -238,7 +238,7 @@ function CabeceraCtrl($scope, $http, $sce, vcRecaptchaService) {
 
         $http({
             method: 'POST',
-            url: "./modulo/Contacto/Ajax/Contacto.php",
+            url: "/modulo/Contacto/Ajax/Contacto.php",
             data: obj.Contacto
         }).then(function successCallback(res) {
             

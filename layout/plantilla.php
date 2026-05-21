@@ -25,6 +25,7 @@
 <!DOCTYPE html>
 <html lang="es" class="Macrom_page">
     <head>
+        <base href="/">
 	    <title><?php echo $titulo_seo; ?></title>
 	    <meta charset="UTF-8">
 	    <meta name="viewport" content="width=device-width, initial-scale=1">
