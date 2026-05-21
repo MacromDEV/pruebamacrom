@@ -89,8 +89,10 @@ function catalogosCtrl($scope, $http) {
             query.delete("orden");
             query.delete("tipodeorden");
         }
-        query.set("pag", 1);
-        window.location.search = query.toString();
+        query.delete("pag");
+        
+        const queryString = query.toString();
+        window.location.search = queryString ? "?" + queryString : "";
     };
 
     obj.getFiltrosCount = () => {
@@ -109,8 +111,13 @@ function catalogosCtrl($scope, $http) {
                 query.set(k, params[k]);
             }
         });
-        if (resetPage) query.set("pag", 1);
-        window.location.search = query.toString();
+        
+        if (resetPage) {
+            query.delete("pag");
+        }
+        
+        const queryString = query.toString();
+        window.location.search = queryString ? "?" + queryString : "";
     };
 
     obj.toggleMenu = (menu) => {
@@ -467,7 +474,6 @@ function catalogosCtrl($scope, $http) {
                 let f = data.filtros;
                 const query = new URLSearchParams();
                 
-                query.set("pag",1);
                 if(textoLimpio) query.set("prod", encodeURIComponent(textoLimpio));
 
                 let catFinal = f.cate || next_cate || "";
@@ -486,7 +492,8 @@ function catalogosCtrl($scope, $http) {
                 if (next_orden) query.set("orden", next_orden);
                 if (next_tipodeorden) query.set("tipodeorden", next_tipodeorden);
 
-                window.location.href = "/catalogo?" + query.toString();
+                const queryString = query.toString();
+                window.location.href = "/catalogo" + (queryString ? "?" + queryString : "");
             } else {
                 window.location.href = "/catalogo?prod=" + encodeURIComponent(texto);
             }
@@ -568,11 +575,17 @@ function catalogosCtrl($scope, $http) {
         if (obj.refaccion && typeof obj.refaccion.producto === "string" && obj.refaccion.producto.trim() !== "") {
             query.set("prod", encodeURIComponent(obj.refaccion.producto));
         } else {
-             query.delete("prod");
+             query.delete("prod"); 
         }
-        query.set("pag", index);
         
-        window.location.href = window.location.pathname + "?" + query.toString(); 
+        if (index == 1) {
+            query.delete("pag");
+        } else {
+            query.set("pag", index);
+        }
+        
+        const queryString = query.toString();
+        window.location.href = window.location.pathname + (queryString ? "?" + queryString : ""); 
     };
 
     obj.RefaccionDetalles = (_id) => {
