@@ -87,7 +87,7 @@ function CabeceraCtrl($scope, $http, $sce, vcRecaptchaService) {
         }
 
         setTimeout(function () {
-            if(window.location.search.includes("?mod=Compras") && obj.Data.Carrito && obj.Data.Carrito.length == 0 && $_SESSION["CarritoPrueba"] && Object.keys($_SESSION["CarritoPrueba"]).length > 0){
+            if(window.location.search.includes("/Compras") && obj.Data.Carrito && obj.Data.Carrito.length == 0 && $_SESSION["CarritoPrueba"] && Object.keys($_SESSION["CarritoPrueba"]).length > 0){
                 location.reload();
             }
         }, 400);
@@ -144,7 +144,7 @@ function CabeceraCtrl($scope, $http, $sce, vcRecaptchaService) {
         if (!value) return;
         
         const query = encodeURIComponent(value);
-        window.location.href = `/?mod=catalogo&pag=1&busqueda_general=${query}`;
+        window.location.href = `/catalogo?pag=1&busqueda_general=${query}`;
     };
 
     obj.getCategorias = async () => {
@@ -197,7 +197,7 @@ function CabeceraCtrl($scope, $http, $sce, vcRecaptchaService) {
     };
 
     obj.RefaccionDetalles = (_id, newurl) => {
-        window.open(`?mod=catalogo&opc=detalles&_id=${_id}-${newurl}`, "_self");
+        window.open(`/catalogo/detalles/${_id}-${newurl}`, "_self");
     };
 
     obj.btnLogout = () => {
@@ -208,8 +208,8 @@ function CabeceraCtrl($scope, $http, $sce, vcRecaptchaService) {
             data: { Login: obj.login }
         }).then(function successCallback(res) {
             if (res.data.Bandera == 1) {
-                if (window.location.search.includes("?mod=Compras") || window.location.search.includes("?mod=Profile")) {
-                    location.href = "?mod=home";
+                if (window.location.search.includes("/Compras") || window.location.search.includes("/Profile")) {
+                    location.href = "/";
                 } else {
                     location.reload();
                 }
@@ -225,7 +225,7 @@ function CabeceraCtrl($scope, $http, $sce, vcRecaptchaService) {
     };
 
     obj.btnPerfil = () => {
-        location.href = "?mod=Profile&opc=Direcciones";
+        location.href = "/Profile/Direcciones";
     };
 
     obj.enviarContacto = () => {
