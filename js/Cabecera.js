@@ -144,7 +144,7 @@ function CabeceraCtrl($scope, $http, $sce, vcRecaptchaService) {
         if (!value) return;
         
         const query = encodeURIComponent(value);
-        window.location.href = `/catalogo?pag=1&busqueda_general=${query}`;
+        window.location.href = `/catalogo?busqueda_general=${query}`;
     };
 
     obj.getCategorias = async () => {

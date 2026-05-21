@@ -6,20 +6,18 @@ var url_session = "./modulo/home/Ajax/session.php";
 
 tsuruVolks.controller('LoginCtrl', ["$scope", "$http", LoginCtrl]);
 
-// Protección de ruta (Redirección si ya está logueado)
-if (window.location.search.includes("?mod=login") || window.location.search.includes("?mod=register")) {
+if (window.location.search.includes("/login") || window.location.search.includes("/register")) {
     if (localStorage.getItem('iduser') != undefined) {
-        location.href = "?mod=home";
+        location.href = "/";
     }
 }
 
 function LoginCtrl($scope, $http) {
     var obj = $scope;
     
-    // Inicialización de variables de scope
     obj.login = {};
     obj.Registro = {};
-    obj.SeiData = {}; // Mantengo esto por si lo usas en la vista, aunque ya no dependemos de él para la lógica
+    obj.SeiData = {};
     obj.dataflag = true;
     obj.loginError = false;
     obj.intentosRestantes = null;
@@ -27,25 +25,21 @@ function LoginCtrl($scope, $http) {
     obj.tiempoRestante = 0;
     obj.mensajeError = "";
 
-    // --- 1. FUNCIÓN MATEMÁTICA SEGURA ---
     function trunc(x, posiciones = 0) {
-        // Se usa matemática real para evitar que un número sin decimales rompa el string
         const factor = Math.pow(10, posiciones);
         return Math.trunc(x * factor) / factor;
     }
 
-    // --- 2. LOGIN ASÍNCRONO SEGURO ---
     obj.btnLogin = async function () {
-        // 1. FAIL FAST FRONTEND: Si están vacíos, mostramos error y cortamos aquí mismo.
         if (!obj.login.user || !obj.login.password) {
             $scope.$evalAsync(() => {
                 obj.loginError = true;
                 obj.mensajeError = "Por favor, ingresa tu correo y contraseña.";
             });
-            return; // Retorna y cancela todo, ¡no tocamos PHP!
+            return;
         }
         obj.login.opc = "in";
-        obj.dataflag = false; // Bloquea el botón mientras carga
+        obj.dataflag = false;
 
         try {
             const res = await $http({
@@ -57,22 +51,19 @@ function LoginCtrl($scope, $http) {
             if (res.data.Bandera == 1) {
                 $scope.$evalAsync(() => { obj.loginError = false; });
                 
-                // ESPERAMOS a que termine TODO el proceso del carrito antes de avanzar
                 await obj.prodCarrito(res);
                 
                 localStorage.setItem('session', JSON.stringify(res.data.session));
                 localStorage.setItem('iduser', res.data.session.iduser);
                 
-                // Validación de seguridad por si no hay domicilio registrado aún
                 if (res.data.session.id_domicilio) {
                     localStorage.setItem('_id_domicilio', res.data.session.id_domicilio._id);
                 }
 
-                // Ahora sí, redireccionamos con seguridad
-                if (document.referrer.includes("?mod=catalogo")) {
+                if (document.referrer.includes("/catalogo")) {
                     location.href = document.referrer;
                 } else {
-                    location.href = "?mod=home";
+                    location.href = "/";
                 }
 
             } else {
@@ -82,7 +73,7 @@ function LoginCtrl($scope, $http) {
                     obj.cuentaBloqueada = res.data.bloqueado == 1 ? true : false;
                     obj.intentosRestantes = res.data.intentos_restantes ?? null;
                     obj.tiempoRestante = res.data.tiempo_restante ?? 0;
-                    obj.dataflag = true; // Liberamos el botón
+                    obj.dataflag = true;
                 });
             }
         } catch (error) {
@@ -92,19 +83,16 @@ function LoginCtrl($scope, $http) {
         }
     };
 
-    // --- 3. ACTUALIZACIÓN DE CARRITO SIN CONDICIÓN DE CARRERA ---
     obj.prodCarrito = async function (res) {
         const carrito = res.data.session.CarritoPrueba || [];
         
-        // Mapeamos cada producto en una promesa aislada
         const promesas = carrito.map(async (el) => {
             const seiData = await obj.getSeicom(el.Clave);
-            
-            // Si el servicio falla o no trae info, saltamos este producto
+
             if (!seiData || !seiData.Table) return;
 
             let count_prod = 0;
-            let promesasInternas = []; // Para agrupar los updates de cada producto
+            let promesasInternas = [];
 
             seiData.Table.forEach(prd => {
                 count_prod += prd.existencia;
@@ -147,15 +135,12 @@ function LoginCtrl($scope, $http) {
                 );
             }
             
-            // Ejecutamos todos los updates de este producto
             return Promise.all(promesasInternas);
         });
 
-        // Esperamos a que TODOS los productos del carrito terminen su proceso
         await Promise.all(promesas);
     };
 
-    // --- 4. PETICIÓN A SEICOM AISLADA ---
     obj.getSeicom = async (clave) => {
         try {
             const result = await $http({
@@ -171,7 +156,7 @@ function LoginCtrl($scope, $http) {
             if (result && result.data) {
                 const xml = $(result.data).find("string");
                 const json = JSON.parse(xml.text());
-                return json; // Retornamos la info directo para no cruzar datos en variables globales
+                return json;
             }
         } catch (error) {
             console.error("Error al consultar SEICOM para " + clave, error);
@@ -179,9 +164,8 @@ function LoginCtrl($scope, $http) {
         }
     };
 
-    // --- 5. OLVIDÉ MI CONTRASEÑA ---
     obj.btnolvide = () => {
-        obj.dataflag = false; // Angular se encarga de bloquear el botón en la vista
+        obj.dataflag = false;
         obj.login.opc = "forgot";
         
         $http({
@@ -203,7 +187,7 @@ function LoginCtrl($scope, $http) {
         });
     };
 
-    // --- 6. REGISTRO ---
+    // --- REGISTRO ---
     obj.btnRegistrar = (form) => {
         obj.Registro.FechaCreacion = new Date();
         obj.Registro.FechaModificacion = new Date();
@@ -220,7 +204,7 @@ function LoginCtrl($scope, $http) {
             }).then(function successCallback(res) {
                 if (res.data.Bandera == 1) {
                     obj.dataflag = true;
-                    location.href = "?mod=home";
+                    location.href = "/";
                 } else {
                     toastr.error(res.data.mensaje);
                     obj.dataflag = true;

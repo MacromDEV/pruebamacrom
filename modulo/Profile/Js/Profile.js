@@ -4,9 +4,9 @@ const urlProfile = "./modulo/Profile/Ajax/Profile.php";
 const urlComprobante = "./modulo/Profile/Ajax/uploadfile.php";
 
 tsuruVolks.controller("ProfileCtrl", ["$scope", "$http", ProfileCtrl]);
-if (window.location.href.includes("?mod=Profile")) {
+if (window.location.href.includes("/Profile")) {
     if (localStorage.getItem('iduser') == undefined) {
-        location.href = "?mod=home";
+        location.href = "/";
     }
 }
 function ProfileCtrl($scope, $http) {
@@ -71,9 +71,9 @@ function ProfileCtrl($scope, $http) {
 
     obj.btnMenulinks = (opc = '') => {
         if (opc != "") {
-            location.href = "?mod=Profile&opc=" + opc;
+            location.href = "/Profile/=" + opc;
         } else {
-            location.href = "?mod=Profile";
+            location.href = "/Profile";
         }
     }
 
@@ -263,7 +263,7 @@ function ProfileCtrl($scope, $http) {
     }
 
     obj.btnRegresarviewPedidos = () => {
-        window.location.href = "?mod=Profile&opc=Mispedidos";
+        window.location.href = "/Profile/Mispedidos";
     }
 
     obj.btnCancelarPedido = () => {
@@ -482,7 +482,6 @@ function ProfileCtrl($scope, $http) {
     obj.btneditDomicilio = (id) => {
         obj.btnMenulinks("Direcciones_edit");
         localStorage.setItem("_id_domicilio", id);
-        //location.href = "?mod=Profile&opc=Direcciones_edit&id="+id;
     }
 
     obj.btnPredeterminado = (id) => {
@@ -503,7 +502,7 @@ function ProfileCtrl($scope, $http) {
 
     /* Inicia modulo de Datos de Facturacion */
     obj.addFacturacion = () => {
-        location.href = "?mod=Profile&opc=Facturacion_add";
+        location.href = "/Profile/Facturacion_add";
         localStorage.setItem("pag", "Facturacion_add")
     }
 
@@ -641,7 +640,7 @@ function ProfileCtrl($scope, $http) {
     angular.element(document).ready(function () {
         if ((obj.session.autentificacion == undefined && obj.session.autentificacion != 1)) {
             localStorage.clear();
-            location.href = "?mod=login";
+            location.href = "/login";
         }
 
 

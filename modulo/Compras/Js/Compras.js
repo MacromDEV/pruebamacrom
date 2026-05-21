@@ -744,7 +744,7 @@ function ComprasCtrl($scope, $http, $sce) {
                                 <i class="fab fa-facebook-messenger"></i> Acordar envío por Facebook
                             </a>
 
-                            <a href="?mod=contacto" 
+                            <a href="/contacto" 
                                target="_blank"
                                style="background-color: #6c757d; color: white; text-decoration: none; padding: 12px; border-radius: 8px; font-weight: bold; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); transition: 0.3s;">
                                 <i class="fas fa-envelope"></i> Formulario de Contacto
@@ -836,7 +836,7 @@ function ComprasCtrl($scope, $http, $sce) {
 
     obj.btndireccionguardadas = (pag) => {
         localStorage.setItem("pag", pag);
-        location.href = "?mod=Profile&opc=" + pag;
+        location.href = "/Profile/" + pag;
     }
 
     obj.comprobarDatosFacturacion = (value) => {
@@ -918,7 +918,7 @@ function ComprasCtrl($scope, $http, $sce) {
             
             if (res.data.Bandera == 1) {
                 if (obj.total === 0) {
-                    location.href = "?mod=ProcesoCompra&opc=paso3";
+                    location.href = "/ProcesoCompra/paso3";
                 } else if (obj.Costumer.metodoPago === "Deposito" || obj.Costumer.metodoPago === "Transferencia") {
                     obj.openDeposito(res.data.Data);
                 } else if (obj.Costumer.metodoPago === "Tarjeta") {
@@ -944,7 +944,7 @@ function ComprasCtrl($scope, $http, $sce) {
             toastr.info("Aviso: Tienes bloqueadas las ventanas emergentes. Puedes ver tu ficha desde 'Mis Pedidos'.");
         }
         
-        location.href = "?mod=ProcesoCompra&opc=paso3";
+        location.href = "/ProcesoCompra/paso3";
     }
     
     obj.seturl = (url) => {
@@ -963,7 +963,7 @@ function ComprasCtrl($scope, $http, $sce) {
     }
 
     obj.RefaccionDetalles = (_id, newurl) => {
-        window.open("?mod=catalogo&opc=detalles&_id=" + _id + "-" + newurl, "_self");
+        window.open("/catalogo/detalles/" + _id + "-" + newurl, "_self");
     }
 
     obj.aplicarCupon = () => {
@@ -1063,7 +1063,7 @@ function ComprasCtrl($scope, $http, $sce) {
     });
     angular.element(document).ready(function () {
         if (obj.session.autentificacion == undefined && obj.session.autentificacion != 1) {
-            location.href = "?mod=login";
+            location.href = "/login";
         } else {
             obj.getDataUser({ opc: "get", username: obj.session.usr })
             obj.empaquetar();
@@ -1083,9 +1083,9 @@ function ProfileCtrl($scope, $http) {
 
     obj.btnMenulinks = (opc = '') => {
         if (opc != "") {
-            location.href = "?mod=Compras";
+            location.href = "/Compras";
         } else {
-            location.href = "?mod=Profile";
+            location.href = "/Profile";
         }
     }
 
@@ -1306,7 +1306,6 @@ function ProfileCtrl($scope, $http) {
     obj.btneditDomicilio = (id) => {
         //obj.btnMenulinks("Direcciones_edit");
         localStorage.setItem("_id_domicilio", id);
-        //location.href = "?mod=Profile&opc=Direcciones_edit&id="+id;
     }
 
     obj.btnPredeterminado = (id) => {
@@ -1319,14 +1318,13 @@ function ProfileCtrl($scope, $http) {
 
     /* Inicia modulo de Datos de Facturacion */
     obj.addFacturacion = () => {
-        location.href = "?mod=Profile&opc=Facturacion_add";
+        location.href = "/Profile/Facturacion_add";
         localStorage.setItem("pag", "Facturacion_add")
     }
 
     obj.btnEditadatosFacturacion = (id) => {
         localStorage.setItem("id_rfc", id);
         obj.btnMenulinks('Facturacion_edit');
-        //obj.sendFacturacion(opc, {_id:id})
     }
 
     obj.sendFacturacion = (opc = "buscar", data = null) => {
@@ -1436,7 +1434,7 @@ function ProfileCtrl($scope, $http) {
     angular.element(document).ready(function () {
         if ((obj.session.autentificacion == undefined && obj.session.autentificacion != 1)) {
             localStorage.clear();
-            location.href = "?mod=login";
+            location.href = "/login";
         }
 
         if (!localStorage.getItem("iduser")) {
