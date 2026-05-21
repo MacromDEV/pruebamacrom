@@ -319,10 +319,14 @@ function catalogosCtrl($scope, $http) {
     };
 
     if(aplicarbutton){
-        aplicarbutton.addEventListener("click", () => { window.location.href = "?pag=1"; });
+        aplicarbutton.addEventListener("click", () => { 
+            updateURL(); 
+        });
     }
     if(borrarbutton){
-        borrarbutton.addEventListener("click", clearfilter =>{ window.location.href = "?pag=1"; });
+        borrarbutton.addEventListener("click", clearfilter =>{ 
+            window.location.href = "/catalogo"; 
+        });
     }
 
     obj.viewMore = () => {
@@ -448,7 +452,7 @@ function catalogosCtrl($scope, $http) {
 
     obj.ejecutarBusquedaInteligente = (texto) => {
         if(!texto || texto.trim() === ""){
-            window.location.href = "?pag=1";
+            window.location.href = "/catalogo";
             return;
         }
         obj.cargando = true;
@@ -462,7 +466,7 @@ function catalogosCtrl($scope, $http) {
                 let textoLimpio = data.texto_limpio;
                 let f = data.filtros;
                 const query = new URLSearchParams();
-                query.set("mod", "catalogo");
+                
                 query.set("pag",1);
                 if(textoLimpio) query.set("prod", encodeURIComponent(textoLimpio));
 
@@ -482,12 +486,12 @@ function catalogosCtrl($scope, $http) {
                 if (next_orden) query.set("orden", next_orden);
                 if (next_tipodeorden) query.set("tipodeorden", next_tipodeorden);
 
-                window.location.search = query.toString();
+                window.location.href = "/catalogo?" + query.toString();
             } else {
-                window.location.href = "?pag=1&prod=" + encodeURIComponent(texto);
+                window.location.href = "/catalogo?pag=1&prod=" + encodeURIComponent(texto);
             }
         }, function errorCallback(res) {
-            window.location.href = "?pag=1&prod=" + encodeURIComponent(texto);
+            window.location.href = "/catalogo?pag=1&prod=" + encodeURIComponent(texto);
         });
     };
 
@@ -561,11 +565,14 @@ function catalogosCtrl($scope, $http) {
 
     obj.setPage = function (index) {
         const query = new URLSearchParams(window.location.search);
-        if (obj.refaccion && typeof obj.refaccion.producto === "string") {
+        if (obj.refaccion && typeof obj.refaccion.producto === "string" && obj.refaccion.producto.trim() !== "") {
             query.set("prod", encodeURIComponent(obj.refaccion.producto));
+        } else {
+             query.delete("prod");
         }
         query.set("pag", index);
-        window.location.href = "?" + query.toString();
+        
+        window.location.href = window.location.pathname + "?" + query.toString(); 
     };
 
     obj.RefaccionDetalles = (_id) => {
