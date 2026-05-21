@@ -150,7 +150,7 @@ button[type="submit"]:hover { background-color: var(--primary-dark); transform: 
         <?php endif; ?>
         
         <p class="error-text"><?php echo $mensaje_bloqueo; ?></p>
-        <a href="https://macromautopartes.com/?mod=login" class="btn-back">Volver al inicio de sesión</a>
+        <a href="https://macromautopartes.com//login" class="btn-back">Volver al inicio de sesión</a>
 
     <?php else: ?>
         
@@ -195,7 +195,7 @@ button[type="submit"]:hover { background-color: var(--primary-dark); transform: 
         allowOutsideClick: false
     }).then((result) => {
         if (result.isConfirmed) {
-            window.location.href = 'https://macromautopartes.com/?mod=login';
+            window.location.href = 'https://macromautopartes.com/login';
         }
     });
 </script>

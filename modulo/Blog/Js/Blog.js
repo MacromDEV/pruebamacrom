@@ -1,4 +1,4 @@
-var url_Blog = "./modulo/Blog/Ajax/Blog.php";
+var url_Blog = "/modulo/Blog/Ajax/Blog.php";
 
 tsuruVolks
     .controller('BlogCtrl', ["$scope", "$http", BlogCtrl])
@@ -16,7 +16,7 @@ function BlogCtrl($scope, $http) {
     obj.entradas = [];
 
     obj.btnBlodDetalles = (id) => {
-        window.location.href = "?mod=Blog&opc=detalles&id=" + id;
+        window.location.href = "/Blog/detalles/" + id;
     }
 
     obj.getEntradas = (opc = "get", skip = 0, limit = 6) => {
@@ -59,7 +59,7 @@ function BlogDetallesCtrl($scope, $http) {
     }
 
     obj.btnBlodDetalles = (id) => {
-        window.location.href = "?mod=Blog&opc=detalles&id=" + id;
+        window.location.href = "/Blog/detalles/" + id;
     }
 
     obj.getPost = (opc, id, x, y) => {

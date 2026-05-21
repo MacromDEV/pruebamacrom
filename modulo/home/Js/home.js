@@ -63,7 +63,7 @@ function homeCtrl($scope, $http) {
     }
 
     obj.RefaccionDetalles = (_id) => {
-        window.open("?mod=catalogo&opc=detalles&_id=" + _id, "_self");
+        window.open("/catalogo/detalles/" + _id, "_self");
     }
 
     // ==========================================
