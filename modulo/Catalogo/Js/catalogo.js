@@ -70,7 +70,7 @@ function catalogosCtrl($scope, $http) {
     
     obj.currentPage = 0;
     obj.pages = [];
-    obj.pageSize = 20;
+    obj.pageSize = 21;
     obj.Trefacciones = 0;
     obj.view = 20;
 

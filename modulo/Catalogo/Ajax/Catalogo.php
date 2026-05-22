@@ -640,7 +640,7 @@
             return $row["Trefacciones"];
         }
 
-        private function getRefacciones($arrayLikes, $x=0, $y = 20 ){
+        private function getRefacciones($arrayLikes, $x=0, $y = 21 ){
             $array = array();
             $orden = $this->formulario["orden"];
             $tipodeorden = $this->formulario["tipodeorden"];
@@ -769,7 +769,7 @@
                     AND (PROV._id IS NULL OR PROV.Estatus = 1) 
                     AND M.Estatus = 1 AND C.Status = 1 AND MO.Estatus = 1
                     AND P._id >= {$randId}
-                LIMIT 20
+                LIMIT 21
             ";
 
             $id = $this->conn->query($sql);
