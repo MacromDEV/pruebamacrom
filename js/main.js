@@ -163,8 +163,6 @@ document.addEventListener("DOMContentLoaded", () => {
     // 5. Enrutamiento de Menú Activo
     // =======================================================
     const path = window.location.pathname.toLowerCase();
-
-    // Diccionario de rutas: Fácil de leer y de escalar
     const rutas = [
         { ruta: '/catalogo',          selector: '#sidebar1' },
         { ruta: '/compras',           selector: '#sidebar2' },
@@ -182,7 +180,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const activeSidebarSelector = coincidencia ? coincidencia.selector : '#sidebar0';
 
     document.querySelectorAll('.sidebar__click').forEach(el => el.classList.remove('sidebar__active'));
-    
+
     const activeSidebar = document.querySelector(activeSidebarSelector);
     if (activeSidebar) activeSidebar.classList.add('sidebar__active');
 
