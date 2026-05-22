@@ -1,24 +1,22 @@
 <link rel="stylesheet" href="/modulo/Catalogo/Css/catalogo_detalles.css">
-<div ng-controller="catalogosDetallesCtrl" class="ctrlmain global__content contenedor" ng-cloak itemscope
-	itemtype="http://schema.org/Product">
+<div ng-controller="catalogosDetallesCtrl" class="ctrlmain global__content contenedor" ng-cloak itemscope itemtype="http://schema.org/Product">
 
-	<meta itemprop="url"
-		content="https://macromautopartes.com/catalogo/detalles/{{Refaccion.datos._id}}-{{Refaccion.datos.NewUrlName}}">
+	<meta itemprop="url" content="https://macromautopartes.com/catalogo/detalles/{{Refaccion.datos._id}}-{{Refaccion.datos.NewUrlName}}">
+    <meta itemprop="name" content="{{Refaccion.datos.Producto}}">
+    <meta itemprop="sku" content="{{Refaccion.datos.No_parte}}">
+    <meta itemprop="brand" content="{{Refaccion.datos.Proveedor}}">
 
-	<div class="bread-crumb bgwhite flex-w categorias__link">
-		<a href="/catalogo?pag=1&prod=&cate={{Refaccion.datos._idCategoria}}&armadora=&mdl=&[a]=" class="s-text16">
-			<span ng-bind="Refaccion.datos.Categoria"></span><i class="fa fa-angle-right" aria-hidden="true"></i>
-		</a>
-		<a href="/catalogo?pag=1&prod=&cate={{Refaccion.datos._idCategoria}}&armadora={{Refaccion.datos._idMarca}}&mdl=&[a]="
-			class="s-text16">
-			<span ng-bind="Refaccion.datos.Marca"></span><i class="fa fa-angle-right" aria-hidden="true"></i>
-		</a>
-		<a href="/catalogo?pag=1&prod=&cate={{Refaccion.datos._idCategoria}}&armadora={{Refaccion.datos._idMarca}}&mdl={{Refaccion.datos._idModelo}}&[a]="
-			class="s-text16">
-			<span ng-bind="Refaccion.datos.Modelo"></span><i class="fa fa-angle-right" aria-hidden="true"></i>
-		</a>
-		<a href="/catalogo?pag=1&prod=&cate={{Refaccion.datos._idCategoria}}&armadora={{Refaccion.datos._idMarca}}&mdl={{Refaccion.datos._idModelo}}&[a]={{Refaccion.datos.Anios}}"class="s-text17" ng-bind="Refaccion.datos.Anio"></a>
-	</div>
+    <div class="bread-crumb bgwhite flex-w categorias__link">
+        <a href="/catalogo?pag=1&prod=&cate={{Refaccion.datos._idCategoria}}&armadora=&mdl=&[a]=" class="s-text16">
+            <span ng-bind="Refaccion.datos.Categoria"></span><i class="fa fa-angle-right" aria-hidden=\"true\"></i>
+        </a>
+        <a href="/catalogo?pag=1&prod=&cate={{Refaccion.datos._idCategoria}}&armadora={{Refaccion.datos._idMarca}}&mdl=&[a]=" class="s-text16">
+            <span ng-bind="Refaccion.datos.Marca"></span><i class="fa fa-angle-right" aria-hidden=\"true\"></i>
+        </a>
+        <a href="/catalogo?pag=1&prod=&cate={{Refaccion.datos._idCategoria}}&armadora={{Refaccion.datos._idMarca}}&mdl={{Refaccion.datos._idModelo}}&[a]=" class="s-text16">
+            <span ng-bind="Refaccion.datos.Modelo"></span><i class="fa fa-angle-right" aria-hidden=\"true\"></i>
+        </a>
+    </div>
 
 	<div class="contenido-principal bgwhite" id="MainDark">
 		<div class="loader-container" ng-show="cargando" style="text-align: center; padding: 100px 0;">
@@ -58,9 +56,8 @@
 					</div>
 
 					<div class="detalles__informacion--titulares">
-						<h1 itemprop="name" class="product-detail-name" ng-bind="Refaccion.datos.Producto"></h1>
-						<h2 class="product-detail-SKU">SKU: <span itemprop="sku"
-								ng-bind="Refaccion.datos.No_parte"></span></h2>
+						<h1 class="product-detail-name" ng-bind="Refaccion.datos.Producto"></h1>
+						<h2 class="product-detail-SKU">SKU: <span ng-bind="Refaccion.datos.No_parte"></span></h2>
 					</div>
 
 					<div class="descripcion">
@@ -112,8 +109,8 @@
 									<th class="des-table__header striped-specs__row__column">
 										<div class="des-table__header__container">Marca</div>
 									</th>
-									<td class="des-table__column striped-specs__row__column"><span itemprop="brand"
-											class="des-table__column--value" ng-bind="Refaccion.datos.Proveedor"></span>
+									<td class="des-table__column striped-specs__row__column">
+										<span class="des-table__column--value" ng-bind="Refaccion.datos.Proveedor"></span>
 									</td>
 								</tr>
 								<tr class="des-table__row striped-specs__row">
@@ -132,29 +129,24 @@
 
 						<div itemprop="offers" itemscope itemtype="http://schema.org/Offer">
 							<meta itemprop="priceCurrency" content="MXN">
-
-							<link itemprop="availability" href="http://schema.org/InStock"
-								ng-if="Refaccion.datos.stock > 0" />
-							<link itemprop="availability" href="http://schema.org/OutOfStock"
-								ng-if="Refaccion.datos.stock == 0" />
+							<link itemprop="availability" href="http://schema.org/InStock" ng-if="Refaccion.datos.stock > 0" />
+							<link itemprop="availability" href="http://schema.org/OutOfStock" ng-if="Refaccion.datos.stock <= 0" />
 
 							<div class="botones__sesion" ng-show="Activa">
 								<div class="botones__sesion--iniciada">
-									<span class="m-text17 price" ng-hide="Refaccion.datos.RefaccionOferta">
-										<meta itemprop="price" content="{{Refaccion.datos.Precio1}}">
+
+									<span class="m-text17 price" ng-hide="Refaccion.datos.RefaccionOferta=='1'">
+										<meta itemprop="price" content="{{Refaccion.datos.Precio1 || '0.00'}}">
 										<span class="money__amount">
-											<span ng-bind="Refaccion.datos.Precio1 | currency"></span><small
-												class="m-text15"> IVA incluido</small>
+											<span ng-bind="Refaccion.datos.Precio1 | currency"></span><small class="m-text15"> IVA incluido</small>
 										</span>
 									</span>
 
-									<span class="m-text17 price" ng-show="Refaccion.datos.RefaccionOferta">
-										<small class="line_through-red"
-											ng-bind="Refaccion.datos.Precio1 | currency"></small>
-										<meta itemprop="price" content="{{Refaccion.datos.Precio2}}">
+									<span class="m-text17 price" ng-show="Refaccion.datos.RefaccionOferta=='1'">
+										<small class="line_through-red" ng-bind="Refaccion.datos.Precio1 | currency"></small>
+										<meta itemprop="price" content="{{Refaccion.datos.Precio2 || '0.00'}}">
 										<span class="money__amount">
-											<span ng-bind="Refaccion.datos.Precio2 | currency"></span> <small
-												class="m-text15"> IVA incluido</small>
+											<span ng-bind="Refaccion.datos.Precio2 | currency"></span> <small class="m-text15"> IVA incluido</small>
 										</span>
 									</span>
 
@@ -248,34 +240,28 @@
 									</div>
 									<div class="block2-txt">
 										<section class="descripcion-producto">
-											<p itemprop="brand" class="block2-brand" ng-bind="producto.NombreProveedor">
-											</p>
-											<a itemprop="name"
-												href="/catalogo/detalles/{{producto._id}}-{{producto.NewUrlName}}"
-												class="block2-name dis-block s-text3" ng-bind="producto.Producto"></a>
+											<meta itemprop="name" content="{{producto.Producto}}">
+											<meta itemprop="sku" content="{{producto.No_parte}}">
+											<meta itemprop="brand" content="{{producto.NombreProveedor}}">
+											<p class="block2-brand" ng-bind="producto.NombreProveedor"></p>
+                    						<a href="/catalogo/detalles/{{producto._id}}-{{producto.NewUrlName}}" class="block2-name dis-block s-text3" ng-bind="producto.Producto"></a>
 											<div class="sku_row">
 												<span class="sku_label dis-block">No. Parte:</span>
-												<span itemprop="sku" class="sku_value dis-block"
-													ng-bind="producto.No_parte"></span>
+												<span class="sku_value dis-block" ng-bind="producto.No_parte"></span>
 											</div>
 
-											<div itemprop="offers" itemscope itemtype="http://schema.org/Offer"
-												class="precio__imgprove">
+											<div itemprop="offers" itemscope itemtype="http://schema.org/Offer" class="precio__imgprove">
 												<meta itemprop="priceCurrency" content="MXN">
-												<link itemprop="availability" href="http://schema.org/InStock"
-													ng-if="!producto.agotado" />
-												<link itemprop="availability" href="http://schema.org/OutOfStock"
-													ng-if="producto.agotado" />
+												<link itemprop="availability" href="http://schema.org/InStock" ng-if="!producto.agotado" />
+												<link itemprop="availability" href="http://schema.org/OutOfStock" ng-if="producto.agotado" />
 
-												<p class="precio__producto price"
-													ng-hide="producto.RefaccionOferta=='1'">
-													<meta itemprop="price" content="{{producto.Precio1}}">
+												<p class="precio__producto" ng-hide="producto.RefaccionOferta">
+													<meta itemprop="price" content="{{producto.Precio1 || '0.00'}}">
 													<span ng-bind="producto.Precio1 | currency"></span>
 												</p>
-												<p class="precio__producto" ng-show="producto.RefaccionOferta=='1'">
-													<small class="line_through-red"
-														ng-bind="producto.Precio1 | currency"></small>
-													<meta itemprop="price" content="{{producto.Precio2}}">
+												<p class="precio__producto" ng-show="producto.RefaccionOferta">
+													<small class="line_through-red" ng-bind="producto.Precio1 | currency"></small>
+													<meta itemprop="price" content="{{producto.Precio2 || '0.00'}}">
 													<span ng-bind="producto.Precio2 | currency"></span>
 												</p>
 											</div>

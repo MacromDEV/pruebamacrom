@@ -71,7 +71,7 @@ function ProfileCtrl($scope, $http) {
 
     obj.btnMenulinks = (opc = '') => {
         if (opc != "") {
-            location.href = "/Profile/=" + opc;
+            location.href = "/Profile/" + opc;
         } else {
             location.href = "/Profile";
         }

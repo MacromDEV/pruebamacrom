@@ -91,6 +91,9 @@ Class Proveedores{
                 $alt_seguro = addslashes(trim($this->formulario["tag_alt"]));
                 $sql = "UPDATE Proveedor SET Proveedor = '$prov_seguro', USRModificacion='$usr_seguro', fechaModificacion='{$this->fecha}', tag_title = '$title_seguro', tag_alt = '$alt_seguro' WHERE _id=$id_seguro";
                 $accionLog = "EDITAR_PROVEEDOR"; $detallesLog = "Se actualizaron los datos del proveedor: $nombre_prov";
+                if(isset($this->foto["file"]) && $this->foto["file"]["name"] != "") {
+                    $detallesLog .= " y se actualizó su logotipo";
+                }   
             } else if($this->formulario["opc"] == 'enabled'){
                 $sqlOld = "SELECT Proveedor FROM Proveedor WHERE _id = $id_seguro";
                 $rowOld = $this->conn->fetch($this->conn->query($sqlOld));
