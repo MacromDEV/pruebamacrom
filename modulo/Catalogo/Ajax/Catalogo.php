@@ -158,10 +158,25 @@
             $sql = "";
 
             if (!in_array('marca', $ignorar) && !empty($f['marca'])) {
-                $sql .= " AND P._idMarca IN({$f['marca']})";
                 if (!in_array('vehiculo', $ignorar) && !empty($f['vehiculo'])) {
-                    $sql .= " AND P.Modelo IN({$f['vehiculo']})";
+                    $sql .= " AND ( 
+                        (P._idMarca IN({$f['marca']}) AND P.Modelo IN({$f['vehiculo']})) 
+                        OR 
+                        EXISTS (SELECT 1 FROM compatibilidad comp WHERE comp.id_imagen = P._id AND comp.idmarca IN({$f['marca']}) AND comp.idmodelo IN({$f['vehiculo']}))
+                    )";
+                } else {
+                    $sql .= " AND (
+                        P._idMarca IN({$f['marca']}) 
+                        OR 
+                        EXISTS (SELECT 1 FROM compatibilidad comp WHERE comp.id_imagen = P._id AND comp.idmarca IN({$f['marca']}))
+                    )";
                 }
+            } elseif (!in_array('vehiculo', $ignorar) && !empty($f['vehiculo'])) {
+                $sql .= " AND (
+                    P.Modelo IN({$f['vehiculo']}) 
+                    OR 
+                    EXISTS (SELECT 1 FROM compatibilidad comp WHERE comp.id_imagen = P._id AND comp.idmodelo IN({$f['vehiculo']}))
+                )";
             }
 
             if (!in_array('categoria', $ignorar) && !empty($f['categoria']) && $f['categoria'] !== "T") {
