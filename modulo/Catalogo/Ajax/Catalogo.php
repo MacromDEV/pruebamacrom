@@ -216,7 +216,10 @@
             $filtrosDetectados = ['marca' => [], 'vehiculo' => [], 'proveedor' => [], 'categoria' => []];
             
             $sqlMarcas = "SELECT _id, LOWER(Marca) as nombre FROM u619477378_macromau.Marcas WHERE Estatus = 1";
-            foreach($this->conn->fetch_all($this->conn->query($sqlMarcas)) as $m) {
+            $marcasData = $this->conn->fetch_all($this->conn->query($sqlMarcas));
+            usort($marcasData, function($a, $b) { return strlen($b['nombre']) <=> strlen($a['nombre']); });
+
+            foreach($marcasData as $m) {
                 $nom = trim(mb_strtolower($m['nombre'], 'UTF-8'));
                 if (empty($nom)) continue;
                 if (preg_match('/(?<=\s)'.preg_quote($nom, '/').'(?=\s)/iu', $textoLimpio)) {
@@ -224,8 +227,12 @@
                     $textoLimpio = preg_replace('/(?<=\s)'.preg_quote($nom, '/').'(?=\s)/iu', ' ', $textoLimpio);
                 }
             }
+
             $sqlModelos = "SELECT _id, LOWER(Modelo) as nombre, _idMarca FROM u619477378_macromau.Modelos WHERE Estatus = 1";
-            foreach($this->conn->fetch_all($this->conn->query($sqlModelos)) as $mo) {
+            $modelosData = $this->conn->fetch_all($this->conn->query($sqlModelos));
+            usort($modelosData, function($a, $b) { return strlen($b['nombre']) <=> strlen($a['nombre']); });
+
+            foreach($modelosData as $mo) {
                 $nom = trim(mb_strtolower($mo['nombre'], 'UTF-8'));
                 if (empty($nom)) continue;
                 if (preg_match('/(?<=\s)'.preg_quote($nom, '/').'(?=\s)/iu', $textoLimpio)) {
@@ -237,17 +244,25 @@
                     $textoLimpio = preg_replace('/(?<=\s)'.preg_quote($nom, '/').'(?=\s)/iu', ' ', $textoLimpio);
                 }
             }
+
             $sqlCat = "SELECT _id, LOWER(Categoria) as nombre FROM u619477378_macromau.Categorias WHERE Status = 1";
-            foreach($this->conn->fetch_all($this->conn->query($sqlCat)) as $c) {
+            $catData = $this->conn->fetch_all($this->conn->query($sqlCat));
+            usort($catData, function($a, $b) { return strlen($b['nombre']) <=> strlen($a['nombre']); });
+
+            foreach($catData as $c) {
                 $nom = trim(mb_strtolower($c['nombre'], 'UTF-8'));
                 if (empty($nom)) continue;
-                if (preg_match('/(?<=\s)'.preg_quote($nom, '/').'(?=\s)/iu', $textoLimpio)) {
+                if (preg_match('/(?<=\s)'.preg_quote($nom, '/').'(?=\s)/iu', $textoLopt) || preg_match('/(?<=\s)'.preg_quote($nom, '/').'(?=\s)/iu', $textoLimpio)) {
                     $filtrosDetectados['categoria'][] = $c['_id'];
                     $textoLimpio = preg_replace('/(?<=\s)'.preg_quote($nom, '/').'(?=\s)/iu', ' ', $textoLimpio);
                 }
             }
+
             $sqlProv = "SELECT _id, LOWER(Proveedor) as nombre FROM u619477378_macromau.Proveedor WHERE Estatus = 1";
-            foreach($this->conn->fetch_all($this->conn->query($sqlProv)) as $p) {
+            $provData = $this->conn->fetch_all($this->conn->query($sqlProv));
+            usort($provData, function($a, $b) { return strlen($b['nombre']) <=> strlen($a['nombre']); });
+
+            foreach($provData as $p) {
                 $nom = trim(mb_strtolower($p['nombre'], 'UTF-8'));
                 if (empty($nom)) continue;
                 if (preg_match('/(?<=\s)'.preg_quote($nom, '/').'(?=\s)/iu', $textoLimpio)) {
