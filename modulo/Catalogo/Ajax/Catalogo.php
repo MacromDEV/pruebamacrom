@@ -664,7 +664,8 @@
             }
             
             $whereData = $this->buildWhereBusqueda($arrayLikes);
-            $condicion = $this->buildCondicionesSQL();
+            
+            $condicion = $this->usarBusquedaRelajada ? $this->buildCondicionesSQL(['marca', 'vehiculo']) : $this->buildCondicionesSQL();
 
             $sql = "
                 SELECT COUNT(*) AS Trefacciones
@@ -684,9 +685,11 @@
             $row = $this->conn->fetch($this->conn->query($sql));
             $total = $row["Trefacciones"];
 
-            if ($total == 0 && !$this->usarBusquedaRelajada && !empty($whereData['busqueda'])) {
+            if ($total == 0 && !$this->usarBusquedaRelajada && !empty($this->formulario["producto"])) {
                 $this->usarBusquedaRelajada = true;
-                return $this->getTrefacciones($arrayLikes); 
+                
+                $busquedaOriginal = $this->getexplode($this->formulario["producto"]);
+                return $this->getTrefacciones($busquedaOriginal); 
             }
 
             $this->setCache('cache_trefacciones', $cacheKey, $total);
@@ -697,6 +700,10 @@
             $array = array();
             $orden = $this->formulario["orden"];
             $tipodeorden = $this->formulario["tipodeorden"];
+
+            if ($this->usarBusquedaRelajada && !empty($this->formulario["producto"])) {
+                $arrayLikes = $this->getexplode($this->formulario["producto"]);
+            }
 
             $whereData = $this->buildWhereBusqueda($arrayLikes);
             $busqueda = $whereData['busqueda'];
@@ -731,7 +738,7 @@
                 ";
             }
 
-            $condicion = $this->buildCondicionesSQL();
+            $condicion = $this->usarBusquedaRelajada ? $this->buildCondicionesSQL(['marca', 'vehiculo']) : $this->buildCondicionesSQL();
                             
             $sql = "SELECT P.*, PROV._id as idProveedor, PROV.Proveedor as NombreProveedor, PROV.tag_alt as tag_altproveedor, PROV.tag_title as tag_titleproveedor 
             FROM Producto AS P 
@@ -757,8 +764,10 @@
             foreach ($array as $row) { if (!empty($row['_id'])) { $productTags[] = "producto:{$row['_id']}"; } }
             $tags = $productTags;
 
-            if (!empty($this->formulario['marca'])) { foreach (explode(',', $this->formulario['marca']) as $idMarca) { $tags[] = "marca:$idMarca"; } }
-            if (!empty($this->formulario['vehiculo'])) { foreach (explode(',', $this->formulario['vehiculo']) as $idModelo) { $tags[] = "modelo:$idModelo"; } }
+            if (!$this->usarBusquedaRelajada) {
+                if (!empty($this->formulario['marca'])) { foreach (explode(',', $this->formulario['marca']) as $idMarca) { $tags[] = "marca:$idMarca"; } }
+                if (!empty($this->formulario['vehiculo'])) { foreach (explode(',', $this->formulario['vehiculo']) as $idModelo) { $tags[] = "modelo:$idModelo"; } }
+            }
             
             $this->setCacheWithTags('cache_refacciones', $cacheKey, $array, $tags);
             return $array;
