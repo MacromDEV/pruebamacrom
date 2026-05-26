@@ -12,6 +12,7 @@
             'cache_miss' => 0
         ];
         private $jsonData = array("Bandera"=>false, "Mensaje"=>"", "Data"=>array());
+        private $usarBusquedaRelajada = false;
 
         public function __construct($array) {
             $this->conn = new HelperMySql($array["server"], $array["user"], $array["pass"], $array["db"]);
@@ -290,6 +291,7 @@
                             $buscarlikes = $this->getexplode($this->formulario["producto"]);
                             $this->jsonData["Data"]["Trefacciones"] = $this->getTrefacciones($buscarlikes);
                             $this->jsonData["Data"]["Refacciones"] = $this->getRefacciones($buscarlikes, $this->formulario["x"],$this->formulario["y"]);
+                            $this->jsonData["Data"]["BusquedaRelajada"] = $this->usarBusquedaRelajada;
                         break;
                         case 'OneRefaccion':
                             $this->jsonData["Data"]["Refaccion"] = $this->getOneRefaccion();
@@ -591,17 +593,28 @@
         private function buildWhereBusqueda(array $arrayLikes) {
             $busqueda = trim($this->formulario["producto"] ?? "");
             $usarFulltext = false;
+            $busquedaFulltext = "";
+
             if (strlen($busqueda) >= 6 && preg_match('/[a-zA-Z]{3,}/', $busqueda)) {
                 $usarFulltext = true;
+                
+                if ($this->usarBusquedaRelajada) {
+                    $busquedaFulltext = $busqueda; 
+                } else {
+                    $palabras = preg_split('/\s+/', $busqueda);
+                    $palabras_estrictas = array_map(function($p) { return '+' . $p; }, $palabras);
+                    $busquedaFulltext = implode(' ', $palabras_estrictas);
+                }
             }
 
             $where = "(({$arrayLikes['Productos']} OR {$arrayLikes['Clave']} OR {$arrayLikes['No_parte']})
-            " . ($usarFulltext ? " OR (MATCH(P.Producto, P.Descripcion) AGAINST ('$busqueda' IN BOOLEAN MODE))": "") . ")";
+            " . ($usarFulltext ? " OR (MATCH(P.Producto, P.Descripcion) AGAINST ('$busquedaFulltext' IN BOOLEAN MODE))": "") . ")";
 
             return [
-                'where'        => $where,
-                'usarFulltext' => $usarFulltext,
-                'busqueda'     => $busqueda
+                'where'            => $where,
+                'usarFulltext'     => $usarFulltext,
+                'busqueda'         => $busqueda,
+                'busquedaFulltext' => $busquedaFulltext
             ];
         }
 
@@ -613,9 +626,12 @@
         }
 
         private function getTrefacciones($arrayLikes){
-            $cacheKey = $this->buildCacheKey(['producto','categoria','marca','vehiculo','proveedor','disponibilidad']);
+            $cacheKey = $this->buildCacheKey(['producto','categoria','marca','vehiculo','proveedor','disponibilidad']) . ($this->usarBusquedaRelajada ? '_relaxed' : '_strict');
+            
             $cache = $this->getCache('cache_trefacciones', $cacheKey);
-            if ($cache !== null) return $cache;
+            if ($cache !== null && ($cache > 0 || $this->usarBusquedaRelajada)) {
+                return $cache;
+            }
             
             $whereData = $this->buildWhereBusqueda($arrayLikes);
             $condicion = $this->buildCondicionesSQL();
@@ -636,8 +652,15 @@
             ";
 
             $row = $this->conn->fetch($this->conn->query($sql));
-            $this->setCache('cache_trefacciones', $cacheKey, $row["Trefacciones"]);
-            return $row["Trefacciones"];
+            $total = $row["Trefacciones"];
+
+            if ($total == 0 && !$this->usarBusquedaRelajada && !empty($whereData['busqueda'])) {
+                $this->usarBusquedaRelajada = true;
+                return $this->getTrefacciones($arrayLikes); 
+            }
+
+            $this->setCache('cache_trefacciones', $cacheKey, $total);
+            return $total;
         }
 
         private function getRefacciones($arrayLikes, $x=0, $y = 21 ){
@@ -647,15 +670,14 @@
 
             $whereData = $this->buildWhereBusqueda($arrayLikes);
             $busqueda = $whereData['busqueda'];
+            $busquedaFulltext = $whereData['busquedaFulltext'];
             
-            $cacheKey = $this->buildCacheKey(['producto','categoria','marca','vehiculo','proveedor','disponibilidad','orden','tipodeorden','x','y']);
+            $cacheKey = $this->buildCacheKey(['producto','categoria','marca','vehiculo','proveedor','disponibilidad','orden','tipodeorden','x','y']) . ($this->usarBusquedaRelajada ? '_relaxed' : '_strict');
             $cache = $this->getCache('cache_refacciones', $cacheKey);
             if ($cache !== null) return $cache;
             
             $usarFulltext = $whereData['usarFulltext'];
-            if (strlen($busqueda) >= 6 && preg_match('/[a-zA-Z]{3,}/', $busqueda)) {
-                $usarFulltext = true;
-            }
+            
             $ordenPrioridad = "";
             if (preg_match('/^\d+$/', $busqueda)) {
                 $ordenPrioridad = "
@@ -663,7 +685,7 @@
                         WHEN P.Clave = $busqueda THEN 100
                         WHEN P.No_parte LIKE '%$busqueda%' THEN 60
                         WHEN P.Producto LIKE '%$busqueda%' THEN 40
-                        " . ($usarFulltext ? " WHEN MATCH(P.Producto, P.Descripcion) AGAINST ('$busqueda' IN BOOLEAN MODE) THEN 30 " : "") . "
+                        " . ($usarFulltext ? " WHEN MATCH(P.Producto, P.Descripcion) AGAINST ('$busquedaFulltext' IN BOOLEAN MODE) THEN 30 " : "") . "
                         ELSE 0
                     END DESC,
                 ";
@@ -673,7 +695,7 @@
                         WHEN P.No_parte = '$busqueda' THEN 80
                         WHEN P.No_parte LIKE '%$busqueda%' THEN 60
                         WHEN P.Producto LIKE '%$busqueda%' THEN 40
-                        " . ($usarFulltext ? " WHEN MATCH(P.Producto, P.Descripcion) AGAINST ('$busqueda' IN BOOLEAN MODE) THEN 30 " : "") . "
+                        " . ($usarFulltext ? " WHEN MATCH(P.Producto, P.Descripcion) AGAINST ('$busquedaFulltext' IN BOOLEAN MODE) THEN 30 " : "") . "
                         ELSE 0
                     END DESC,
                 ";
