@@ -664,7 +664,6 @@
             }
             
             $whereData = $this->buildWhereBusqueda($arrayLikes);
-            
             $condicion = $this->usarBusquedaRelajada ? $this->buildCondicionesSQL(['marca', 'vehiculo']) : $this->buildCondicionesSQL();
 
             $sql = "
@@ -687,7 +686,6 @@
 
             if ($total == 0 && !$this->usarBusquedaRelajada && !empty($this->formulario["producto"])) {
                 $this->usarBusquedaRelajada = true;
-                
                 $busquedaOriginal = $this->getexplode($this->formulario["producto"]);
                 return $this->getTrefacciones($busquedaOriginal); 
             }
@@ -715,11 +713,17 @@
             
             $usarFulltext = $whereData['usarFulltext'];
             
+            $entradaHumana = trim($this->formulario["producto"] ?? "");
+            $entradaHumanaSegura = addslashes($entradaHumana);
+
             $ordenPrioridad = "";
             if (preg_match('/^\d+$/', $busqueda)) {
                 $ordenPrioridad = "
                     CASE
-                        WHEN P.Clave = $busqueda THEN 100
+                        WHEN P.Clave = '$entradaHumanaSegura' THEN 200
+                        WHEN P.No_parte = '$entradaHumanaSegura' THEN 150
+                        WHEN P.Producto LIKE '%$entradaHumanaSegura%' THEN 100
+                        WHEN P.Clave = $busqueda THEN 80
                         WHEN P.No_parte LIKE '%$busqueda%' THEN 60
                         WHEN P.Producto LIKE '%$busqueda%' THEN 40
                         " . ($usarFulltext ? " WHEN MATCH(P.Producto, P.Descripcion) AGAINST ('$busquedaFulltext' IN BOOLEAN MODE) THEN 30 " : "") . "
@@ -729,6 +733,8 @@
             } else {
                 $ordenPrioridad = "
                     CASE
+                        WHEN P.No_parte = '$entradaHumanaSegura' THEN 200
+                        WHEN P.Producto LIKE '%$entradaHumanaSegura%' THEN 150
                         WHEN P.No_parte = '$busqueda' THEN 80
                         WHEN P.No_parte LIKE '%$busqueda%' THEN 60
                         WHEN P.Producto LIKE '%$busqueda%' THEN 40
