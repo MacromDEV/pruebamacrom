@@ -157,25 +157,25 @@
             $f = $this->formulario;
             $sql = "";
 
-            if (!in_array('marca', $ignorar) && !empty($f['marca'])) {
-                if (!in_array('vehiculo', $ignorar) && !empty($f['vehiculo'])) {
-                    $sql .= " AND ( 
-                        (P._idMarca IN({$f['marca']}) AND P.Modelo IN({$f['vehiculo']})) 
-                        OR 
-                        EXISTS (SELECT 1 FROM compatibilidad comp WHERE comp.id_imagen = P._id AND comp.idmarca IN({$f['marca']}) AND comp.idmodelo IN({$f['vehiculo']}))
-                    )";
-                } else {
-                    $sql .= " AND (
-                        P._idMarca IN({$f['marca']}) 
-                        OR 
-                        EXISTS (SELECT 1 FROM compatibilidad comp WHERE comp.id_imagen = P._id AND comp.idmarca IN({$f['marca']}))
-                    )";
-                }
-            } elseif (!in_array('vehiculo', $ignorar) && !empty($f['vehiculo'])) {
+            if (!in_array('vehiculo', $ignorar) && !empty($f['vehiculo'])) {
                 $sql .= " AND (
                     P.Modelo IN({$f['vehiculo']}) 
                     OR 
-                    EXISTS (SELECT 1 FROM compatibilidad comp WHERE comp.id_imagen = P._id AND comp.idmodelo IN({$f['vehiculo']}))
+                    EXISTS (SELECT 1 FROM u619477378_macromau.compatibilidad comp WHERE comp.id_imagen = P._id AND comp.idmodelo IN({$f['vehiculo']}))
+                )";
+                
+                if (!in_array('marca', $ignorar) && !empty($f['marca'])) {
+                    $sql .= " AND (
+                        P._idMarca IN({$f['marca']})
+                        OR
+                        EXISTS (SELECT 1 FROM u619477378_macromau.compatibilidad comp WHERE comp.id_imagen = P._id AND comp.idmarca IN({$f['marca']}))
+                    )";
+                }
+            } elseif (!in_array('marca', $ignorar) && !empty($f['marca'])) {
+                $sql .= " AND (
+                    P._idMarca IN({$f['marca']}) 
+                    OR 
+                    EXISTS (SELECT 1 FROM u619477378_macromau.compatibilidad comp WHERE comp.id_imagen = P._id AND comp.idmarca IN({$f['marca']}))
                 )";
             }
 
@@ -668,11 +668,11 @@
 
             $sql = "
                 SELECT COUNT(*) AS Trefacciones
-                FROM Producto AS P
-                LEFT JOIN Proveedor AS PROV ON P.id_proveedor = PROV._id
-                INNER JOIN Marcas AS M ON P._idMarca = M._id
-                INNER JOIN Categorias AS C ON P._idCategoria = C._id
-                INNER JOIN Modelos AS MO ON P.Modelo = MO._id
+                FROM u619477378_macromau.Producto AS P
+                LEFT JOIN u619477378_macromau.Proveedor AS PROV ON P.id_proveedor = PROV._id
+                INNER JOIN u619477378_macromau.Marcas AS M ON P._idMarca = M._id
+                INNER JOIN u619477378_macromau.Categorias AS C ON P._idCategoria = C._id
+                INNER JOIN u619477378_macromau.Modelos AS MO ON P.Modelo = MO._id
                 WHERE
                     P.Estatus = 1 AND P.Publicar = 1
                     AND (PROV._id IS NULL OR PROV.Estatus = 1) 
@@ -705,7 +705,7 @@
 
             $whereData = $this->buildWhereBusqueda($arrayLikes);
             $busqueda = $whereData['busqueda'];
-            $busquedaFulltext = $whereData['busquedaFulltext'];
+            $busquedaFulltext = $whereData['busquedaFulltext'] ?? $busqueda;
             
             $cacheKey = $this->buildCacheKey(['producto','categoria','marca','vehiculo','proveedor','disponibilidad','orden','tipodeorden','x','y']) . ($this->usarBusquedaRelajada ? '_relaxed' : '_strict');
             $cache = $this->getCache('cache_refacciones', $cacheKey);
@@ -716,42 +716,30 @@
             $entradaHumana = trim($this->formulario["producto"] ?? "");
             $entradaHumanaSegura = addslashes($entradaHumana);
 
-            $ordenPrioridad = "";
-            if (preg_match('/^\d+$/', $busqueda)) {
-                $ordenPrioridad = "
-                    CASE
-                        WHEN P.Clave = '$entradaHumanaSegura' THEN 200
-                        WHEN P.No_parte = '$entradaHumanaSegura' THEN 150
-                        WHEN P.Producto LIKE '%$entradaHumanaSegura%' THEN 100
-                        WHEN P.Clave = $busqueda THEN 80
-                        WHEN P.No_parte LIKE '%$busqueda%' THEN 60
-                        WHEN P.Producto LIKE '%$busqueda%' THEN 40
-                        " . ($usarFulltext ? " WHEN MATCH(P.Producto, P.Descripcion) AGAINST ('$busquedaFulltext' IN BOOLEAN MODE) THEN 30 " : "") . "
-                        ELSE 0
-                    END DESC,
-                ";
-            } else {
-                $ordenPrioridad = "
-                    CASE
-                        WHEN P.No_parte = '$entradaHumanaSegura' THEN 200
-                        WHEN P.Producto LIKE '%$entradaHumanaSegura%' THEN 150
-                        WHEN P.No_parte = '$busqueda' THEN 80
-                        WHEN P.No_parte LIKE '%$busqueda%' THEN 60
-                        WHEN P.Producto LIKE '%$busqueda%' THEN 40
-                        " . ($usarFulltext ? " WHEN MATCH(P.Producto, P.Descripcion) AGAINST ('$busquedaFulltext' IN BOOLEAN MODE) THEN 30 " : "") . "
-                        ELSE 0
-                    END DESC,
-                ";
-            }
+            $ordenPrioridad = "
+                CASE 
+                    -- Prioridad 1: Empieza exactamente con la frase completa del usuario
+                    WHEN P.Producto LIKE '$entradaHumanaSegura%' THEN 200
+                    -- Prioridad 2: Contiene la frase completa con espacios exactos
+                    WHEN P.Producto LIKE '% $entradaHumanaSegura %' THEN 150
+                    -- Prioridad 3: Contiene la frase completa en cualquier posición
+                    WHEN P.Producto LIKE '%$entradaHumanaSegura%' THEN 100
+                    -- Prioridad 4: Empieza con la palabra limpia filtrada
+                    WHEN P.Producto LIKE '$busqueda%' THEN 80
+                    -- Prioridad 5: Contiene la palabra limpia filtrada
+                    WHEN P.Producto LIKE '%$busqueda%' THEN 40
+                    ELSE 0 
+                END DESC,
+            ";
 
             $condicion = $this->usarBusquedaRelajada ? $this->buildCondicionesSQL(['marca', 'vehiculo']) : $this->buildCondicionesSQL();
                             
             $sql = "SELECT P.*, PROV._id as idProveedor, PROV.Proveedor as NombreProveedor, PROV.tag_alt as tag_altproveedor, PROV.tag_title as tag_titleproveedor 
-            FROM Producto AS P 
-            LEFT JOIN Proveedor AS PROV ON P.id_proveedor = PROV._id
-            INNER JOIN Marcas AS M ON P._idMarca = M._id
-            INNER JOIN Categorias AS C ON P._idCategoria = C._id
-            INNER JOIN Modelos AS MO ON P.Modelo = MO._id
+            FROM u619477378_macromau.Producto AS P 
+            LEFT JOIN u619477378_macromau.Proveedor AS PROV ON P.id_proveedor = PROV._id
+            INNER JOIN u619477378_macromau.Marcas AS M ON P._idMarca = M._id
+            INNER JOIN u619477378_macromau.Categorias AS C ON P._idCategoria = C._id
+            INNER JOIN u619477378_macromau.Modelos AS MO ON P.Modelo = MO._id
             WHERE P.Estatus = 1 AND P.Publicar = 1 
             AND (PROV._id IS NULL OR PROV.Estatus = 1) 
             AND M.Estatus = 1 AND C.Status = 1 AND MO.Estatus = 1
