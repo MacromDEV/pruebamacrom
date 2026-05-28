@@ -10,15 +10,15 @@
     .perfil__navegador .list-group-item i { width: 25px; text-align: center; margin-right: 10px; }
 
     /* WIZARD DE ENVÍO MODERNIZADO */
-    .wizard-moderno {
+    .wizard-MispedidosV {
         display: flex; justify-content: space-between; align-items: center; 
         position: relative; padding: 20px 0 40px 0; margin-bottom: 20px;
     }
-    .wizard-moderno::before {
+    .wizard-MispedidosV::before {
         content: ''; position: absolute; top: 40px; left: 10%; right: 10%; 
         height: 4px; background: #e5e7eb; z-index: 1; border-radius: 10px;
     }
-    .wizard-moderno-progress {
+    .wizard-MispedidosV-progress {
         position: absolute; top: 40px; left: 10%; height: 4px; 
         background: #de0007; z-index: 2; transition: all 0.5s ease; border-radius: 10px;
     }
@@ -37,8 +37,8 @@
     .wizard-step.active p { color: #de0007; }
 
     /* Componentes Generales */
-    .table-premium th { border-top: none; text-transform: uppercase; font-size: 1.1rem; letter-spacing: 1px; color: #6b7280; }
-    .table-premium td { vertical-align: middle; border-color: #f3f4f6; }
+    .table-general th { border-top: none; text-transform: uppercase; font-size: 1.1rem; letter-spacing: 1px; color: #6b7280; }
+    .table-general td { vertical-align: middle; border-color: #f3f4f6; }
     .resumen-card { background: #f9fafb; border-radius: 12px; padding: 20px; border: 1px solid #f3f4f6; }
 </style>
 
@@ -96,8 +96,8 @@
                             <div class="col-md-8 pl-md-4">
                                 <h5 class="font-weight-bold mb-3 text-center" style="color: #4b5563;">Estatus del Envío</h5>
                                 
-                                <div class="wizard-moderno">
-                                    <div class="wizard-moderno-progress" ng-style="{'width': wizard.entregado ? '80%' : (wizard.proceso ? '55%' : (wizard.transito ? '25%' : '0%'))}"></div>
+                                <div class="wizard-MispedidosV">
+                                    <div class="wizard-MispedidosV-progress" ng-style="{'width': wizard.entregado ? '80%' : (wizard.proceso ? '55%' : (wizard.transito ? '25%' : '0%'))}"></div>
                                     
                                     <div class="wizard-step" ng-class="{'active': wizard.preparacion}">
                                         <div class="wizard-icon"><img src="./images/icons/Preparacion.png"></div>
@@ -146,7 +146,7 @@
 
                         <h4 class="font-weight-bold mb-3" style="color: #222;">Artículos en tu orden</h4>
                         <div class="table-responsive">
-                            <table class="table table-hover table-premium">
+                            <table class="table table-hover table-general">
                                 <thead>
                                     <tr>
                                         <th width="5%" class="text-center">#</th>

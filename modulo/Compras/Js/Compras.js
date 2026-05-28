@@ -1098,7 +1098,6 @@ function ProfileCtrl($scope, $http) {
         let agregar_div = []; 
         let agregar_lbl = []; 
         for (var j = 0; j <= 7; j++) {
-            // Aseguramos que si el elemento no existe (ej. campos opcionales) no reviente el código
             let elemento = document.getElementById("agregar_" + (j + 1));
             agregar[j] = elemento ? elemento.value : "";
             agregar_div[j] = document.getElementById("agregar_div" + (j + 1));
@@ -1117,7 +1116,7 @@ function ProfileCtrl($scope, $http) {
                 hasError = true;
             } else {
                 if(agregar_lbl[i]) agregar_lbl[i].style.color = "var(--negro)";
-                if(agregar_div[i]) agregar_div[i].style.borderColor = "#d1d5db"; // Gris moderno
+                if(agregar_div[i]) agregar_div[i].style.borderColor = "#d1d5db";
             }
         }
         

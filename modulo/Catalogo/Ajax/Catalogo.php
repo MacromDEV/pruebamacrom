@@ -625,14 +625,20 @@
             $usarFulltext = false;
             $busquedaFulltext = "";
 
-            if (strlen($busqueda) >= 6 && preg_match('/[a-zA-Z]{3,}/', $busqueda)) {
+            if (strlen($busqueda) >= 3 && preg_match('/[a-zA-Z]{3,}/', $busqueda)) {
                 $usarFulltext = true;
                 
                 if ($this->usarBusquedaRelajada) {
                     $busquedaFulltext = $busqueda; 
                 } else {
                     $palabras = preg_split('/\s+/', $busqueda);
-                    $palabras_estrictas = array_map(function($p) { return '+' . $p; }, $palabras);
+                    $palabras_estrictas = [];
+                    
+                    foreach($palabras as $p) {
+                        if(strlen($p) > 2 || preg_match('/[0-9]/', $p)) {
+                            $palabras_estrictas[] = '+' . $p;
+                        }
+                    }
                     $busquedaFulltext = implode(' ', $palabras_estrictas);
                 }
             }
@@ -724,9 +730,11 @@
                     WHEN P.Producto LIKE '% $entradaHumanaSegura %' THEN 150
                     -- Prioridad 3: Contiene la frase completa en cualquier posición
                     WHEN P.Producto LIKE '%$entradaHumanaSegura%' THEN 100
-                    -- Prioridad 4: Empieza con la palabra limpia filtrada
+                    -- Prioridad 4: MATCH SEMÁNTICO (Puntaje 90 para palabras invertidas o sin conectores)
+                    " . ($usarFulltext ? " WHEN MATCH(P.Producto, P.Descripcion) AGAINST ('$busquedaFulltext' IN BOOLEAN MODE) THEN 90 " : "") . "
+                    -- Prioridad 5: Empieza con la palabra limpia filtrada
                     WHEN P.Producto LIKE '$busqueda%' THEN 80
-                    -- Prioridad 5: Contiene la palabra limpia filtrada
+                    -- Prioridad 6: Contiene la palabra limpia filtrada
                     WHEN P.Producto LIKE '%$busqueda%' THEN 40
                     ELSE 0 
                 END DESC,

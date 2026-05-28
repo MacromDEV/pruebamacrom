@@ -24,7 +24,6 @@ class WebPrincipal{
     }
 
     public function main(){
-        // Soporte Híbrido: Acepta tanto JSON (Angular moderno) como FormData (subida de archivos)
         $json = json_decode(file_get_contents('php://input'), true);
         if (!empty($json) && isset($json['imagen'])) {
             $this->formulario = $json['imagen'];

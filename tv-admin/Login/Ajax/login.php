@@ -146,7 +146,7 @@ class login {
 
         $passwordGuardado = $userData["password"];
 
-        // Verificación con hash moderno (Bcrypt)
+        // Verificación con hash (Bcrypt)
         if (password_verify($pass, $passwordGuardado)) {
             $this->userData = $userData;
             return true;
