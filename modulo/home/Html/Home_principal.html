@@ -92,11 +92,11 @@
                                                         <link itemprop="availability" href="http://schema.org/InStock" ng-if="!producto.agotado" />
                                                         <link itemprop="availability" href="http://schema.org/OutOfStock" ng-if="producto.agotado" />
 
-                                                        <p class="precio__producto" ng-hide="producto.RefaccionOferta">
+                                                        <p class="precio__producto" ng-if="!producto.RefaccionOferta">
                                                             <meta itemprop="price" content="{{producto.Precio1 || '0.00'}}">
                                                             <span ng-bind="producto.Precio1 | currency"></span>
                                                         </p>  
-                                                        <p class="precio__producto" ng-show="producto.RefaccionOferta">
+                                                        <p class="precio__producto" ng-if="producto.RefaccionOferta">
                                                             <small class="line_through-red" ng-bind="producto.Precio1 | currency"></small>
                                                             <meta itemprop="price" content="{{producto.Precio2 || '0.00'}}">
                                                             <span ng-bind="producto.Precio2 | currency"></span>
@@ -147,11 +147,11 @@
                                                         <link itemprop="availability" href="http://schema.org/InStock" ng-if="!producto.agotado" />
                                                         <link itemprop="availability" href="http://schema.org/OutOfStock" ng-if="producto.agotado" />
 
-                                                        <p class="precio__producto" ng-hide="producto.RefaccionOferta">
+                                                        <p class="precio__producto" ng-if="!producto.RefaccionOferta">
                                                             <meta itemprop="price" content="{{producto.Precio1 || '0.00'}}">
                                                             <span ng-bind="producto.Precio1 | currency"></span>
                                                         </p>  
-                                                        <p class="precio__producto" ng-show="producto.RefaccionOferta">
+                                                        <p class="precio__producto" ng-if="producto.RefaccionOferta">
                                                             <small class="line_through-red" ng-bind="producto.Precio1 | currency"></small>
                                                             <meta itemprop="price" content="{{producto.Precio2 || '0.00'}}">
                                                             <span ng-bind="producto.Precio2 | currency"></span>
@@ -179,7 +179,7 @@
                                                         <span class="promocion__aviso bg-promo" ng-show="producto.RefaccionOferta">Promoción</span>
                                                         <span class="enviogratis__aviso bg-promo" ng-show="producto.Enviogratis">Envío gratis</span>
                                                     </div>
-                                                   <img itemprop="image" ng-src="{{producto.imagen ? 'images/refacciones/' + producto._id + '.' + producto.img_ext : 'images/refacciones/motor.webp'}}" width="190" height="250" ng-attr-alt="{{producto.NewAltName}}" loading="lazy">
+                                                    <img itemprop="image" ng-src="{{producto.imagen ? 'images/refacciones/' + producto._id + '.' + producto.img_ext : 'images/refacciones/motor.webp'}}" width="190" height="250" ng-attr-alt="{{producto.NewAltName}}" loading="lazy">
                                                 </a>
                                             </div>
 
@@ -201,13 +201,14 @@
                                                         <link itemprop="availability" href="http://schema.org/InStock" ng-if="!producto.agotado" />
                                                         <link itemprop="availability" href="http://schema.org/OutOfStock" ng-if="producto.agotado" />
 
-                                                        <p class="precio__producto" ng-hide="producto.RefaccionOferta">
+                                                        <p class="precio__producto" ng-if="!producto.RefaccionOferta">
                                                             <meta itemprop="price" content="{{producto.Precio1 || '0.00'}}">
                                                             <span ng-bind="producto.Precio1 | currency"></span>
                                                         </p>  
-                                                        <p class="precio__producto" ng-show="producto.RefaccionOferta">
+                                                        <p class="precio__producto" ng-if="producto.RefaccionOferta">
                                                             <small class="line_through-red" ng-bind="producto.Precio1 | currency"></small>
-                                                            <meta itemprop="price" content="{{producto.Precio1 || '0.00'}}">
+                                                            <meta itemprop="price" content="{{producto.Precio2 || '0.00'}}">
+                                                            <span ng-bind="producto.Precio2 | currency"></span>
                                                         </p>
                                                     </div>
                                                 </section>
