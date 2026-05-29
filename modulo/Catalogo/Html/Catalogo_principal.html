@@ -242,11 +242,11 @@
 												<link itemprop="availability" href="http://schema.org/InStock" ng-if="!producto.agotado" />
 												<link itemprop="availability" href="http://schema.org/OutOfStock" ng-if="producto.agotado" />
 
-												<p class="precio__producto price" ng-hide="producto.RefaccionOferta">
+												<p class="precio__producto price" ng-if="!producto.RefaccionOferta">
 													<meta itemprop="price" content="{{producto.Precio1 || '0.00'}}">
 													<span ng-bind="producto.Precio1 | currency"></span>
 												</p>  
-												<p class="precio__producto" ng-show="producto.RefaccionOferta">
+												<p class="precio__producto" ng-if="producto.RefaccionOferta">
 													<small class="line_through-red" ng-bind="producto.Precio1 | currency"></small>
 													<meta itemprop="price" content="{{producto.Precio2 || '0.00'}}">
 													<span ng-bind="producto.Precio2 | currency"></span>
