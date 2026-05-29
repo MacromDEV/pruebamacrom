@@ -290,13 +290,12 @@ class Login{
 
         $passwordGuardado = $userData["password"];
 
-        // 🔐 Password moderno
         if(password_verify($pass, $passwordGuardado)){
             $this->dataLogin = $userData;
             return true;
         }
 
-        // 🔄 SHA1 viejo
+        // SHA1 viejo
         if($passwordGuardado === sha1($pass)){
 
             $nuevoHash = password_hash($pass, PASSWORD_DEFAULT);

@@ -1,6 +1,6 @@
-var url_session = "./modulo/home/Ajax/session.php";
-var url = "./modulo/home/Ajax/home.php";
-var urlLogin = "./modulo/Login/Ajax/Login.php";
+var url_session = "/modulo/home/Ajax/session.php";
+var url = "/modulo/home/Ajax/home.php";
+var urlLogin = "/modulo/Login/Ajax/Login.php";
 
 tsuruVolks.controller('CabeceraCtrl', ["$scope", "$http", "$sce", "vcRecaptchaService", CabeceraCtrl])
     .controller('FooterCtrl', ["$scope", "$http", FooterCtrl])
@@ -87,7 +87,7 @@ function CabeceraCtrl($scope, $http, $sce, vcRecaptchaService) {
         }
 
         setTimeout(function () {
-            if(window.location.search.includes("?mod=Compras") && obj.Data.Carrito && obj.Data.Carrito.length == 0 && $_SESSION["CarritoPrueba"] && Object.keys($_SESSION["CarritoPrueba"]).length > 0){
+            if(window.location.search.includes("/Compras") && obj.Data.Carrito && obj.Data.Carrito.length == 0 && $_SESSION["CarritoPrueba"] && Object.keys($_SESSION["CarritoPrueba"]).length > 0){
                 location.reload();
             }
         }, 400);
@@ -144,7 +144,7 @@ function CabeceraCtrl($scope, $http, $sce, vcRecaptchaService) {
         if (!value) return;
         
         const query = encodeURIComponent(value);
-        window.location.href = `/?mod=catalogo&pag=1&busqueda_general=${query}`;
+        window.location.href = `/catalogo?busqueda_general=${query}`;
     };
 
     obj.getCategorias = async () => {
@@ -172,7 +172,7 @@ function CabeceraCtrl($scope, $http, $sce, vcRecaptchaService) {
     obj.getBanners = (data) => {
         $http({
             method: 'POST',
-            url: "./tv-admin/asset/Modulo/Secciones/webprincipal/Ajax/webprincipal.php",
+            url: "/tv-admin/asset/Modulo/Secciones/webprincipal/Ajax/webprincipal.php",
             data: { imagen: data },
             headers: { 'Content-Type': undefined },
             transformRequest: function (data) {
@@ -197,7 +197,7 @@ function CabeceraCtrl($scope, $http, $sce, vcRecaptchaService) {
     };
 
     obj.RefaccionDetalles = (_id, newurl) => {
-        window.open(`?mod=catalogo&opc=detalles&_id=${_id}-${newurl}`, "_self");
+        window.open(`/catalogo/detalles/${_id}-${newurl}`, "_self");
     };
 
     obj.btnLogout = () => {
@@ -208,8 +208,8 @@ function CabeceraCtrl($scope, $http, $sce, vcRecaptchaService) {
             data: { Login: obj.login }
         }).then(function successCallback(res) {
             if (res.data.Bandera == 1) {
-                if (window.location.search.includes("?mod=Compras") || window.location.search.includes("?mod=Profile")) {
-                    location.href = "?mod=home";
+                if (window.location.search.includes("/Compras") || window.location.search.includes("/Profile")) {
+                    location.href = "/";
                 } else {
                     location.reload();
                 }
@@ -225,7 +225,7 @@ function CabeceraCtrl($scope, $http, $sce, vcRecaptchaService) {
     };
 
     obj.btnPerfil = () => {
-        location.href = "?mod=Profile&opc=Direcciones";
+        location.href = "/Profile/Direcciones";
     };
 
     obj.enviarContacto = () => {
@@ -238,7 +238,7 @@ function CabeceraCtrl($scope, $http, $sce, vcRecaptchaService) {
 
         $http({
             method: 'POST',
-            url: "./modulo/Contacto/Ajax/Contacto.php",
+            url: "/modulo/Contacto/Ajax/Contacto.php",
             data: obj.Contacto
         }).then(function successCallback(res) {
             

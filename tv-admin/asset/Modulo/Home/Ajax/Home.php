@@ -90,8 +90,8 @@ class Dashboard {
 
             case 'get':
                 $this->jsonData["Bandera"] = 1;
-                $this->jsonData["Publicados"] = $this->getInventarioEstatus(1);
-                $this->jsonData["NoPublicados"] = $this->getInventarioEstatus(0);
+                $this->jsonData["Publicados"] = $this->getInventarioEstatus(1,1);
+                $this->jsonData["NoPublicados"] = $this->getInventarioEstatus(0,0);
                 break;
 
             case 'getPermisos':
@@ -202,8 +202,8 @@ class Dashboard {
         return $array;
     }
 
-    private function getInventarioEstatus($estatus) {
-        $sql = "SELECT COUNT(_id) as cantidad FROM Producto WHERE Estatus = $estatus";
+    private function getInventarioEstatus($estatus,$publicado) {
+        $sql = "SELECT COUNT(_id) as cantidad FROM Producto WHERE Estatus = $estatus AND Publicar = $publicado";
         $res = $this->conn->fetch($this->conn->query($sql));
         return (int)($res['cantidad'] ?? 0);
     }

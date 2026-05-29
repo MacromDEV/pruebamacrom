@@ -70,7 +70,7 @@
                     <i id="abrirModal6" class="fas fa-bars click filwhite"></i>
                 </div>
 
-                <a href="?mod=home" class="header__topbar--logo clicksidebar">
+                <a href="/" class="header__topbar--logo clicksidebar">
                     <img src="images/icons/logomacromb.webp" alt="Logo Macrom">
                 </a>
 
@@ -85,7 +85,7 @@
 
                 <div class="contenedor__usuario">
                     <div class="header-wrapicon1 login__text" ng-show="!user">
-                        <span class="topbar-email header-icon1" onclick="location.href='?mod=login'">Iniciar
+                        <span class="topbar-email header-icon1" onclick="location.href='/login'">Iniciar
                             Sesion</span>
                     </div>
                     <div class="contenedor__usuario--perfil" id="usercba" ng-show="user">
@@ -99,24 +99,24 @@
                                         class="perfil__usuario--img" loading="lazy" alt="Avatar Usuario">
 
                                     <div class="vinculos">
-                                        <a href="?mod=Profile&opc=Session" class="vinculos--contenedor enlace-limpio">
+                                        <a href="/Profile/Session" class="vinculos--contenedor enlace-limpio">
                                             <i loading="lazy" class="fa fa-shield-alt"> </i>
                                             <span class="vinculos--opciones">Sesión y Seguridad</span>
                                         </a><br>
 
-                                        <a href="?mod=Profile&opc=Mispedidos"
+                                        <a href="/Profile/Mispedidos"
                                             class="vinculos--contenedor enlace-limpio">
                                             <i loading="lazy" class="fa fa-shopping-cart"></i>
                                             <span class="vinculos--opciones">Mis pedidos</span>
                                         </a><br>
 
-                                        <a href="?mod=Profile&opc=Direcciones"
+                                        <a href="/Profile/Direcciones"
                                             class="vinculos--contenedor enlace-limpio">
                                             <i loading="lazy" class="fa fa-map-marked-alt"></i>
                                             <span class="vinculos--opciones">Mis direcciones</span>
                                         </a><br>
 
-                                        <a href="?mod=Profile&opc=Facturacion"
+                                        <a href="/Profile/Facturacion"
                                             class="vinculos--contenedor enlace-limpio">
                                             <i loading="lazy" class="fa fa-file-invoice-dollar"></i>
                                             <span class="vinculos--opciones">Datos de facturación</span>
@@ -201,9 +201,9 @@
                                     <div class="header-cart-buttons">
                                         <div class="header-cart-wrapbtn">
                                             <button class="form-control clicksidebarshop btn_CPrimarios"
-                                                onclick="location.href='?mod=Compras'" ng-show="user">Pagar</button>
+                                                onclick="location.href='/Compras'" ng-show="user">Pagar</button>
                                             <button class="form-control clicksidebarshop btn_CPrimarios"
-                                                onclick="location.href='?mod=login'" ng-show="!user">Iniciar
+                                                onclick="location.href='/login'" ng-show="!user">Iniciar
                                                 Sesión</button>
                                         </div>
                                     </div>
@@ -219,31 +219,31 @@
                 <div class="contenedor__navegacion__menu">
                     <nav class="contenedor__navegacion__menu--principal">
                         <ul class="contenedor__navegacion__menu--opciones" data-animation="diagonal">
-                            <li><a href="?mod=home">Inicio<span class="border border-top"></span><span
+                            <li><a href="/">Inicio<span class="border border-top"></span><span
                                         class="border border-right"></span><span
                                         class="border border-bottom"></span><span class="border border-left"></span></a>
                             </li>
-                            <li><a href="?mod=catalogo&pag=1">Refacciones<span class="border border-top"></span><span
+                            <li><a href="/catalogo">Refacciones<span class="border border-top"></span><span
                                         class="border border-right"></span><span
                                         class="border border-bottom"></span><span class="border border-left"></span></a>
                             </li>
                             <li>
-                                <a href="?mod=Compras" ng-show="user">Mis compras<span
+                                <a href="/Compras" ng-show="user">Mis compras<span
                                         class="border border-top"></span><span class="border border-right"></span><span
                                         class="border border-bottom"></span><span class="border border-left"></span></a>
-                                <a href="?mod=login" ng-show="!user">Mis compras<span
+                                <a href="/login" ng-show="!user">Mis compras<span
                                         class="border border-top"></span><span class="border border-right"></span><span
                                         class="border border-bottom"></span><span class="border border-left"></span></a>
                             </li>
-                            <li><a href="?mod=Blog">Blog<span class="border border-top"></span><span
+                            <li><a href="/Blog">Blog<span class="border border-top"></span><span
                                         class="border border-right"></span><span
                                         class="border border-bottom"></span><span class="border border-left"></span></a>
                             </li>
-                            <li><a href="?mod=nosotros">Nosotros<span class="border border-top"></span><span
+                            <li><a href="/nosotros">Nosotros<span class="border border-top"></span><span
                                         class="border border-right"></span><span
                                         class="border border-bottom"></span><span class="border border-left"></span></a>
                             </li>
-                            <li><a href="?mod=contacto">Contacto<span class="border border-top"></span><span
+                            <li><a href="/contacto">Contacto<span class="border border-top"></span><span
                                         class="border border-right"></span><span
                                         class="border border-bottom"></span><span class="border border-left"></span></a>
                             </li>
@@ -262,8 +262,7 @@
                     <img src="../images/usuarios/Avatar-Lobo-Macrom-Grande.webp" class="menu__cliente__informacion--img"
                         alt="Avatar Usuario">
                     <div class="cliente__informacion--datos">
-                        <p class="txtred">¡Hola!</p>
-                        <p class="text-dark" ng-bind="session.nombre"></p>
+                        <p class="txtred">¡Hola <span ng-bind="session.nombrecorto"></span>!</p>
                     </div>
                 </div>
                 <div class="sidebar__mobil__menu--enlaces">
@@ -279,31 +278,31 @@
 
                     <div class="menu__enlaces__contenedor">
                         <div class="menu__enlaces">
-                            <a href="?mod=home" id="sidebar0" class="sidebar__click"><i class="fa fa-home"></i>
+                            <a href="/" id="sidebar0" class="sidebar__click"><i class="fa fa-home"></i>
                                 Inicio</a>
-                            <a href="?mod=catalogo&pag=1" id="sidebar1" class="sidebar__click"><i
+                            <a href="/catalogo" id="sidebar1" class="sidebar__click"><i
                                     class="fa fa-wrench"></i> Refacciones</a>
-                            <a href="?mod=Compras" id="sidebar2" class="sidebar__click" ng-show="user"><i
+                            <a href="/Compras" id="sidebar2" class="sidebar__click" ng-show="user"><i
                                     class="fa fa-shopping-cart"></i> Carrito</a>
-                            <a href="?mod=login" id="sidebar3" class="sidebar__click" ng-show="!user"><i
+                            <a href="/login" id="sidebar3" class="sidebar__click" ng-show="!user"><i
                                     class="fa fa-shopping-cart"></i> <span
                                     class="menu__enlaces--links txtgris">Carrito</span></a>
-                            <a href="?mod=nosotros" id="sidebar4" class="sidebar__click"><i
+                            <a href="/nosotros" id="sidebar4" class="sidebar__click"><i
                                     class="fa fa-question-circle"></i> Nosotros</a>
-                            <a href="?mod=Blog" id="sidebar9" class="sidebar__click"><i class="fas fa-book"></i>
+                            <a href="/Blog" id="sidebar9" class="sidebar__click"><i class="fas fa-book"></i>
                                 Blog</a>
-                            <a href="?mod=contacto" id="sidebar10" class="sidebar__click"><i
+                            <a href="/contacto" id="sidebar10" class="sidebar__click"><i
                                     class="fas fa-envelope"></i> Contacto</a>
                         </div>
                         <hr>
                         <div class="menu__enlaces" ng-show="user">
-                            <a href="?mod=Profile&opc=Session" id="sidebar5" class="sidebar__click"><i
+                            <a href="/Profile/Session" id="sidebar5" class="sidebar__click"><i
                                     class="fa fa-shield-alt"></i> Sesión y Seguridad</a>
-                            <a href="?mod=Profile&opc=Mispedidos" id="sidebar6" class="sidebar__click"><i
+                            <a href="/Profile/Mispedidos" id="sidebar6" class="sidebar__click"><i
                                     class="fa fa-shopping-cart"></i> Mis Pedidos</a>
-                            <a href="?mod=Profile&opc=Direcciones" id="sidebar7" class="sidebar__click"><i
+                            <a href="/Profile/Direcciones" id="sidebar7" class="sidebar__click"><i
                                     class="fa fa-map-marked-alt"></i> Mis Direcciones</a>
-                            <a href="?mod=Profile&opc=Facturacion" id="sidebar8" class="sidebar__click"><i
+                            <a href="/Profile/Facturacion" id="sidebar8" class="sidebar__click"><i
                                     class="fa fa-file-invoice-dollar"></i> Datos Facturación</a>
                             <span class="sidebar__logout center--text" ng-click="btnLogout()" style="cursor: pointer;">
                                 <i class="fas fa-sign-out-alt"></i>
@@ -315,11 +314,11 @@
                     <div class="menu__sesion" ng-show="!user">
                         <div class="menu__sesion__inicio">
                             <p>¿Ya tienes cuenta?</p>
-                            <a href="?mod=login">Iniciar Sesión</a>
+                            <a href="/login">Iniciar Sesión</a>
                         </div>
                         <div class="menu__sesion__registrar">
                             <p>¿Aún no tienes cuenta?</p>
-                            <a href="?mod=register">Registrarse</a>
+                            <a href="/register">Registrarse</a>
                         </div>
                     </div>
                 </div>

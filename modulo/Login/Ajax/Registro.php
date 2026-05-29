@@ -149,7 +149,7 @@ private function setCSeguridad ($id){
 
     $passwordPlano = $this->formulario->Registro->pass;
 
-    // 🔐 Hash moderno seguro
+    // 🔐 Hash nuevo
     $passwordHash = password_hash($passwordPlano, PASSWORD_DEFAULT);
 
     $fechaActual = date("Y-m-d H:i:s");

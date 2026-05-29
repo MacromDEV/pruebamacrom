@@ -93,6 +93,7 @@ function ProveedoresCrtl($scope, $http) {
     obj.btnNuevo = () => {
         obj.nuevo = true;
         obj.Proveedor = { opc: "new", tag_title: "", tag_alt: "" };
+        delete obj.Proveedor.file;
         obj.img = "Images/boxed-bg.jpg";
         document.getElementById("txtfile").value = "";
         $('.custom-file-label').html('Seleccionar imagen...');
@@ -131,6 +132,7 @@ function ProveedoresCrtl($scope, $http) {
         obj.nuevo = false;
         obj.Proveedor = angular.copy(proveedor);
         obj.Proveedor.opc = "edit";
+        delete obj.Proveedor.file;
         obj.img = obj.Proveedor.foto ? obj.dominio + "/images/Marcasrefacciones/" + obj.Proveedor._id + ".png" : "Images/boxed-bg.jpg";
         document.getElementById("txtfile").value = "";
         $('.custom-file-label').html('Cambiar imagen...');
@@ -220,11 +222,12 @@ function ProveedoresCrtl($scope, $http) {
                         var reader = new FileReader();
                         reader.onload = function (e) {
                             obj.img = reader.result;
+                            obj.Proveedor.file = file; 
                             obj.$apply();
                         }
                         reader.readAsDataURL(file);
                         $(this).next('.custom-file-label').html(file.name); 
-                    } else {
+                    }else {
                         Toast.fire({ icon: 'warning', title: 'La imagen supera los 512 KB' });
                         this.value = "";
                         $(this).next('.custom-file-label').html('Seleccionar imagen...');

@@ -1,16 +1,225 @@
-<section class="bg-title-page flex-col-c-m" style="background-image: url(images/Banners/Contactanos.png);">
-		
-    <h2 class="l-text2 t-center">
-        DEVOLUCIONES Y REEMBOLSOS
-    </h2>
+<style>
+    /* Estilos base heredados de Términos y Condiciones */
+    .terms-header {
+        background: linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75)), url('images/Banners/Contactanos.png');
+        background-size: cover;
+        background-position: center;
+        padding: 80px 0;
+        text-align: center;
+        margin-bottom: 50px;
+    }
+    
+    .terms-header h1 {
+        color: #ffffff;
+        font-weight: 800;
+        font-size: 2.8rem;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        margin: 0;
+        text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+    }
 
-</section>
-<section class="contenedor bgwhite devoluciones__reembolso" id="MainDark">
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-12 col-md-12 col-lg-12">
-                <ng-include src="'./modulo/Devoluciones/Html/Devoluciones.html'"></ng-include>
+    .terms-container {
+        max-width: 900px;
+        margin: 0 auto 60px auto;
+        background: #ffffff;
+        padding: 50px 60px;
+        border-radius: 16px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        border: 1px solid #f3f4f6;
+    }
+
+    /* Estilos de Tipografía Editorial */
+    .terms-content p, .terms-content li {
+        color: #4b5563;
+        font-size: 1.05rem;
+        line-height: 1.8;
+        margin-bottom: 20px;
+        text-align: justify;
+    }
+
+    .terms-content h4 {
+        color: #de0007;
+        font-weight: 800;
+        font-size: 1.5rem;
+        margin-top: 20px;
+        margin-bottom: 30px;
+        text-align: center;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        line-height: 1.5;
+    }
+
+    .terms-content h5 {
+        color: #1f2937;
+        font-weight: 800;
+        font-size: 1.2rem;
+        margin-top: 40px;
+        margin-bottom: 15px;
+        border-bottom: 2px solid #fecaca;
+        padding-bottom: 8px;
+        display: inline-block;
+        text-transform: uppercase;
+    }
+
+    .terms-content strong, .terms-content b {
+        color: #111827;
+        font-weight: 700;
+    }
+
+    /* Clases específicas para resaltados en Devoluciones */
+    .text-red {
+        color: #de0007 !important;
+    }
+
+    /* Estilo para las listas ordenadas */
+    .terms-content ol {
+        margin-left: 20px;
+        margin-bottom: 30px;
+    }
+    
+    .terms-content ol > li {
+        margin-bottom: 25px;
+    }
+
+    .terms-content ol ol {
+        margin-top: 15px;
+        list-style-type: lower-alpha;
+    }
+
+    /* Caja de Advertencia */
+    .terms-warning-box {
+        background-color: #fff5f5;
+        border-left: 5px solid #de0007;
+        padding: 20px 25px;
+        border-radius: 8px;
+        margin: 30px 0;
+    }
+    
+    .terms-warning-box p {
+        margin: 0;
+        color: #de0007;
+        font-weight: 700;
+        text-align: center;
+        font-size: 1.1rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .terms-container {
+            padding: 30px 20px;
+            margin: 0 15px 40px 15px;
+        }
+        .terms-header h1 {
+            font-size: 2rem;
+        }
+    }
+</style>
+
+<div class="global__content" id="MainDark">
+    
+    <header class="terms-header">
+        <h1>Devoluciones y Reembolsos</h1>
+    </header>
+
+    <section class="container">
+        <div class="terms-container terms-content">
+            
+            <h4>Sección de Devoluciones</h4>
+            
+            <div class="terms-warning-box">
+                <p>¡En Macrom Autopartes las devoluciones son gratis!</p>
             </div>
+
+            <p>Si tienes alguna duda, revisa nuestra Política de Devolución para conocer más detalles sobre cómo proceder si necesitas regresar un artículo.</p>
+
+            <h5>¿Cómo devuelvo un producto?</h5>
+            <ol>
+                <li><b class="text-red">1. Registra tu devolución</b>
+                    <p>Inicia sesión. Haz clic en la sección <b>“Mis Compras”</b> ubicada en el menú superior de lado derecho de nuestra página. Recuerda que solo puedes devolver un producto una vez ya lo recibiste.</p>
+                    <p>Identifica tu pedido y a continuación elige el producto que deseas <b>“Devolver”</b>. Si tu producto ya está marcado como Entregado podrás iniciar tu proceso sin problema enviando un correo a: <b>ventasweb@macromautopartes.com</b> y un asesor te guiará durante este proceso.</p>
+                    <p>En caso contrario, si tu producto sigue marcado como "En camino", quiere decir que no hemos recibido la confirmación de la paquetería; sin embargo, tú nos puedes confirmar la recepción de tu paquete enviándonos un correo a ventasweb@macromautopartes.com. Con esto confirmarás que tienes el producto y podrás iniciar el proceso de devolución sin problemas.</p>
+                    <p>Recuerda solo hacer esto si tienes el producto físicamente en tus manos; una vez confirmada esta acción no podrás iniciar algún reclamo de no recepción.</p>
+                    <p>Llena de forma bien específica toda la información solicitada. Mientras más detalles sobre el motivo de tu devolución nos puedas brindar, será más sencillo procesarla.</p>
+                </li>
+                <li><b class="text-red">2. Descarga e imprime tu guía de devolución</b>
+                    <p>Una vez hayas confirmado tu devolución en el paso 1, en la siguiente pantalla podrás descargar tu guía de devolución para ser impresa o te la enviaremos por correo electrónico en menos de 48 horas.</p>
+                    <p>En caso de que no puedas imprimirla en ese momento, esta opción estará habilitada hasta 2 días hábiles luego de haber iniciado el proceso de devolución (el mismo tiempo que tienes para hacer uso de la guía). De no utilizarla en este tiempo, no podremos aceptar tu devolución. Esta opción estará dentro de los detalles de tu pedido.</p>
+                    <p><b>*</b> Si tu producto es de grandes dimensiones, la guía de devolución es diferente y te la enviaremos por correo electrónico en menos de 48 horas.</p>
+                </li>
+                <li><b class="text-red">3. Empaca tu producto y pega tu guía de devolución</b>
+                    <p>Guarda el producto tal como lo recibiste y en buenas condiciones: en su empaque original y en la caja o sobre en el que te lo enviamos.</p>
+                    <p>Pega la guía de la paquetería en el exterior de esta caja o sobre. Por favor, <b>no lo hagas directamente en el empaque original del producto</b>, ya que el pegamento podría dañarlo y esto haría que se rechace la devolución.</p>
+                    <p>Asegúrate de incluir todos los accesorios, instructivos y etiquetas que recibiste. Cada guía generada se asigna a una devolución específica. Por favor pega cada guía generada por producto; el destino de cada uno puede ser diferente, y si llegan al destino incorrecto no lograrás recibir un reembolso correcto.</p>
+                </li>
+                <li><b class="text-red">4. Envía</b>
+                    <p>Puedes escoger entre estas dos opciones:</p>
+                    <ol>
+                        <li>Llevar el paquete directamente a tu sucursal Redpack más cercana.</li>
+                        <li>Solicitar la recolección de tu producto desde el link de nuestro formulario enviado junto con el correo de devolución (vamos por tu paquete).</li>
+                    </ol>
+                    <p><b>*</b> Si tu producto es de grandes dimensiones, te contactaremos para agendar la recolección. Ten en cuenta que el proceso de devolución para productos con estas características puede variar dependiendo de tu disponibilidad para entregar el producto.</p>
+                    <p>Normalmente, el producto dura en camino de <b>3 a 5 días hábiles</b>. Te notificaremos por medio de un correo electrónico cuando tu producto llegue a nuestro almacén para su revisión.</p>
+                    <p>En cuanto recibamos tu producto, tardaremos un máximo de <b>3 días hábiles</b> en revisarlo y aprobar tu devolución. Una vez aprobada recibirás tu reembolso.</p>
+                </li>
+                <li><b class="text-red">5. Aprobación y reembolso</b>
+                    <p>Una vez recibido el producto, realizaremos un control de calidad durante 3 días hábiles para determinar su estado. La pieza debe estar en las mismas condiciones que fue enviada; cualquier modificación, alteración o uso indebido anula cualquier proceso de devolución y/o garantía.</p>
+                    <p>Si la devolución es exitosa, te enviaremos de inmediato un cupón por el monto pagado por el producto. Recuerda que el tiempo de reembolso dependerá de la forma de pago que hayas elegido.</p>
+                    <p>Si tu opción elegida fue <b>"cambio de producto"</b>, nos comunicaremos contigo para reordenar el producto. De no poder ser reordenado, de igual forma generaremos un cupón el cual podrás usar inmediatamente.</p>
+                </li>
+            </ol>
+
+            <h5>¿Puedo devolver todos los productos?</h5>
+            <p>Debido a la naturaleza de algunos artículos, no aceptamos devoluciones en todos los productos. Por cuestiones de calidad y seguridad, existen restricciones en piezas específicas (eléctricas o de desgaste inusual).</p>
+
+            <h5>¿Puedo cambiar un producto?</h5>
+            <p>No, en Macrom Autopartes no realizamos cambios directos. Si tu pedido aún no ha sido enviado y deseas cambiarlo, puedes cancelarlo y generar una nueva compra.</p>
+
+            <h5>¿Cuánto tiempo tengo para devolver un producto?</h5>
+            <p>Tienes <b>2 días naturales</b> a partir del momento en que la paquetería hace entrega de tu producto.</p>
+
+            <h5>¿En qué condiciones debe estar el producto y el empaque?</h5>
+            <p>En las mejores condiciones posibles. Es fundamental que conserves el empaque original, pues es tan importante como el producto; cuídalo, guárdalo y manipúlalo con el mayor de los cuidados. De esta forma no tendrás ningún inconveniente al momento de realizar la devolución.</p>
+            <p>Recuerda no pegar la guía directamente en la caja original del producto. Utiliza otra caja o envoltura para proteger el empaque original. Si no conservas el empaque original o se encuentra en mal estado, tu devolución podrá ser rechazada.</p>
+
+            <h5>¿Debo conservar mi ticket de compra?</h5>
+            <p>Sí, en todo momento debes conservar el ticket de compra. Sin ticket no hay devolución, por lo que tendrás que enviarnos una imagen o un escaneo del ticket junto con el paquete.</p>
+
+            <h5>¿Cómo sé si Macrom Autopartes recibió mi devolución?</h5>
+            <ol>
+                <li><b class="text-red">DEVOLUCIÓN POR REDPACK:</b> Si realizaste tu devolución a través de REDPACK, el código de rastreo proporcionado te servirá para dar seguimiento al paquete en su portal.</li>
+                <li><b class="text-red">RECOLECCIÓN:</b> Una vez que la paquetería recolecte tu producto y lo entregue en nuestro almacén, te enviaremos un correo electrónico para confirmar su llegada e informarte sobre los próximos pasos.</li>
+            </ol>
+
+            <hr style="border: 1px solid #f3f4f6; margin: 50px 0;">
+
+            <h4>Sección de Reembolsos</h4>
+
+            <h5>¿Cómo funcionan los reembolsos?</h5>
+            <ol>
+                <li><b class="text-red">POR CANCELACIÓN:</b><p>Una vez cancelada tu orden (sea por voluntad propia o por un error en el pedido), se generará un cupón de forma inmediata. Este cupón estará disponible en la sección de <b>“Mis Compras”</b> y en <b>“Mis Cupones”</b> para que sigas comprando sin esperar.</p></li>
+                <li><b class="text-red">POR DEVOLUCIÓN:</b><p>Una vez que el producto llegue a nuestras bodegas y apruebe el control de calidad, se te enviará un cupón de crédito con el dinero pagado (incluyendo envío, si aplica). A menos que nos hayas indicado que deseabas un producto de reposición, en cuyo caso te contactaremos con el nuevo número de pedido. Si no deseas el cupón, puedes solicitar el reembolso a tu método original desde la página.</p></li>
+            </ol>
+
+            <h5>¿El reembolso está ligado a la forma de pago que elegí?</h5>
+            <p>Sí, los reembolsos se efectuarán acorde a la forma de pago original si decides no utilizar el cupón de crédito automático.</p>
+
+            <h5>¿Cómo verifico el estado de mi reembolso?</h5>
+            <p>Ingresa a <b>“Mi cuenta”</b> y haz clic en <b>“Mis Compras”</b>. Ubica el pedido sobre el cual se aplicará el reembolso y verifica su estado:</p>
+            <ol>
+                <li><b class="text-red">Cancelado / Cupón disponible:</b> Tu cupón ha sido generado. Recibirás un correo con el código para utilizarlo, o puedes solicitar el reembolso del cupón desde la página (perdiendo cualquier compensación adicional).</li>
+                <li><b class="text-red">Devolución aprobada / Cupón disponible:</b> Tu producto pasó el control de calidad y tienes saldo a favor listo para usarse.</li>
+                <li><b class="text-red">Reembolso solicitado:</b> Has pedido que el dinero regrese a tu banco. En un período máximo de 48 hrs, Macrom Autopartes procesará el movimiento y te notificará.</li>
+            </ol>
+
+            <h5>¿Qué es reembolso por nota de crédito?</h5>
+            <p>Es una solicitud realizada directamente al banco para aplicar la devolución del monto cobrado a tu tarjeta. Este movimiento se verá reflejado en un lapso no mayor a <b>7 días hábiles</b> (dependiendo de tu banco emisor).</p>
+            <p>En caso de no ver reflejado el monto después de este lapso, comunícate con tu banco. La transacción puede ser rastreada con el mismo código de autorización con el que se generó tu compra original.</p>
+
+            <h5>No me llegó mi comprobante de reembolso, ¿Cómo lo obtengo?</h5>
+            <p>Por el momento no se emiten comprobantes físicos o digitales específicos cuando el reembolso es efectuado por nota de crédito hacia tu banco. Debes rastrearlo directamente con tu institución bancaria mediante el código de autorización de la compra.</p>
+
         </div>
-    </div>
-</section>
+    </section>
+
+</div>

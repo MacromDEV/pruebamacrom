@@ -21,16 +21,19 @@
     
     <div class="contenedor contenido-principal">
         <main class="macrom" id="MainDark">
+            <h1 style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); border: 0;">
+                Macrom Autopartes: Venta de refacciones y accesorios automotrices.
+            </h1>
             <div class="macrom__contenedor--categorias">
                 <div>
                     <div class="row rowrap">
                         <div class="categoria__cat" ng-repeat="categoria in Data.Categorias">
                             <div class="block1 hov-img-zoom pos-relative m-b-20">
-                                <a href="?mod=catalogo&pag=1&cate={{categoria._id}}">
+                                <a href="/catalogo?pag=1&cate={{categoria._id}}">
                                     <img ng-src="{{getImagen(categoria)}}" ng-attr-alt="Categoría {{categoria.Categoria}}" class="filcatego" loading="lazy">
                                 </a>
                                 <div class="block1-wrapbtn">
-                                    <a href="?mod=catalogo&pag=1&cate={{categoria._id}}" class="categoria__enlace" ng-bind="categoria.Categoria"></a>
+                                    <a href="/catalogo?pag=1&cate={{categoria._id}}" class="categoria__enlace" ng-bind="categoria.Categoria"></a>
                                 </div>
                             </div>
                         </div>
@@ -60,7 +63,7 @@
                                     <div class="home__pr" ng-repeat="producto in Data.masVendidos | limitTo: 8" itemscope itemtype="http://schema.org/Product">
                                         <div class="productos__informacion">
                                             <div class="wrap-pic-w of-hidden cursorpnt">
-                                                <a itemprop="url" href="?mod=catalogo&opc=detalles&_id={{producto._id}}-{{producto.NewUrlName}}" class="enlace">
+                                                <a itemprop="url" href="/catalogo/detalles/{{producto._id}}-{{producto.NewUrlName}}" class="enlace">
                                                     <div class="avisos__productos">
                                                         <span class="nuevo__aviso bg-new" ng-show="producto.RefaccionNueva != 0">Nuevo</span>
                                                         <span class="agotado__aviso bg-advertencia" ng-show="producto.agotado">Agotado</span>
@@ -73,24 +76,29 @@
 
                                             <div class="block2-txt">
                                                 <section class="descripcion-producto">
-                                                    <p itemprop="brand" class="block2-brand" ng-bind="producto.NombreProveedor"></p>
-                                                    <a itemprop="name" href="?mod=catalogo&opc=detalles&_id={{producto._id}}-{{producto.NewUrlName}}" class="block2-name dis-block s-text3" ng-bind="producto.Producto"></a>
+                                                    <meta itemprop="name" content="{{producto.Producto}}">
+                                                    <meta itemprop="sku" content="{{producto.No_parte}}">
+                                                    <meta itemprop="brand" content="{{producto.NombreProveedor}}">
+
+                                                    <p class="block2-brand" ng-bind="producto.NombreProveedor"></p>
+                                                    <a href="/catalogo/detalles/{{producto._id}}-{{producto.NewUrlName}}" class="block2-name dis-block s-text3" ng-bind="producto.Producto"></a>
+
                                                     <div class="sku_row">
-														<span class="sku_label dis-block">No. Parte:</span>
-														<span itemprop="sku" class="sku_value dis-block" ng-bind="producto.No_parte"></span>
-													</div>
+                                                        <span class="sku_label dis-block">No. Parte:</span>
+                                                        <span class="sku_value dis-block" ng-bind="producto.No_parte"></span>
+                                                    </div>
                                                     <div itemprop="offers" itemscope itemtype="http://schema.org/Offer" class="precio__imgprove">
                                                         <meta itemprop="priceCurrency" content="MXN">
                                                         <link itemprop="availability" href="http://schema.org/InStock" ng-if="!producto.agotado" />
                                                         <link itemprop="availability" href="http://schema.org/OutOfStock" ng-if="producto.agotado" />
 
                                                         <p class="precio__producto" ng-hide="producto.RefaccionOferta">
-                                                            <meta itemprop="price" content="{{producto.Precio1}}">
+                                                            <meta itemprop="price" content="{{producto.Precio1 || '0.00'}}">
                                                             <span ng-bind="producto.Precio1 | currency"></span>
                                                         </p>  
                                                         <p class="precio__producto" ng-show="producto.RefaccionOferta">
                                                             <small class="line_through-red" ng-bind="producto.Precio1 | currency"></small>
-                                                            <meta itemprop="price" content="{{producto.Precio2}}">
+                                                            <meta itemprop="price" content="{{producto.Precio2 || '0.00'}}">
                                                             <span ng-bind="producto.Precio2 | currency"></span>
                                                         </p>
                                                     </div>
@@ -109,7 +117,7 @@
                                     <div class="home__pr" ng-repeat="producto in Data.nuevos | limitTo: 8" itemscope itemtype="http://schema.org/Product">
                                         <div class="productos__informacion">
                                             <div class="wrap-pic-w of-hidden cursorpnt">
-                                                <a itemprop="url" href="?mod=catalogo&opc=detalles&_id={{producto._id}}-{{producto.NewUrlName}}" class="enlace">
+                                                <a itemprop="url" href="/catalogo/detalles/{{producto._id}}-{{producto.NewUrlName}}" class="enlace">
                                                     <div class="avisos__productos">
                                                         <span class="nuevo__aviso bg-new" ng-show="producto.RefaccionNueva != 0">Nuevo</span>
                                                         <span class="agotado__aviso bg-advertencia" ng-show="producto.agotado">Agotado</span>
@@ -122,24 +130,30 @@
 
                                             <div class="block2-txt">
                                                 <section class="descripcion-producto">
-                                                    <p itemprop="brand" class="block2-brand" ng-bind="producto.NombreProveedor"></p>
-                                                    <a itemprop="name" href="?mod=catalogo&opc=detalles&_id={{producto._id}}-{{producto.NewUrlName}}" class="block2-name dis-block s-text3" ng-bind="producto.Producto"></a>
+                                                    <meta itemprop="name" content="{{producto.Producto}}">
+                                                    <meta itemprop="sku" content="{{producto.No_parte}}">
+                                                    <meta itemprop="brand" content="{{producto.NombreProveedor}}">
+
+                                                    <p class="block2-brand" ng-bind="producto.NombreProveedor"></p>
+                                                    <a href="/catalogo/detalles/{{producto._id}}-{{producto.NewUrlName}}" class="block2-name dis-block s-text3" ng-bind="producto.Producto"></a>
+
                                                     <div class="sku_row">
-														<span class="sku_label dis-block">No. Parte:</span>
-														<span itemprop="sku" class="sku_value dis-block" ng-bind="producto.No_parte"></span>
-													</div>
+                                                        <span class="sku_label dis-block">No. Parte:</span>
+                                                        <span class="sku_value dis-block" ng-bind="producto.No_parte"></span>
+                                                    </div>
+
                                                     <div itemprop="offers" itemscope itemtype="http://schema.org/Offer" class="precio__imgprove">
                                                         <meta itemprop="priceCurrency" content="MXN">
                                                         <link itemprop="availability" href="http://schema.org/InStock" ng-if="!producto.agotado" />
                                                         <link itemprop="availability" href="http://schema.org/OutOfStock" ng-if="producto.agotado" />
 
                                                         <p class="precio__producto" ng-hide="producto.RefaccionOferta">
-                                                            <meta itemprop="price" content="{{producto.Precio1}}">
+                                                            <meta itemprop="price" content="{{producto.Precio1 || '0.00'}}">
                                                             <span ng-bind="producto.Precio1 | currency"></span>
                                                         </p>  
                                                         <p class="precio__producto" ng-show="producto.RefaccionOferta">
                                                             <small class="line_through-red" ng-bind="producto.Precio1 | currency"></small>
-                                                            <meta itemprop="price" content="{{producto.Precio2}}">
+                                                            <meta itemprop="price" content="{{producto.Precio2 || '0.00'}}">
                                                             <span ng-bind="producto.Precio2 | currency"></span>
                                                         </p>
                                                     </div>
@@ -158,7 +172,7 @@
                                     <div class="home__pr" ng-repeat="producto in Data.liquidacion | limitTo: 8" itemscope itemtype="http://schema.org/Product">
                                         <div class="productos__informacion">
                                             <div class="wrap-pic-w of-hidden cursorpnt">
-                                                <a itemprop="url" href="?mod=catalogo&opc=detalles&_id={{producto._id}}-{{producto.NewUrlName}}" class="enlace">
+                                                <a itemprop="url" href="/catalogo/detalles/{{producto._id}}-{{producto.NewUrlName}}" class="enlace">
                                                     <div class="avisos__productos">
                                                         <span class="nuevo__aviso bg-new" ng-show="producto.RefaccionNueva != 0">Nuevo</span>
                                                         <span class="agotado__aviso bg-advertencia" ng-show="producto.agotado">Agotado</span>
@@ -171,24 +185,29 @@
 
                                             <div class="block2-txt">
                                                 <section class="descripcion-producto">
-                                                    <p itemprop="brand" class="block2-brand" ng-bind="producto.NombreProveedor"></p>
-                                                    <a itemprop="name" href="?mod=catalogo&opc=detalles&_id={{producto._id}}-{{producto.NewUrlName}}" class="block2-name dis-block s-text3" ng-bind="producto.Producto"></a>
+                                                    <meta itemprop="name" content="{{producto.Producto}}">
+                                                    <meta itemprop="sku" content="{{producto.No_parte}}">
+                                                    <meta itemprop="brand" content="{{producto.NombreProveedor}}">
+
+                                                    <p class="block2-brand" ng-bind="producto.NombreProveedor"></p>
+                                                    <a href="/catalogo/detalles/{{producto._id}}-{{producto.NewUrlName}}" class="block2-name dis-block s-text3" ng-bind="producto.Producto"></a>
+                                                    
                                                     <div class="sku_row">
-														<span class="sku_label dis-block">No. Parte:</span>
-														<span itemprop="sku" class="sku_value dis-block" ng-bind="producto.No_parte"></span>
-													</div>
+                                                        <span class="sku_label dis-block">No. Parte:</span>
+                                                        <span class="sku_value dis-block" ng-bind="producto.No_parte"></span>
+                                                    </div>
                                                     <div itemprop="offers" itemscope itemtype="http://schema.org/Offer" class="precio__imgprove">  
                                                         <meta itemprop="priceCurrency" content="MXN">
                                                         <link itemprop="availability" href="http://schema.org/InStock" ng-if="!producto.agotado" />
                                                         <link itemprop="availability" href="http://schema.org/OutOfStock" ng-if="producto.agotado" />
 
                                                         <p class="precio__producto" ng-hide="producto.RefaccionOferta">
-                                                            <meta itemprop="price" content="{{producto.Precio1}}">
+                                                            <meta itemprop="price" content="{{producto.Precio1 || '0.00'}}">
                                                             <span ng-bind="producto.Precio1 | currency"></span>
                                                         </p>  
                                                         <p class="precio__producto" ng-show="producto.RefaccionOferta">
                                                             <small class="line_through-red" ng-bind="producto.Precio1 | currency"></small>
-                                                            <meta itemprop="price" content="{{producto.Precio1}}">
+                                                            <meta itemprop="price" content="{{producto.Precio1 || '0.00'}}">
                                                         </p>
                                                     </div>
                                                 </section>

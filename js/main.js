@@ -160,44 +160,29 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // =======================================================
-    // 5. Enrutamiento de Menú Activo (Mapeo por URLParams)
+    // 5. Enrutamiento de Menú Activo
     // =======================================================
-    const opcActual = urlParams.get('opc');
-    
-    const routeMap = {
-        'home': '#sidebar0',
-        'nosotros': '#sidebar4',
-        'catalogo': '#sidebar1',
-        'Compras': '#sidebar2',
-        'Blog': '#sidebar9'
-    };
+    const path = window.location.pathname.toLowerCase();
+    const rutas = [
+        { ruta: '/catalogo',          selector: '#sidebar1' },
+        { ruta: '/compras',           selector: '#sidebar2' },
+        { ruta: '/procesocompra',     selector: '#sidebar2' },
+        { ruta: '/nosotros',          selector: '#sidebar4' },
+        { ruta: '/profile/session',   selector: '#sidebar5' },
+        { ruta: '/profile/mispedidos',selector: '#sidebar6' },
+        { ruta: '/profile/direcciones',selector: '#sidebar7' },
+        { ruta: '/profile/facturacion',selector: '#sidebar8' },
+        { ruta: '/blog',              selector: '#sidebar9' },
+        { ruta: '/contacto',          selector: '#sidebar10' }
+    ];
 
-    const profileRouteMap = {
-        'Session': '#sidebar5',
-        'Mispedidos': '#sidebar6',
-        'Mispedidos_view': '#sidebar6',
-        'Facturacion': '#sidebar8',
-        'Facturacion_add': '#sidebar8',
-        'Facturacion_edit': '#sidebar8',
-        'Direcciones': '#sidebar7',
-        'Direcciones_add': '#sidebar7',
-        'Direcciones_edit': '#sidebar7'
-    };
+    const coincidencia = rutas.find(r => path.includes(r.ruta));
+    const activeSidebarSelector = coincidencia ? coincidencia.selector : '#sidebar0';
 
-    let activeSidebarSelector = null;
+    document.querySelectorAll('.sidebar__click').forEach(el => el.classList.remove('sidebar__active'));
 
-    if (!moduloActual) {
-        activeSidebarSelector = '#sidebar0';
-    } else if (moduloActual === 'Profile' && opcActual) {
-        activeSidebarSelector = profileRouteMap[opcActual];
-    } else {
-        activeSidebarSelector = routeMap[moduloActual];
-    }
-
-    if (activeSidebarSelector) {
-        const activeSidebar = document.querySelector(activeSidebarSelector);
-        if (activeSidebar) activeSidebar.classList.add('sidebar__active');
-    }
+    const activeSidebar = document.querySelector(activeSidebarSelector);
+    if (activeSidebar) activeSidebar.classList.add('sidebar__active');
 
     // =======================================================
     // 6. Menús Desplegables de Cabecera (Usuario y Carrito)

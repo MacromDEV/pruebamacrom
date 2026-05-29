@@ -1,5 +1,5 @@
-const url_catalogo = "./modulo/Catalogo/Ajax/Catalogo.php";
-var url_session = "./modulo/home/Ajax/session.php";
+const url_catalogo = "/modulo/Catalogo/Ajax/Catalogo.php";
+var url_session = "/modulo/home/Ajax/session.php";
 
 tsuruVolks
     .controller('catalogosCtrl', ["$scope", "$http", catalogosCtrl])
@@ -70,7 +70,7 @@ function catalogosCtrl($scope, $http) {
     
     obj.currentPage = 0;
     obj.pages = [];
-    obj.pageSize = 20;
+    obj.pageSize = 21;
     obj.Trefacciones = 0;
     obj.view = 20;
 
@@ -89,8 +89,10 @@ function catalogosCtrl($scope, $http) {
             query.delete("orden");
             query.delete("tipodeorden");
         }
-        query.set("pag", 1);
-        window.location.search = query.toString();
+        query.delete("pag");
+        
+        const queryString = query.toString();
+        window.location.search = queryString ? "?" + queryString : "";
     };
 
     obj.getFiltrosCount = () => {
@@ -109,8 +111,13 @@ function catalogosCtrl($scope, $http) {
                 query.set(k, params[k]);
             }
         });
-        if (resetPage) query.set("pag", 1);
-        window.location.search = query.toString();
+        
+        if (resetPage) {
+            query.delete("pag");
+        }
+        
+        const queryString = query.toString();
+        window.location.search = queryString ? "?" + queryString : "";
     };
 
     obj.toggleMenu = (menu) => {
@@ -319,10 +326,14 @@ function catalogosCtrl($scope, $http) {
     };
 
     if(aplicarbutton){
-        aplicarbutton.addEventListener("click", () => { window.location.href = "?mod=catalogo&pag=1"; });
+        aplicarbutton.addEventListener("click", () => { 
+            updateURL(); 
+        });
     }
     if(borrarbutton){
-        borrarbutton.addEventListener("click", clearfilter =>{ window.location.href = "?mod=catalogo&pag=1"; });
+        borrarbutton.addEventListener("click", clearfilter =>{ 
+            window.location.href = "/catalogo"; 
+        });
     }
 
     obj.viewMore = () => {
@@ -340,9 +351,13 @@ function catalogosCtrl($scope, $http) {
 
     obj.eachRefacciones = (array) => {
         array.forEach(e => {
-            e.NewUrlName = e["Producto"].replaceAll(" ", "-");
-            e.NewUrlName = e.NewUrlName.replaceAll(",", "");
-            e.NewUrlName = e.NewUrlName.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+            let cleanUrl = e["Producto"].toLowerCase();
+            cleanUrl = cleanUrl.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+            cleanUrl = cleanUrl.replace(/[^a-z0-9-]/gi, '-');
+            cleanUrl = cleanUrl.replace(/-+/g, '-');
+            cleanUrl = cleanUrl.replace(/^-+|-+$/g, '');
+            e.NewUrlName = cleanUrl;
+            
             e.NewAltName = e["Producto"].replaceAll(",", "");
             if (e.stock == 0) { e.agotado = true; }
         })
@@ -444,7 +459,7 @@ function catalogosCtrl($scope, $http) {
 
     obj.ejecutarBusquedaInteligente = (texto) => {
         if(!texto || texto.trim() === ""){
-            window.location.href = "?mod=catalogo&pag=1";
+            window.location.href = "/catalogo";
             return;
         }
         obj.cargando = true;
@@ -458,8 +473,7 @@ function catalogosCtrl($scope, $http) {
                 let textoLimpio = data.texto_limpio;
                 let f = data.filtros;
                 const query = new URLSearchParams();
-                query.set("mod", "catalogo");
-                query.set("pag",1);
+                
                 if(textoLimpio) query.set("prod", encodeURIComponent(textoLimpio));
 
                 let catFinal = f.cate || next_cate || "";
@@ -478,12 +492,13 @@ function catalogosCtrl($scope, $http) {
                 if (next_orden) query.set("orden", next_orden);
                 if (next_tipodeorden) query.set("tipodeorden", next_tipodeorden);
 
-                window.location.search = query.toString();
+                const queryString = query.toString();
+                window.location.href = "/catalogo" + (queryString ? "?" + queryString : "");
             } else {
-                window.location.href = "?mod=catalogo&pag=1&prod=" + encodeURIComponent(texto);
+                window.location.href = "/catalogo?prod=" + encodeURIComponent(texto);
             }
         }, function errorCallback(res) {
-            window.location.href = "?mod=catalogo&pag=1&prod=" + encodeURIComponent(texto);
+            window.location.href = "/catalogo?prod=" + encodeURIComponent(texto);
         });
     };
 
@@ -557,15 +572,24 @@ function catalogosCtrl($scope, $http) {
 
     obj.setPage = function (index) {
         const query = new URLSearchParams(window.location.search);
-        if (obj.refaccion && typeof obj.refaccion.producto === "string") {
+        if (obj.refaccion && typeof obj.refaccion.producto === "string" && obj.refaccion.producto.trim() !== "") {
             query.set("prod", encodeURIComponent(obj.refaccion.producto));
+        } else {
+             query.delete("prod"); 
         }
-        query.set("pag", index);
-        window.location.href = "?" + query.toString();
+        
+        if (index == 1) {
+            query.delete("pag");
+        } else {
+            query.set("pag", index);
+        }
+        
+        const queryString = query.toString();
+        window.location.href = window.location.pathname + (queryString ? "?" + queryString : ""); 
     };
 
     obj.RefaccionDetalles = (_id) => {
-        window.open("?mod=catalogo&opc=detalles&_id=" + _id, "_self");
+        window.open("/catalogo/detalles/_id=" + _id, "_self");
     }
 
     obj.init = function() {
@@ -618,7 +642,7 @@ function catalogosDetallesCtrl($scope, $http, $rootScope) {
     obj.btnEnabled = obj.session.autentificacion == undefined ? true : false;
     obj.Refaccion = { id: 0, opc: "OneRefaccion", datos: {}, galeria: [], Existencias: 0, cantidad: 1, precio: 0 };
     
-    obj.RefaccionDetalles = (_id) => { window.open("?mod=catalogo&opc=detalles&_id=" + _id, "_self"); }
+    obj.RefaccionDetalles = (_id) => { window.open("/catalogo/detalles/_id=" + _id, "_self"); }
 
     obj.Activa = false;
     obj.trunc = (x, posiciones = 0) => {
@@ -666,18 +690,21 @@ function catalogosDetallesCtrl($scope, $http, $rootScope) {
                 obj.eachRefacciones(obj.productos);
                 obj.Refaccion.datos.NewAltName = obj.Refaccion.datos.Producto.replaceAll(",", "");
                 newPageTitle = obj.Refaccion.datos.NewAltName;
-                obj.Refaccion.datos.NewUrlName = obj.Refaccion.datos["Producto"].replaceAll(" ", "-");
-                obj.Refaccion.datos.NewUrlName = obj.Refaccion.datos.NewUrlName.replaceAll(",", "");
+                let cleanUrl = obj.Refaccion.datos["Producto"].toLowerCase();
+                cleanUrl = cleanUrl.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+                cleanUrl = cleanUrl.replace(/[^a-z0-9-]/gi, '-');
+                cleanUrl = cleanUrl.replace(/-+/g, '-');
+                cleanUrl = cleanUrl.replace(/^-+|-+$/g, '');
+                
+                obj.Refaccion.datos.NewUrlName = cleanUrl;
                 document.querySelector('title').textContent = newPageTitle;
-                obj.Refaccion.datos.NewUrlName = obj.Refaccion.datos.NewUrlName.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
 
-                const expectedIdParam = obj.Refaccion.id + "-" + obj.Refaccion.datos.NewUrlName;
-                const currentParams = new URLSearchParams(window.location.search);
-
-                if (currentParams.get('_id') !== expectedIdParam) {
-                    currentParams.set('_id', expectedIdParam);
-                    const newUrl = window.location.pathname + '?' + currentParams.toString();
-                    window.history.replaceState(null, '', newUrl);
+                const expectedSlug = obj.Refaccion.id + "-" + obj.Refaccion.datos.NewUrlName;
+                const currentPath = window.location.pathname;
+                const expectedPath = "/catalogo/detalles/" + expectedSlug;
+                
+                if (currentPath !== expectedPath && currentPath.includes('/catalogo/detalles')) {
+                    window.history.replaceState(null, '', expectedPath);
                 }
 
                 obj.Activa = obj.Refaccion.datos.stock != 0 ? true : false;
@@ -734,20 +761,32 @@ function catalogosDetallesCtrl($scope, $http, $rootScope) {
         }
     }
 
-    obj.btnDetallesRelacionados = (id) => { window.open("?mod=catalogo&opc=detalles&_id=" + id, "_self"); }
+    obj.btnDetallesRelacionados = (id) => { window.open("/catalogo/detalles/_id=" + id, "_self"); }
 
     obj.eachRefacciones = (array) => {
         array.forEach(e => {
-            e.NewUrlName = e["Producto"].replaceAll(" ", "-");
-            e.NewUrlName = e.NewUrlName.replaceAll(",", "");
-            e.NewUrlName = e.NewUrlName.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+            let cleanUrl = e["Producto"].toLowerCase();
+            cleanUrl = cleanUrl.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+            cleanUrl = cleanUrl.replace(/[^a-z0-9-]/gi, '-');
+            cleanUrl = cleanUrl.replace(/-+/g, '-');
+            cleanUrl = cleanUrl.replace(/^-+|-+$/g, '');
+            e.NewUrlName = cleanUrl;
+            
             e.NewAltName = e["Producto"].replaceAll(",", "");
             if (e.stock == 0) { e.agotado = true; }
         })
     }
     
-    const urlParams = new URLSearchParams(window.location.search);
-    const rawId = urlParams.get('_id'); 
-    if (rawId) { obj.Refaccion.id = rawId.split('-')[0]; }
+    const pathParts = window.location.pathname.split('/');
+    const lastPart = pathParts[pathParts.length - 1];
+    
+    if (lastPart && /^\d+/.test(lastPart)) {
+        obj.Refaccion.id = lastPart.split('-')[0];
+    } else {
+        const urlParams = new URLSearchParams(window.location.search);
+        const rawId = urlParams.get('_id'); 
+        if (rawId) { obj.Refaccion.id = rawId.split('-')[0]; }
+    }
+    
     obj.getRefaccion();
 }

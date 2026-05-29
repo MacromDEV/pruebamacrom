@@ -9,13 +9,13 @@
     }
     .perfil__navegador .list-group-item i { width: 25px; text-align: center; margin-right: 10px; }
 
-    /* Buscador Moderno */
-    .search-moderno { border-radius: 50px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1px solid #e5e7eb; background-color: #fff !important; }
-    .search-moderno input.form-control { border: none !important; box-shadow: none !important; padding-left: 20px; height: 45px; background: transparent !important; }
-    .search-moderno input.form-control:focus { outline: none !important; box-shadow: none !important; }
-    .search-moderno .input-group-append { margin: 0 !important; }
-    .search-moderno button.btn { background: #de0007 !important; color: white !important; border: none !important; padding: 0 25px; font-weight: 600; transition: 0.3s; cursor: pointer; border-radius: 0 !important; height: 100%; }
-    .search-moderno button.btn:hover { background: #bf040a !important; }
+    /* Buscador */
+    .search-FacturacionPral { border-radius: 50px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1px solid #e5e7eb; background-color: #fff !important; }
+    .search-FacturacionPral input.form-control { border: none !important; box-shadow: none !important; padding-left: 20px; height: 45px; background: transparent !important; }
+    .search-FacturacionPral input.form-control:focus { outline: none !important; box-shadow: none !important; }
+    .search-FacturacionPral .input-group-append { margin: 0 !important; }
+    .search-FacturacionPral button.btn { background: #de0007 !important; color: white !important; border: none !important; padding: 0 25px; font-weight: 600; transition: 0.3s; cursor: pointer; border-radius: 0 !important; height: 100%; }
+    .search-FacturacionPral button.btn:hover { background: #bf040a !important; }
 
     /* Tarjetas de Facturación */
     .card-factura {
@@ -72,7 +72,7 @@
                 
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb bg-white shadow-sm" style="border-radius: 8px; border: 1px solid #e5e7eb;">
-                      <li class="breadcrumb-item"><a href="?mod=Profile&opc=Session" style="color: #de0007;">Mi Cuenta</a></li>
+                      <li class="breadcrumb-item"><a href="/Profile/Session" style="color: #de0007;">Mi Cuenta</a></li>
                       <li class="breadcrumb-item active" aria-current="page">Datos de Facturación</li>
                     </ol>
                 </nav>
@@ -88,7 +88,7 @@
                         </div>
                     </div> 
                     <div class="col-md-6">
-                        <div class="input-group search-moderno">
+                        <div class="input-group search-FacturacionPral">
                             <input type="text" name="buscar" class="form-control" placeholder="Buscar por RFC o Razón Social..." ng-model="buscar">
                             <div class="input-group-append">
                                 <button class="btn" type="button"><i class="fa fa-search"></i></button>

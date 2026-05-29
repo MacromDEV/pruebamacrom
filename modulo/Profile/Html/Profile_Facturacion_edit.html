@@ -9,8 +9,7 @@
     }
     .perfil__navegador .list-group-item i { width: 25px; text-align: center; margin-right: 10px; }
 
-    /* Formulario Premium */
-    .form-premium {
+    .form-FacturacionEdt {
         background-color: #f9fafb !important;
         border: 1px solid #e5e7eb !important;
         border-radius: 8px !important;
@@ -19,9 +18,9 @@
         color: #374151;
         transition: all 0.3s ease;
         box-shadow: none !important;
-        height: auto !important; /* Para que los selects se vean bien */
+        height: auto !important;
     }
-    .form-premium:focus {
+    .form-FacturacionEdt:focus {
         background-color: #fff !important;
         border-color: #de0007 !important;
         box-shadow: 0 0 0 4px rgba(222,0,7,0.1) !important;
@@ -66,7 +65,7 @@
             <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb bg-white shadow-sm" style="border-radius: 8px; border: 1px solid #e5e7eb;">
-                      <li class="breadcrumb-item"><a href="?mod=Profile&opc=Session" style="color: #de0007;">Mi Cuenta</a></li>
+                      <li class="breadcrumb-item"><a href="/Profile/Session" style="color: #de0007;">Mi Cuenta</a></li>
                       <li class="breadcrumb-item"><a href="#" ng-click="btnMenulinks('Facturacion')" style="color: #de0007;">Facturación</a> </li>
                       <li class="breadcrumb-item active" aria-current="page">Editar Datos Fiscales</li>
                     </ol>
@@ -96,14 +95,14 @@
                             <div class="row">
                                 <div class="col-md-4 mb-3">
                                     <label class="font-weight-bold text-muted small text-uppercase">RFC <span class="text-danger">*</span></label>
-                                    <input name="RFC" class="form-control form-premium text-uppercase" type="text" placeholder="Ej. ABCD876541XXX" ng-model="Facturacion.dataFacturacion.Rfc" required>
+                                    <input name="RFC" class="form-control form-FacturacionEdt text-uppercase" type="text" placeholder="Ej. ABCD876541XXX" ng-model="Facturacion.dataFacturacion.Rfc" required>
                                     <div class="text-danger error-msg" ng-if="Facturacionform.RFC.$error.required && Facturacionform.RFC.$touched">
                                         <i class="fa fa-exclamation-circle"></i> El RFC es obligatorio
                                     </div>
                                 </div>
                                 <div class="col-md-8 mb-3">
                                     <label class="font-weight-bold text-muted small text-uppercase">Razón Social <span class="text-danger">*</span></label>
-                                    <input name="razon" class="form-control form-premium text-uppercase" type="text" placeholder="Ej. PEPE SA DE CV" ng-model="Facturacion.dataFacturacion.Razonsocial" required>
+                                    <input name="razon" class="form-control form-FacturacionEdt text-uppercase" type="text" placeholder="Ej. PEPE SA DE CV" ng-model="Facturacion.dataFacturacion.Razonsocial" required>
                                     <div class="text-danger error-msg" ng-if="Facturacionform.razon.$error.required && Facturacionform.razon.$touched">
                                         <i class="fa fa-exclamation-circle"></i> La razón social es obligatoria
                                     </div>
@@ -111,7 +110,7 @@
 
                                 <div class="col-md-12 mb-3">
                                     <label class="font-weight-bold text-muted small text-uppercase">Domicilio Fiscal (Calle y Números) <span class="text-danger">*</span></label>
-                                    <input name="domicilio" class="form-control form-premium" type="text" placeholder="Ej. Fco I Madero #44" ng-model="Facturacion.dataFacturacion.Domicilio" required>
+                                    <input name="domicilio" class="form-control form-FacturacionEdt" type="text" placeholder="Ej. Fco I Madero #44" ng-model="Facturacion.dataFacturacion.Domicilio" required>
                                     <div class="text-danger error-msg" ng-if="Facturacionform.domicilio.$error.required && Facturacionform.domicilio.$touched">
                                         <i class="fa fa-exclamation-circle"></i> El domicilio es obligatorio
                                     </div>
@@ -119,14 +118,14 @@
 
                                 <div class="col-md-8 mb-3">
                                     <label class="font-weight-bold text-muted small text-uppercase">Colonia <span class="text-danger">*</span></label>
-                                    <input name="colonia" class="form-control form-premium" type="text" placeholder="Ej. San Lorenzo" ng-model="Facturacion.dataFacturacion.Colonia" required>
+                                    <input name="colonia" class="form-control form-FacturacionEdt" type="text" placeholder="Ej. San Lorenzo" ng-model="Facturacion.dataFacturacion.Colonia" required>
                                     <div class="text-danger error-msg" ng-if="Facturacionform.colonia.$error.required && Facturacionform.colonia.$touched">
                                         <i class="fa fa-exclamation-circle"></i> La colonia es obligatoria
                                     </div>
                                 </div>
                                 <div class="col-md-4 mb-3">
                                     <label class="font-weight-bold text-muted small text-uppercase">Código Postal <span class="text-danger">*</span></label>
-                                    <input name="cp" class="form-control form-premium numero" type="text" placeholder="00000" maxlength="5" ng-model="Facturacion.dataFacturacion.Codigo_postal" required>
+                                    <input name="cp" class="form-control form-FacturacionEdt numero" type="text" placeholder="00000" maxlength="5" ng-model="Facturacion.dataFacturacion.Codigo_postal" required>
                                     <div class="text-danger error-msg" ng-if="Facturacionform.cp.$error.required && Facturacionform.cp.$touched">
                                         <i class="fa fa-exclamation-circle"></i> El C.P. es obligatorio
                                     </div>
@@ -134,14 +133,14 @@
 
                                 <div class="col-md-6 mb-3">
                                     <label class="font-weight-bold text-muted small text-uppercase">Ciudad o Municipio <span class="text-danger">*</span></label>
-                                    <input name="ciudad" class="form-control form-premium" type="text" placeholder="Ej. Los Cabos" ng-model="Facturacion.dataFacturacion.Ciudad" required>
+                                    <input name="ciudad" class="form-control form-FacturacionEdt" type="text" placeholder="Ej. Los Cabos" ng-model="Facturacion.dataFacturacion.Ciudad" required>
                                     <div class="text-danger error-msg" ng-if="Facturacionform.ciudad.$error.required && Facturacionform.ciudad.$touched">
                                         <i class="fa fa-exclamation-circle"></i> La ciudad es obligatoria
                                     </div>
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label class="font-weight-bold text-muted small text-uppercase">Estado <span class="text-danger">*</span></label>
-                                    <input name="estado" class="form-control form-premium" type="text" placeholder="Ej. Baja California Sur" ng-model="Facturacion.dataFacturacion.Estado" required>
+                                    <input name="estado" class="form-control form-FacturacionEdt" type="text" placeholder="Ej. Baja California Sur" ng-model="Facturacion.dataFacturacion.Estado" required>
                                     <div class="text-danger error-msg" ng-if="Facturacionform.estado.$error.required && Facturacionform.estado.$touched">
                                         <i class="fa fa-exclamation-circle"></i> El estado es obligatorio
                                     </div>
@@ -149,7 +148,7 @@
 
                                 <div class="col-md-6 mb-4">
                                     <label class="font-weight-bold text-muted small text-uppercase">Uso de CFDI <span class="text-danger">*</span></label>
-                                    <select name="cfdi" class="form-control form-premium" ng-model="Facturacion.dataFacturacion.cfdi" required>
+                                    <select name="cfdi" class="form-control form-FacturacionEdt" ng-model="Facturacion.dataFacturacion.cfdi" required>
                                         <option value="" disabled selected>Selecciona el uso de CFDI</option>
                                         <option ng-repeat="cfdi in Facturacion.usocfdi" value="{{cfdi._id}}">({{cfdi.UsoCFDI}}) {{cfdi.Descripcion}}</option>
                                     </select>
@@ -159,7 +158,7 @@
                                 </div>
                                 <div class="col-md-6 mb-4">
                                     <label class="font-weight-bold text-muted small text-uppercase">Régimen / Tipo Persona <span class="text-danger">*</span></label>
-                                    <select name="Actividad" class="form-control form-premium" ng-model="Facturacion.dataFacturacion.Actividad" required>
+                                    <select name="Actividad" class="form-control form-FacturacionEdt" ng-model="Facturacion.dataFacturacion.Actividad" required>
                                         <option value="" disabled selected>Selecciona tu actividad</option>
                                         <option ng-repeat="Acti in Facturacion.Actividad" value="{{Acti.valor}}">{{Acti.valor}}</option>
                                     </select>

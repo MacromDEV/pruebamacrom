@@ -12,6 +12,7 @@
             'cache_miss' => 0
         ];
         private $jsonData = array("Bandera"=>false, "Mensaje"=>"", "Data"=>array());
+        private $usarBusquedaRelajada = false;
 
         public function __construct($array) {
             $this->conn = new HelperMySql($array["server"], $array["user"], $array["pass"], $array["db"]);
@@ -156,11 +157,26 @@
             $f = $this->formulario;
             $sql = "";
 
-            if (!in_array('marca', $ignorar) && !empty($f['marca'])) {
-                $sql .= " AND P._idMarca IN({$f['marca']})";
-                if (!in_array('vehiculo', $ignorar) && !empty($f['vehiculo'])) {
-                    $sql .= " AND P.Modelo IN({$f['vehiculo']})";
+            if (!in_array('vehiculo', $ignorar) && !empty($f['vehiculo'])) {
+                $sql .= " AND (
+                    P.Modelo IN({$f['vehiculo']}) 
+                    OR 
+                    EXISTS (SELECT 1 FROM u619477378_macromau.compatibilidad comp WHERE comp.id_imagen = P._id AND comp.idmodelo IN({$f['vehiculo']}))
+                )";
+                
+                if (!in_array('marca', $ignorar) && !empty($f['marca'])) {
+                    $sql .= " AND (
+                        P._idMarca IN({$f['marca']})
+                        OR
+                        EXISTS (SELECT 1 FROM u619477378_macromau.compatibilidad comp WHERE comp.id_imagen = P._id AND comp.idmarca IN({$f['marca']}))
+                    )";
                 }
+            } elseif (!in_array('marca', $ignorar) && !empty($f['marca'])) {
+                $sql .= " AND (
+                    P._idMarca IN({$f['marca']}) 
+                    OR 
+                    EXISTS (SELECT 1 FROM u619477378_macromau.compatibilidad comp WHERE comp.id_imagen = P._id AND comp.idmarca IN({$f['marca']}))
+                )";
             }
 
             if (!in_array('categoria', $ignorar) && !empty($f['categoria']) && $f['categoria'] !== "T") {
@@ -200,7 +216,10 @@
             $filtrosDetectados = ['marca' => [], 'vehiculo' => [], 'proveedor' => [], 'categoria' => []];
             
             $sqlMarcas = "SELECT _id, LOWER(Marca) as nombre FROM u619477378_macromau.Marcas WHERE Estatus = 1";
-            foreach($this->conn->fetch_all($this->conn->query($sqlMarcas)) as $m) {
+            $marcasData = $this->conn->fetch_all($this->conn->query($sqlMarcas));
+            usort($marcasData, function($a, $b) { return strlen($b['nombre']) <=> strlen($a['nombre']); });
+
+            foreach($marcasData as $m) {
                 $nom = trim(mb_strtolower($m['nombre'], 'UTF-8'));
                 if (empty($nom)) continue;
                 if (preg_match('/(?<=\s)'.preg_quote($nom, '/').'(?=\s)/iu', $textoLimpio)) {
@@ -208,8 +227,12 @@
                     $textoLimpio = preg_replace('/(?<=\s)'.preg_quote($nom, '/').'(?=\s)/iu', ' ', $textoLimpio);
                 }
             }
+
             $sqlModelos = "SELECT _id, LOWER(Modelo) as nombre, _idMarca FROM u619477378_macromau.Modelos WHERE Estatus = 1";
-            foreach($this->conn->fetch_all($this->conn->query($sqlModelos)) as $mo) {
+            $modelosData = $this->conn->fetch_all($this->conn->query($sqlModelos));
+            usort($modelosData, function($a, $b) { return strlen($b['nombre']) <=> strlen($a['nombre']); });
+
+            foreach($modelosData as $mo) {
                 $nom = trim(mb_strtolower($mo['nombre'], 'UTF-8'));
                 if (empty($nom)) continue;
                 if (preg_match('/(?<=\s)'.preg_quote($nom, '/').'(?=\s)/iu', $textoLimpio)) {
@@ -221,17 +244,25 @@
                     $textoLimpio = preg_replace('/(?<=\s)'.preg_quote($nom, '/').'(?=\s)/iu', ' ', $textoLimpio);
                 }
             }
+
             $sqlCat = "SELECT _id, LOWER(Categoria) as nombre FROM u619477378_macromau.Categorias WHERE Status = 1";
-            foreach($this->conn->fetch_all($this->conn->query($sqlCat)) as $c) {
+            $catData = $this->conn->fetch_all($this->conn->query($sqlCat));
+            usort($catData, function($a, $b) { return strlen($b['nombre']) <=> strlen($a['nombre']); });
+
+            foreach($catData as $c) {
                 $nom = trim(mb_strtolower($c['nombre'], 'UTF-8'));
                 if (empty($nom)) continue;
-                if (preg_match('/(?<=\s)'.preg_quote($nom, '/').'(?=\s)/iu', $textoLimpio)) {
+                if (preg_match('/(?<=\s)'.preg_quote($nom, '/').'(?=\s)/iu', $textoLopt) || preg_match('/(?<=\s)'.preg_quote($nom, '/').'(?=\s)/iu', $textoLimpio)) {
                     $filtrosDetectados['categoria'][] = $c['_id'];
                     $textoLimpio = preg_replace('/(?<=\s)'.preg_quote($nom, '/').'(?=\s)/iu', ' ', $textoLimpio);
                 }
             }
+
             $sqlProv = "SELECT _id, LOWER(Proveedor) as nombre FROM u619477378_macromau.Proveedor WHERE Estatus = 1";
-            foreach($this->conn->fetch_all($this->conn->query($sqlProv)) as $p) {
+            $provData = $this->conn->fetch_all($this->conn->query($sqlProv));
+            usort($provData, function($a, $b) { return strlen($b['nombre']) <=> strlen($a['nombre']); });
+
+            foreach($provData as $p) {
                 $nom = trim(mb_strtolower($p['nombre'], 'UTF-8'));
                 if (empty($nom)) continue;
                 if (preg_match('/(?<=\s)'.preg_quote($nom, '/').'(?=\s)/iu', $textoLimpio)) {
@@ -290,6 +321,7 @@
                             $buscarlikes = $this->getexplode($this->formulario["producto"]);
                             $this->jsonData["Data"]["Trefacciones"] = $this->getTrefacciones($buscarlikes);
                             $this->jsonData["Data"]["Refacciones"] = $this->getRefacciones($buscarlikes, $this->formulario["x"],$this->formulario["y"]);
+                            $this->jsonData["Data"]["BusquedaRelajada"] = $this->usarBusquedaRelajada;
                         break;
                         case 'OneRefaccion':
                             $this->jsonData["Data"]["Refaccion"] = $this->getOneRefaccion();
@@ -591,17 +623,34 @@
         private function buildWhereBusqueda(array $arrayLikes) {
             $busqueda = trim($this->formulario["producto"] ?? "");
             $usarFulltext = false;
-            if (strlen($busqueda) >= 6 && preg_match('/[a-zA-Z]{3,}/', $busqueda)) {
+            $busquedaFulltext = "";
+
+            if (strlen($busqueda) >= 3 && preg_match('/[a-zA-Z]{3,}/', $busqueda)) {
                 $usarFulltext = true;
+                
+                if ($this->usarBusquedaRelajada) {
+                    $busquedaFulltext = $busqueda; 
+                } else {
+                    $palabras = preg_split('/\s+/', $busqueda);
+                    $palabras_estrictas = [];
+                    
+                    foreach($palabras as $p) {
+                        if(strlen($p) > 2 || preg_match('/[0-9]/', $p)) {
+                            $palabras_estrictas[] = '+' . $p;
+                        }
+                    }
+                    $busquedaFulltext = implode(' ', $palabras_estrictas);
+                }
             }
 
             $where = "(({$arrayLikes['Productos']} OR {$arrayLikes['Clave']} OR {$arrayLikes['No_parte']})
-            " . ($usarFulltext ? " OR (MATCH(P.Producto, P.Descripcion) AGAINST ('$busqueda' IN BOOLEAN MODE))": "") . ")";
+            " . ($usarFulltext ? " OR (MATCH(P.Producto, P.Descripcion) AGAINST ('$busquedaFulltext' IN BOOLEAN MODE))": "") . ")";
 
             return [
-                'where'        => $where,
-                'usarFulltext' => $usarFulltext,
-                'busqueda'     => $busqueda
+                'where'            => $where,
+                'usarFulltext'     => $usarFulltext,
+                'busqueda'         => $busqueda,
+                'busquedaFulltext' => $busquedaFulltext
             ];
         }
 
@@ -613,20 +662,23 @@
         }
 
         private function getTrefacciones($arrayLikes){
-            $cacheKey = $this->buildCacheKey(['producto','categoria','marca','vehiculo','proveedor','disponibilidad']);
+            $cacheKey = $this->buildCacheKey(['producto','categoria','marca','vehiculo','proveedor','disponibilidad']) . ($this->usarBusquedaRelajada ? '_relaxed' : '_strict');
+            
             $cache = $this->getCache('cache_trefacciones', $cacheKey);
-            if ($cache !== null) return $cache;
+            if ($cache !== null && ($cache > 0 || $this->usarBusquedaRelajada)) {
+                return $cache;
+            }
             
             $whereData = $this->buildWhereBusqueda($arrayLikes);
-            $condicion = $this->buildCondicionesSQL();
+            $condicion = $this->usarBusquedaRelajada ? $this->buildCondicionesSQL(['marca', 'vehiculo']) : $this->buildCondicionesSQL();
 
             $sql = "
                 SELECT COUNT(*) AS Trefacciones
-                FROM Producto AS P
-                LEFT JOIN Proveedor AS PROV ON P.id_proveedor = PROV._id
-                INNER JOIN Marcas AS M ON P._idMarca = M._id
-                INNER JOIN Categorias AS C ON P._idCategoria = C._id
-                INNER JOIN Modelos AS MO ON P.Modelo = MO._id
+                FROM u619477378_macromau.Producto AS P
+                LEFT JOIN u619477378_macromau.Proveedor AS PROV ON P.id_proveedor = PROV._id
+                INNER JOIN u619477378_macromau.Marcas AS M ON P._idMarca = M._id
+                INNER JOIN u619477378_macromau.Categorias AS C ON P._idCategoria = C._id
+                INNER JOIN u619477378_macromau.Modelos AS MO ON P.Modelo = MO._id
                 WHERE
                     P.Estatus = 1 AND P.Publicar = 1
                     AND (PROV._id IS NULL OR PROV.Estatus = 1) 
@@ -636,57 +688,66 @@
             ";
 
             $row = $this->conn->fetch($this->conn->query($sql));
-            $this->setCache('cache_trefacciones', $cacheKey, $row["Trefacciones"]);
-            return $row["Trefacciones"];
+            $total = $row["Trefacciones"];
+
+            if ($total == 0 && !$this->usarBusquedaRelajada && !empty($this->formulario["producto"])) {
+                $this->usarBusquedaRelajada = true;
+                $busquedaOriginal = $this->getexplode($this->formulario["producto"]);
+                return $this->getTrefacciones($busquedaOriginal); 
+            }
+
+            $this->setCache('cache_trefacciones', $cacheKey, $total);
+            return $total;
         }
 
-        private function getRefacciones($arrayLikes, $x=0, $y = 20 ){
+        private function getRefacciones($arrayLikes, $x=0, $y = 21 ){
             $array = array();
             $orden = $this->formulario["orden"];
             $tipodeorden = $this->formulario["tipodeorden"];
 
+            if ($this->usarBusquedaRelajada && !empty($this->formulario["producto"])) {
+                $arrayLikes = $this->getexplode($this->formulario["producto"]);
+            }
+
             $whereData = $this->buildWhereBusqueda($arrayLikes);
             $busqueda = $whereData['busqueda'];
+            $busquedaFulltext = $whereData['busquedaFulltext'] ?? $busqueda;
             
-            $cacheKey = $this->buildCacheKey(['producto','categoria','marca','vehiculo','proveedor','disponibilidad','orden','tipodeorden','x','y']);
+            $cacheKey = $this->buildCacheKey(['producto','categoria','marca','vehiculo','proveedor','disponibilidad','orden','tipodeorden','x','y']) . ($this->usarBusquedaRelajada ? '_relaxed' : '_strict');
             $cache = $this->getCache('cache_refacciones', $cacheKey);
             if ($cache !== null) return $cache;
             
             $usarFulltext = $whereData['usarFulltext'];
-            if (strlen($busqueda) >= 6 && preg_match('/[a-zA-Z]{3,}/', $busqueda)) {
-                $usarFulltext = true;
-            }
-            $ordenPrioridad = "";
-            if (preg_match('/^\d+$/', $busqueda)) {
-                $ordenPrioridad = "
-                    CASE
-                        WHEN P.Clave = $busqueda THEN 100
-                        WHEN P.No_parte LIKE '%$busqueda%' THEN 60
-                        WHEN P.Producto LIKE '%$busqueda%' THEN 40
-                        " . ($usarFulltext ? " WHEN MATCH(P.Producto, P.Descripcion) AGAINST ('$busqueda' IN BOOLEAN MODE) THEN 30 " : "") . "
-                        ELSE 0
-                    END DESC,
-                ";
-            } else {
-                $ordenPrioridad = "
-                    CASE
-                        WHEN P.No_parte = '$busqueda' THEN 80
-                        WHEN P.No_parte LIKE '%$busqueda%' THEN 60
-                        WHEN P.Producto LIKE '%$busqueda%' THEN 40
-                        " . ($usarFulltext ? " WHEN MATCH(P.Producto, P.Descripcion) AGAINST ('$busqueda' IN BOOLEAN MODE) THEN 30 " : "") . "
-                        ELSE 0
-                    END DESC,
-                ";
-            }
+            
+            $entradaHumana = trim($this->formulario["producto"] ?? "");
+            $entradaHumanaSegura = addslashes($entradaHumana);
 
-            $condicion = $this->buildCondicionesSQL();
+            $ordenPrioridad = "
+                CASE 
+                    -- Prioridad 1: Empieza exactamente con la frase completa del usuario
+                    WHEN P.Producto LIKE '$entradaHumanaSegura%' THEN 200
+                    -- Prioridad 2: Contiene la frase completa con espacios exactos
+                    WHEN P.Producto LIKE '% $entradaHumanaSegura %' THEN 150
+                    -- Prioridad 3: Contiene la frase completa en cualquier posición
+                    WHEN P.Producto LIKE '%$entradaHumanaSegura%' THEN 100
+                    -- Prioridad 4: MATCH SEMÁNTICO (Puntaje 90 para palabras invertidas o sin conectores)
+                    " . ($usarFulltext ? " WHEN MATCH(P.Producto, P.Descripcion) AGAINST ('$busquedaFulltext' IN BOOLEAN MODE) THEN 90 " : "") . "
+                    -- Prioridad 5: Empieza con la palabra limpia filtrada
+                    WHEN P.Producto LIKE '$busqueda%' THEN 80
+                    -- Prioridad 6: Contiene la palabra limpia filtrada
+                    WHEN P.Producto LIKE '%$busqueda%' THEN 40
+                    ELSE 0 
+                END DESC,
+            ";
+
+            $condicion = $this->usarBusquedaRelajada ? $this->buildCondicionesSQL(['marca', 'vehiculo']) : $this->buildCondicionesSQL();
                             
             $sql = "SELECT P.*, PROV._id as idProveedor, PROV.Proveedor as NombreProveedor, PROV.tag_alt as tag_altproveedor, PROV.tag_title as tag_titleproveedor 
-            FROM Producto AS P 
-            LEFT JOIN Proveedor AS PROV ON P.id_proveedor = PROV._id
-            INNER JOIN Marcas AS M ON P._idMarca = M._id
-            INNER JOIN Categorias AS C ON P._idCategoria = C._id
-            INNER JOIN Modelos AS MO ON P.Modelo = MO._id
+            FROM u619477378_macromau.Producto AS P 
+            LEFT JOIN u619477378_macromau.Proveedor AS PROV ON P.id_proveedor = PROV._id
+            INNER JOIN u619477378_macromau.Marcas AS M ON P._idMarca = M._id
+            INNER JOIN u619477378_macromau.Categorias AS C ON P._idCategoria = C._id
+            INNER JOIN u619477378_macromau.Modelos AS MO ON P.Modelo = MO._id
             WHERE P.Estatus = 1 AND P.Publicar = 1 
             AND (PROV._id IS NULL OR PROV.Estatus = 1) 
             AND M.Estatus = 1 AND C.Status = 1 AND MO.Estatus = 1
@@ -705,8 +766,10 @@
             foreach ($array as $row) { if (!empty($row['_id'])) { $productTags[] = "producto:{$row['_id']}"; } }
             $tags = $productTags;
 
-            if (!empty($this->formulario['marca'])) { foreach (explode(',', $this->formulario['marca']) as $idMarca) { $tags[] = "marca:$idMarca"; } }
-            if (!empty($this->formulario['vehiculo'])) { foreach (explode(',', $this->formulario['vehiculo']) as $idModelo) { $tags[] = "modelo:$idModelo"; } }
+            if (!$this->usarBusquedaRelajada) {
+                if (!empty($this->formulario['marca'])) { foreach (explode(',', $this->formulario['marca']) as $idMarca) { $tags[] = "marca:$idMarca"; } }
+                if (!empty($this->formulario['vehiculo'])) { foreach (explode(',', $this->formulario['vehiculo']) as $idModelo) { $tags[] = "modelo:$idModelo"; } }
+            }
             
             $this->setCacheWithTags('cache_refacciones', $cacheKey, $array, $tags);
             return $array;
@@ -769,7 +832,7 @@
                     AND (PROV._id IS NULL OR PROV.Estatus = 1) 
                     AND M.Estatus = 1 AND C.Status = 1 AND MO.Estatus = 1
                     AND P._id >= {$randId}
-                LIMIT 20
+                LIMIT 21
             ";
 
             $id = $this->conn->query($sql);

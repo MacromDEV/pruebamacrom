@@ -15,7 +15,7 @@ function FichaDepositoCtrl($scope,$http){
                 obj.fichaData = res.data.Data;
             }else{
                 toastr.error(res.data.mensaje);
-                setTimeout(() => { location.href = "../../?mod=home"; }, 2500);
+                setTimeout(() => { location.href = "../../home"; }, 2500);
             }
         }, function errorCallback(res) {
             toastr.error("Error: no se conectó con el servidor");

@@ -9,8 +9,7 @@
     }
     .perfil__navegador .list-group-item i { width: 25px; text-align: center; margin-right: 10px; }
 
-    /* Inputs Premium */
-    .form-premium {
+    .form-USRSession {
         background-color: #f9fafb !important;
         border: 1px solid #e5e7eb !important;
         border-radius: 8px !important;
@@ -20,24 +19,23 @@
         transition: all 0.3s ease;
         box-shadow: none !important;
     }
-    .form-premium:focus {
+    .form-USRSession:focus {
         background-color: #fff !important;
         border-color: #de0007 !important;
         box-shadow: 0 0 0 4px rgba(222,0,7,0.1) !important;
     }
     
-    /* Contenedor de contraseña a prueba de balas */
-    .password-premium-box {
+    .password-USRSession-box {
         position: relative;
         display: block;
         width: 100%;
     }
-    .password-premium-box .form-premium {
+    .password-USRSession-box .form-USRSession {
         width: 100%;
-        padding-right: 45px !important; /* Espacio para que el texto no pise el ojito */
+        padding-right: 45px !important;
         border-radius: 8px !important;
     }
-    .password-premium-box .ojo-btn {
+    .password-USRSession-box .ojo-btn {
         position: absolute;
         right: 0;
         top: 0;
@@ -48,22 +46,22 @@
         justify-content: center;
         z-index: 5;
     }
-    .password-premium-box .ojo-btn i {
+    .password-USRSession-box .ojo-btn i {
         color: #9ca3af;
         cursor: pointer;
         transition: 0.3s;
         font-size: 1.1rem;
     }
-    .password-premium-box .ojo-btn i:hover {
+    .password-USRSession-box .ojo-btn i:hover {
         color: #de0007;
     }
     /* Efecto hover al icono de la contraseña */
-    .input-group-premium:focus-within .input-group-text {
+    .input-group-USRSession:focus-within .input-group-text {
         background-color: #fff;
         border-color: #de0007;
     }
-    .input-group-premium .input-group-text i { color: #9ca3af; transition: 0.3s; }
-    .input-group-premium .input-group-text:hover i { color: #de0007; }
+    .input-group-USRSession .input-group-text i { color: #9ca3af; transition: 0.3s; }
+    .input-group-USRSession .input-group-text:hover i { color: #de0007; }
 
     .btn-guardar {
         border-radius: 8px; font-weight: 600; padding: 10px 25px; transition: all 0.3s ease;
@@ -90,7 +88,7 @@
                 
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb bg-white shadow-sm" style="border-radius: 8px; border: 1px solid #e5e7eb;">
-                      <li class="breadcrumb-item"><a href="?mod=Profile&opc=Session" style="color: #de0007;">Mi Cuenta</a></li>
+                      <li class="breadcrumb-item"><a href="/Profile/Session" style="color: #de0007;">Mi Cuenta</a></li>
                       <li class="breadcrumb-item active" aria-current="page">Sesión y Seguridad</li>
                     </ol>
                 </nav>
@@ -111,19 +109,19 @@
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label class="font-weight-bold text-muted small text-uppercase">Nombre(s):</label>
-                                    <input class="form-control form-premium" name="nombre" type="text" placeholder="Tu nombre" ng-model="profile.nombres" required>
+                                    <input class="form-control form-USRSession" name="nombre" type="text" placeholder="Tu nombre" ng-model="profile.nombres" required>
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label class="font-weight-bold text-muted small text-uppercase">Apellidos:</label>
-                                    <input class="form-control form-premium" type="text" placeholder="Tus apellidos" ng-model="profile.Apellidos" required>
+                                    <input class="form-control form-USRSession" type="text" placeholder="Tus apellidos" ng-model="profile.Apellidos" required>
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label class="font-weight-bold text-muted small text-uppercase">Correo Electrónico:</label>
-                                    <input class="form-control form-premium" type="email" placeholder="ejemplo@correo.com" ng-model="profile.correo" required>
+                                    <input class="form-control form-USRSession" type="email" placeholder="ejemplo@correo.com" ng-model="profile.correo" required>
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label class="font-weight-bold text-muted small text-uppercase">Teléfono Celular:</label>
-                                    <input class="form-control form-premium" type="tel" placeholder="10 dígitos" ng-model="profile.telefono" required>
+                                    <input class="form-control form-USRSession" type="tel" placeholder="10 dígitos" ng-model="profile.telefono" required>
                                 </div>
                             </div>
                             <div class="text-right mt-3 border-top pt-3">
@@ -144,8 +142,8 @@
                             <div class="row">
                                 <div class="col-md-12 mb-4 pb-3 border-bottom">
                                     <label class="font-weight-bold text-muted small text-uppercase">Contraseña Actual:</label>
-                                    <div class="password-premium-box" style="max-width: 50%;">
-                                        <input class="form-control form-premium" type="password" id="inprapass" placeholder="Ingresa tu contraseña actual" ng-model="profile.passActual" required>
+                                    <div class="password-USRSession-box" style="max-width: 50%;">
+                                        <input class="form-control form-USRSession" type="password" id="inprapass" placeholder="Ingresa tu contraseña actual" ng-model="profile.passActual" required>
                                         <div class="ojo-btn"><i class="pass_ver apss fa fa-eye"></i></div>
                                     </div>
                                     <small class="text-muted mt-1">Necesitamos tu contraseña actual para autorizar el cambio.</small>
@@ -153,8 +151,8 @@
 
                                 <div class="col-md-6 mb-3">
                                     <label class="font-weight-bold text-danger small text-uppercase">Nueva Contraseña:</label>
-                                    <div class="password-premium-box">
-                                        <input class="form-control form-premium" type="password" id="inprpass" placeholder="Mínimo 8 caracteres" ng-model="profile.Nuevapass" required>
+                                    <div class="password-USRSession-box">
+                                        <input class="form-control form-USRSession" type="password" id="inprpass" placeholder="Mínimo 8 caracteres" ng-model="profile.Nuevapass" required>
                                         <div class="ojo-btn"><i class="pass_ver pss fa fa-eye"></i></div>
                                     </div>
                                     <small class="text-danger font-weight-bold mt-1 d-block" ng-show="msjprofiledisplay">
@@ -164,8 +162,8 @@
 
                                 <div class="col-md-6 mb-3">
                                     <label class="font-weight-bold text-danger small text-uppercase">Confirmar Contraseña:</label>
-                                    <div class="password-premium-box">
-                                        <input class="form-control form-premium" type="password" id="inprcpass" placeholder="Repite la nueva contraseña" ng-model="profile.Confirmarpass" required>
+                                    <div class="password-USRSession-box">
+                                        <input class="form-control form-USRSession" type="password" id="inprcpass" placeholder="Repite la nueva contraseña" ng-model="profile.Confirmarpass" required>
                                         <div class="ojo-btn"><i class="pass_ver cpss fa fa-eye"></i></div>
                                     </div>
                                     <small class="text-danger font-weight-bold mt-1 d-block" ng-show="msjprofiledisplay">

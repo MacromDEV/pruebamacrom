@@ -3,7 +3,7 @@ var urlModel = "./modulo/ProcesoCompra/ProcesoCompra.php";
 tsuruVolks.controller('ProcesoCompraCtrl', ProcesoCompraCtrl);
 (function () {
     if ($_SESSION["iduser"] == null){
-        window.location.href = '?mod=home';
+        window.location.href = '/';
     }
 })()
 
@@ -75,7 +75,7 @@ function ProcesoCompraCtrl($scope, $http, $location) {
                 // Éxito Depósito
                 if (obj.formularioPC.metodoPago == 'Deposito') {
                     obj.setLock('efectivo');
-                    window.location.href = '?mod=ProcesoCompra&opc=paso3';
+                    window.location.href = '/ProcesoCompra/paso3';
                 } 
                 // Éxito Tarjeta: Redirigir a MIT
                 else if (obj.formularioPC.metodoPago == 'Tarjeta') {
@@ -198,19 +198,17 @@ function ProcesoCompraCtrl($scope, $http, $location) {
         initConfetti();
         const currentUrl = $location.absUrl();
 
-        if(currentUrl.includes("?mod=ProcesoCompra") && !currentUrl.includes("&opc=")) {
+        if(window.location.pathname === "/ProcesoCompra" || window.location.pathname === "/ProcesoCompra/") {
             obj.init();
         }
 
-        // Lógica de éxito Confeti (Efectivo/Transferencia)
-        if (currentUrl.includes("?mod=ProcesoCompra&opc=paso3")) {
+        if (currentUrl.includes("/ProcesoCompra/paso3")) {
             if($_SESSION["padlock"] != "lock"){
                 setTimeout(() => { if(window.initBurst) window.initBurst(); }, 1500);
             }
         }
         
-        // Corrección Definitiva Confeti (Tarjeta MIT)
-        if (currentUrl.includes("?mod=ProcesoCompra&opc=cc")) {
+        if (currentUrl.includes("/ProcesoCompra/cc")) {
             if($_SESSION["padlock"] != "lock"){
                 setTimeout(() => { 
                     let tarjetaExito = document.querySelector('.tarjeta-respuesta--exito');
