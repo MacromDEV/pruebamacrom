@@ -432,7 +432,7 @@ function catalogosCtrl($scope, $http) {
             const result = await $http({
                 method: 'GET',
                 url: url_catalogo,
-                params: obj.refaccion
+                params: obj.refaccion 
             }).then(function successCallback(res) {
                 return res
             }, function errorCallback(res) {
