@@ -75,7 +75,7 @@ function WebCtrl($scope, $http, $timeout) {
                     autoplay: true,
                     autoplaySpeed: 3000,
                     slidesToShow: 1,
-                    adaptiveHeight: true
+                    adaptiveHeight: false
                 });
             }
         }, 300);
