@@ -291,18 +291,19 @@ function CabeceraCtrl($scope, $http, $sce, vcRecaptchaService) {
     angular.element(document).ready(function () {
         obj.getCategorias();
         
+        const pathname = window.location.pathname.toLowerCase();
         const urlParams = new URLSearchParams(window.location.search);
         const moduloActual = urlParams.get('mod');
 
-        if (!moduloActual || moduloActual === 'home') {
+        if (pathname.includes('catalogo') || moduloActual === 'catalogo') {
+            obj.getBanners({ opc: "get", Categoria: "Catalogos", Estatus: 1 });
+        } else if (pathname.includes('compras') || pathname.includes('procesocompra') || moduloActual === 'ProcesoCompra') { 
+            obj.getBanners({ opc: "get", Categoria: "Compras", Estatus: 1 });
+        } else if (pathname.includes('nosotros') || moduloActual === 'nosotros') {
+            obj.getBanners({ opc: "get", Categoria: "Nosotros", Estatus: 1 });
+        } else {
             obj.getBanners({ opc: "get", Categoria: "Principal", Estatus: 1 });
             obj.getBanners({ opc: "get", Categoria: "Carrousel", Estatus: 1 });
-        } else if (moduloActual === 'catalogo') {
-            obj.getBanners({ opc: "get", Categoria: "Catalogos", Estatus: 1 });
-        } else if (moduloActual === 'ProcesoCompra') { 
-            obj.getBanners({ opc: "get", Categoria: "Compras", Estatus: 1 });
-        } else if (moduloActual === 'nosotros') {
-            obj.getBanners({ opc: "get", Categoria: "Nosotros", Estatus: 1 });
         }
     });
 }

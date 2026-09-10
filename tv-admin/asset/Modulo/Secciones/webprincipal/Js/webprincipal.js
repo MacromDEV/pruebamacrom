@@ -75,7 +75,7 @@ function WebCtrl($scope, $http, $timeout) {
                     autoplay: true,
                     autoplaySpeed: 3000,
                     slidesToShow: 1,
-                    adaptiveHeight: true
+                    adaptiveHeight: false
                 });
             }
         }, 300);
@@ -135,6 +135,17 @@ function WebCtrl($scope, $http, $timeout) {
             '#dc3545',
             '<i class="fas fa-trash-alt"></i> Sí, eliminar',
             () => executePost({ imagen: { opc: "off", _id: id, Categoria: categoria } }, 'Imagen eliminada correctamente')
+        );
+    };
+
+    obj.btnPausar = (id, categoria) => {
+        confirmarAccionWeb(
+            '¿Desactivar banner?',
+            'El banner se mandará al historial y dejará de verse en la tienda.',
+            'warning',
+            '#ffc107',
+            '<i class="fas fa-pause"></i> Sí, desactivar',
+            () => executePost({ imagen: { opc: "pause", _id: id, Categoria: categoria } }, 'Banner desactivado')
         );
     };
 

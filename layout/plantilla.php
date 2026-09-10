@@ -137,19 +137,19 @@
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
         <script type="text/javascript" src="/vendor/momentjs/moment.min.js"></script>
-        <script src="https://cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script>
+        <script defer src="https://cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script>
         <script src="/tv-admin/asset/Plugins/numeric/jquery.numeric.js"></script>
         <script type="text/javascript" src="/tv-admin/asset/Js/angular/angular.min.js"></script>
         <script src="/tv-admin/asset/Js/angular/angular-datatables.min.js"></script>
-        <script src="/tv-admin/asset/Js/angular/angular-recaptcha.min.js"></script>
+        <script defer src="/tv-admin/asset/Js/angular/angular-recaptcha.min.js"></script>
         <script type="text/javascript" src="/tv-admin/asset/Js/angular/first.js"></script>
         <script type="text/javascript" src="/js/Cabecera.js"></script>
         <script type="text/javascript">$_SESSION = <?php print json_encode($_SESSION)?>;</script>
         <script src="https://unpkg.com/@popperjs/core@2"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.js"></script>
-        <script type="text/javascript" src="/vendor/JsZip/dist/jszip.min.js"></script>
+        <script defer src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.js"></script>
+        <script defer type="text/javascript" src="/vendor/JsZip/dist/jszip.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script defer src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script type="text/javascript" src="/vendor/toastr/build/toastr.min.js"></script>
 	    <script src="/js/main.js"></script>
 
