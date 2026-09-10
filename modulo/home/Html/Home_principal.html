@@ -8,14 +8,6 @@
                     <img decoding="sync" fetchpriority="high" ng-src="images/Banners/{{banner.imagen}}" ng-attr-alt="Banner Macrom Autopartes Ofertas" class="header__picture--img" width="1920" height="400" style="width: 100%; height: auto; max-height: 350px; object-fit: cover;">
                 </picture>
             </div>
-            
-            <div class="slick2" ng-show="dataBanners.Escritorio == 0">
-                <div class="header__contenido--banner" ng-repeat="banner in dataCarrousel.Escritorio">
-                    <picture class="header__picture d-grid">
-                        <img decoding="sync" ng-src="images/Banners/{{banner.imagen}}" ng-attr-alt="Banner Macrom Autopartes" class="header__picture--img" width="100%" height="350px">
-                    </picture>
-                </div>
-            </div>
         </div>
     </header>
     
