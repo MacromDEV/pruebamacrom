@@ -103,6 +103,22 @@ class WebPrincipal{
                 }
             break;
 
+            case 'pause':
+                if($this->cambiarEstatus(0)){
+                    $this->jsonData["Bandera"] = 1;
+                    $this->jsonData["mensaje"] = "Banner desactivado correctamente.";
+                    $this->jsonData["categoria"] = $this->formulario["Categoria"] ?? '';
+                    
+                    // BITÁCORA
+                    $id_banner = $this->formulario["_id"] ?? '';
+                    $categoria = $this->formulario["Categoria"] ?? '';
+                    $this->setBitacora("DESACTIVAR_BANNER", "Desactivó el banner ID $id_banner de la sección $categoria");
+                } else {
+                    $this->jsonData["Bandera"] = 0;
+                    $this->jsonData["mensaje"] = "Error al intentar desactivar el Banner.";
+                }
+            break;
+
             case 'act':
                 if($this->reemplazarImagenActiva()){
                     $this->jsonData["Bandera"] = 1;

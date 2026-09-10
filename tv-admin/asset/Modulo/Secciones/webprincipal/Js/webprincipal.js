@@ -138,6 +138,17 @@ function WebCtrl($scope, $http, $timeout) {
         );
     };
 
+    obj.btnPausar = (id, categoria) => {
+        confirmarAccionWeb(
+            '¿Desactivar banner?',
+            'El banner se mandará al historial y dejará de verse en la tienda.',
+            'warning',
+            '#ffc107',
+            '<i class="fas fa-pause"></i> Sí, desactivar',
+            () => executePost({ imagen: { opc: "pause", _id: id, Categoria: categoria } }, 'Banner desactivado')
+        );
+    };
+
     obj.btnDesimgcarrousel = (id, categoria) => {
         confirmarAccionWeb(
             '¿Quitar del carrousel?',

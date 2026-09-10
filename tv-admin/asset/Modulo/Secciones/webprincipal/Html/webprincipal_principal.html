@@ -41,6 +41,22 @@
     
     .btn-carrusel-prev { left: 15px; }
     .btn-carrusel-next { right: 15px; }
+    .wrap-slick2:not(.slick-cargado) {
+        position: relative;
+    }
+    .wrap-slick2:not(.slick-cargado)::before {
+        content: "Cargando carrusel...";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: #ffffff;
+        font-weight: bold;
+        letter-spacing: 1px;
+    }
+    .wrap-slick2:not(.slick-cargado) .slick2 {
+        visibility: hidden; /* Oculta las imágenes y botones desordenados hasta que cargue */
+    }
 </style>
 
 <section ng-controller="WebCtrl" ng-cloak>
@@ -91,6 +107,12 @@
                         
                         <div class="tab-pane fade" id="Principal" role="tabpanel">
                             <h5 class="font-weight-bold text-dark mb-3"><i class="fa fa-broadcast-tower text-success mr-2"></i> Banner Actualmente en Vivo</h5>
+
+                            <div ng-if="databannerPrincipal.Escritorio.length === 0" class="alert alert-secondary text-center mb-4 shadow-sm border-0">
+                                <i class="fa fa-info-circle mr-1"></i> No hay ningún banner activo en este momento.
+                            </div>
+
+                            <!-- Tarjeta del banner activo -->
                             <div class="card shadow-sm border-success mb-4" ng-repeat="principal in databannerPrincipal.Escritorio">
                                 <div class="card-body p-0 text-center position-relative">
                                     <span class="badge badge-success position-absolute mt-2 ml-2" style="top:0; left:0; font-size: 1rem;">ACTIVO</span>
@@ -102,9 +124,16 @@
                                         <span class="mr-3"><i class="fa fa-file-image"></i> {{principal.formato | uppercase}}</span>
                                         <span><i class="fa fa-calendar-alt"></i> Subido: {{principal.FechaCreacion}}</span>
                                     </div>
-                                    <button class="btn btn-sm btn-outline-danger" ng-click="btnDesactivar(principal._id, principal.Categoria)" title="Quitar este banner">
-                                        <i class="fa fa-trash mr-1"></i> Desactivar
-                                    </button>
+                                    <div>
+                                        <!-- botón para Desactivar (mandar a historial) -->
+                                        <button class="btn btn-sm btn-outline-warning mr-2" ng-click="btnPausar(principal._id, principal.Categoria)" title="Mandar al historial">
+                                            <i class="fa fa-pause mr-1"></i> Desactivar
+                                        </button>
+                                        <!-- botón para eliminar permanentemente -->
+                                        <button class="btn btn-sm btn-outline-danger" ng-click="btnDesactivar(principal._id, principal.Categoria)" title="Eliminar permanentemente">
+                                            <i class="fa fa-trash mr-1"></i> Eliminar
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
 
