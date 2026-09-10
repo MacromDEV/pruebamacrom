@@ -156,6 +156,11 @@
 
                         <div class="tab-pane fade" id="Catalogos" role="tabpanel">
                             <h5 class="font-weight-bold text-dark mb-3"><i class="fa fa-broadcast-tower text-success mr-2"></i> Banner Actualmente en Vivo</h5>
+
+                            <div ng-if="catalogos.Escritorio.length === 0" class="alert alert-secondary text-center mb-4 shadow-sm border-0">
+                                <i class="fa fa-info-circle mr-1"></i> No hay ningún banner activo en Catálogos en este momento.
+                            </div>
+
                             <div class="card shadow-sm border-success mb-4" ng-repeat="promo in catalogos.Escritorio">
                                 <div class="card-body p-0 text-center position-relative">
                                     <span class="badge badge-success position-absolute mt-2 ml-2" style="top:0; left:0; font-size: 1rem;">ACTIVO</span>
@@ -164,10 +169,12 @@
                                 <div class="card-footer bg-white d-flex justify-content-between align-items-center">
                                     <div class="text-muted small">
                                         <span class="mr-3"><i class="fa fa-ruler-combined"></i> {{promo.width}}x{{promo.height}}px</span>
-                                        <span class="mr-3"><i class="fa fa-file-image"></i> {{promo.formato | uppercase}}</span>
                                         <span><i class="fa fa-calendar-alt"></i> Subido: {{promo.FechaCreacion}}</span>
                                     </div>
-                                    <button class="btn btn-sm btn-outline-danger" ng-click="btnDesactivar(promo._id, promo.Categoria)"><i class="fa fa-trash mr-1"></i> Desactivar</button>
+                                    <div>
+                                        <button class="btn btn-sm btn-outline-warning mr-2" ng-click="btnPausar(promo._id, promo.Categoria)" title="Mandar al historial"><i class="fa fa-pause mr-1"></i> Desactivar</button>
+                                        <button class="btn btn-sm btn-outline-danger" ng-click="btnDesactivar(promo._id, promo.Categoria)" title="Eliminar permanentemente"><i class="fa fa-trash mr-1"></i> Eliminar</button>
+                                    </div>
                                 </div>
                             </div>
                             <hr>
@@ -178,8 +185,8 @@
                                         <img ng-src="{{dominio}}/images/Banners/{{catalogo.imagen}}" class="banner-img-thumb" ng-click="changePred(catalogo._id, catalogo.Categoria)">
                                         <div class="card-body p-2 bg-white text-center">
                                             <small class="text-muted d-block mb-2">{{catalogo.FechaCreacion}}</small>
-                                            <button class="btn btn-xs btn-success" ng-click="changePred(catalogo._id, catalogo.Categoria)"><i class="fa fa-check"></i></button>
-                                            <button class="btn btn-xs btn-outline-danger" ng-click="btnDesactivar(catalogo._id, catalogo.Categoria)"><i class="fa fa-trash"></i></button>
+                                            <button class="btn btn-xs btn-success shadow-sm" ng-click="changePred(catalogo._id, catalogo.Categoria)"><i class="fa fa-check"></i> Activar</button>
+                                            <button class="btn btn-xs btn-outline-danger shadow-sm" ng-click="btnDesactivar(catalogo._id, catalogo.Categoria)"><i class="fa fa-trash"></i> Eliminar</button>
                                         </div>
                                     </div>
                                 </div>
@@ -188,6 +195,11 @@
 
                         <div class="tab-pane fade" id="Compras" role="tabpanel">
                             <h5 class="font-weight-bold text-dark mb-3"><i class="fa fa-broadcast-tower text-success mr-2"></i> Banner Actualmente en Vivo</h5>
+
+                            <div ng-if="compras.Escritorio.length === 0" class="alert alert-secondary text-center mb-4 shadow-sm border-0">
+                                <i class="fa fa-info-circle mr-1"></i> No hay ningún banner activo en Compras en este momento.
+                            </div>
+
                             <div class="card shadow-sm border-success mb-4" ng-repeat="promo in compras.Escritorio">
                                 <div class="card-body p-0 text-center position-relative">
                                     <span class="badge badge-success position-absolute mt-2 ml-2" style="top:0; left:0; font-size: 1rem;">ACTIVO</span>
@@ -198,7 +210,10 @@
                                         <span class="mr-3"><i class="fa fa-ruler-combined"></i> {{promo.width}}x{{promo.height}}px</span>
                                         <span><i class="fa fa-calendar-alt"></i> Subido: {{promo.FechaCreacion}}</span>
                                     </div>
-                                    <button class="btn btn-sm btn-outline-danger" ng-click="btnDesactivar(promo._id, promo.Categoria)"><i class="fa fa-trash mr-1"></i> Desactivar</button>
+                                    <div>
+                                        <button class="btn btn-sm btn-outline-warning mr-2" ng-click="btnPausar(promo._id, promo.Categoria)" title="Mandar al historial"><i class="fa fa-pause mr-1"></i> Desactivar</button>
+                                        <button class="btn btn-sm btn-outline-danger" ng-click="btnDesactivar(promo._id, promo.Categoria)" title="Eliminar permanentemente"><i class="fa fa-trash mr-1"></i> Eliminar</button>
+                                    </div>
                                 </div>
                             </div>
                             <hr>
@@ -208,8 +223,9 @@
                                     <div class="card shadow-sm banner-card h-100 border-0">
                                         <img ng-src="{{dominio}}/images/Banners/{{compra.imagen}}" class="banner-img-thumb" ng-click="changePred(compra._id, compra.Categoria)">
                                         <div class="card-body p-2 bg-white text-center">
-                                            <button class="btn btn-xs btn-success" ng-click="changePred(compra._id, compra.Categoria)"><i class="fa fa-check"></i></button>
-                                            <button class="btn btn-xs btn-outline-danger" ng-click="btnDesactivar(compra._id, compra.Categoria)"><i class="fa fa-trash"></i></button>
+                                            <small class="text-muted d-block mb-2">{{compra.FechaCreacion}}</small>
+                                            <button class="btn btn-xs btn-success shadow-sm" ng-click="changePred(compra._id, compra.Categoria)"><i class="fa fa-check"></i> Activar</button>
+                                            <button class="btn btn-xs btn-outline-danger shadow-sm" ng-click="btnDesactivar(compra._id, compra.Categoria)"><i class="fa fa-trash"></i> Eliminar</button>
                                         </div>
                                     </div>
                                 </div>
@@ -217,7 +233,12 @@
                         </div>
 
                         <div class="tab-pane fade" id="Nosotros" role="tabpanel">
-                             <h5 class="font-weight-bold text-dark mb-3"><i class="fa fa-broadcast-tower text-success mr-2"></i> Banner Actualmente en Vivo</h5>
+                            <h5 class="font-weight-bold text-dark mb-3"><i class="fa fa-broadcast-tower text-success mr-2"></i> Banner Actualmente en Vivo</h5>
+
+                            <div ng-if="nosotros.Escritorio.length === 0" class="alert alert-secondary text-center mb-4 shadow-sm border-0">
+                                <i class="fa fa-info-circle mr-1"></i> No hay ningún banner activo en Nosotros en este momento.
+                            </div>
+
                             <div class="card shadow-sm border-success mb-4" ng-repeat="promo in nosotros.Escritorio">
                                 <div class="card-body p-0 text-center position-relative">
                                     <span class="badge badge-success position-absolute mt-2 ml-2" style="top:0; left:0; font-size: 1rem;">ACTIVO</span>
@@ -228,7 +249,10 @@
                                         <span class="mr-3"><i class="fa fa-ruler-combined"></i> {{promo.width}}x{{promo.height}}px</span>
                                         <span><i class="fa fa-calendar-alt"></i> Subido: {{promo.FechaCreacion}}</span>
                                     </div>
-                                    <button class="btn btn-sm btn-outline-danger" ng-click="btnDesactivar(promo._id, promo.Categoria)"><i class="fa fa-trash mr-1"></i> Desactivar</button>
+                                    <div>
+                                        <button class="btn btn-sm btn-outline-warning mr-2" ng-click="btnPausar(promo._id, promo.Categoria)" title="Mandar al historial"><i class="fa fa-pause mr-1"></i> Desactivar</button>
+                                        <button class="btn btn-sm btn-outline-danger" ng-click="btnDesactivar(promo._id, promo.Categoria)" title="Eliminar permanentemente"><i class="fa fa-trash mr-1"></i> Eliminar</button>
+                                    </div>
                                 </div>
                             </div>
                             <hr>
@@ -238,8 +262,9 @@
                                     <div class="card shadow-sm banner-card h-100 border-0">
                                         <img ng-src="{{dominio}}/images/Banners/{{nos.imagen}}" class="banner-img-thumb" ng-click="changePred(nos._id, nos.Categoria)">
                                         <div class="card-body p-2 bg-white text-center">
-                                            <button class="btn btn-xs btn-success" ng-click="changePred(nos._id, nos.Categoria)"><i class="fa fa-check"></i></button>
-                                            <button class="btn btn-xs btn-outline-danger" ng-click="btnDesactivar(nos._id, nos.Categoria)"><i class="fa fa-trash"></i></button>
+                                            <small class="text-muted d-block mb-2">{{nos.FechaCreacion}}</small>
+                                            <button class="btn btn-xs btn-success shadow-sm" ng-click="changePred(nos._id, nos.Categoria)"><i class="fa fa-check"></i> Activar</button>
+                                            <button class="btn btn-xs btn-outline-danger shadow-sm" ng-click="btnDesactivar(nos._id, nos.Categoria)"><i class="fa fa-trash"></i> Eliminar</button>
                                         </div>
                                     </div>
                                 </div>
@@ -271,8 +296,8 @@
                                     <div class="card shadow-sm banner-card h-100 border-0">
                                         <img ng-src="{{dominio}}/images/Banners/{{carr.imagen}}" class="banner-img-thumb" ng-click="CarrouselPred(carr._id, carr.Categoria)">
                                         <div class="card-body p-2 bg-white text-center">
-                                            <button class="btn btn-xs btn-success" ng-click="CarrouselPred(carr._id, carr.Categoria)"><i class="fa fa-plus"></i> Agregar</button>
-                                            <button class="btn btn-xs btn-outline-danger" ng-click="btnDesactivar(carr._id, carr.Categoria)"><i class="fa fa-trash"></i></button>
+                                            <button class="btn btn-xs btn-success shadow-sm" ng-click="CarrouselPred(carr._id, carr.Categoria)"><i class="fa fa-plus"></i> Agregar</button>
+                                            <button class="btn btn-xs btn-outline-danger shadow-sm" ng-click="btnDesactivar(carr._id, carr.Categoria)"><i class="fa fa-trash"></i> Eliminar</button>
                                         </div>
                                     </div>
                                 </div>
